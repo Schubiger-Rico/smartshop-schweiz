@@ -1,3 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartShop Schweiz</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+h1{
+    text-align:center;
+    color:#4e5ff2;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    box-sizing:border-box;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#4e5ff2;
+    color:white;
+    cursor:pointer;
+}
+
+.item{
+    background:#f1f1f1;
+    padding:12px;
+    margin-top:8px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.history{
+    background:#fafafa;
+    color:#666;
+    padding:10px;
+    margin-top:6px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+h3{
+    margin-top:25px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🛒 SmartShop Schweiz</h1>
+
+<input id="produkt" placeholder="Produkt eingeben">
+
+<button onclick="addProduct()">
+Produkt hinzufügen
+</button>
+
+<h3>Aktuelle Einkaufsliste</h3>
+<div id="liste"></div>
+
+<h3>🕓 Zuletzt gekauft</h3>
+<div id="history"></div>
+
+</div>
+
 <script>
 
 let liste =
@@ -7,65 +98,79 @@ let historyListe =
 JSON.parse(localStorage.getItem("history")) || [];
 
 function speichern(){
-localStorage.setItem("liste",JSON.stringify(liste));
-localStorage.setItem("history",JSON.stringify(historyListe));
+
+localStorage.setItem(
+"liste",
+JSON.stringify(liste)
+);
+
+localStorage.setItem(
+"history",
+JSON.stringify(historyListe)
+);
+
 }
 
 function addProduct(){
 
-let feld=document.getElementById("produkt");
-let text=feld.value.trim();
+let feld =
+document.getElementById("produkt");
 
-if(text==="") return;
+let text =
+feld.value.trim();
 
-if(!liste.includes(text)){
-liste.push(text);
+if(text===""){
+return;
 }
+
+liste.push(text);
 
 feld.value="";
 
 speichern();
+
 anzeigen();
+
 }
 
 function erledigt(index){
 
-let produkt=liste[index];
+let produkt = liste[index];
 
-if(!historyListe.includes(produkt)){
 historyListe.unshift(produkt);
+
+if(historyListe.length>20){
+historyListe.pop();
 }
 
 liste.splice(index,1);
 
 speichern();
+
 anzeigen();
+
 }
 
 function erneut(produkt){
 
 if(!liste.includes(produkt)){
+
 liste.push(produkt);
-}
 
 speichern();
+
 anzeigen();
+
 }
 
-function historyLoeschen(index){
-
-historyListe.splice(index,1);
-
-speichern();
-anzeigen();
 }
 
 function anzeigen(){
 
-let listeDiv=
+let listeDiv =
 document.getElementById("liste");
 
-let historyDiv=
+let historyDiv =
 document.getElementById("history");
 
 listeDiv.innerHTML="";
@@ -83,17 +188,10 @@ listeDiv.innerHTML +=
 for(let i=0;i<historyListe.length;i++){
 
 historyDiv.innerHTML +=
-'<div class="history" style="display:flex;justify-content:space-between;">'
-
-+
-'<span onclick="erneut(\''+historyListe[i]+'\')" style="cursor:pointer;">'
-+ historyListe[i] +
-'</span>'
-
-+
-'<span onclick="historyLoeschen('+i+')" style="cursor:pointer;color:red;">🗑️</span>'
-
-+
+'<div class="history" onclick="erneut(\''+
+historyListe[i]+
+'\')">'+
+historyListe[i]+
 '</div>';
 
 }
@@ -103,3 +201,6 @@ historyDiv.innerHTML +=
 anzeigen();
 
 </script>
+
+</body>
+</html>
