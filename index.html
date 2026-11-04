@@ -152,9 +152,6 @@ Aktiv
 <h3>⭐ Favoriten</h3>
 <div id="favoriten"></div>
 </div>
-<p style="text-align:center;color:#64748b;">
-Intelligent einkaufen. Einfach entscheiden.
-</p>
 <div class="eingabeKarte">
 
 <h3>➕ Produkt hinzufügen</h3>
@@ -475,12 +472,13 @@ favoritenAnzahl;
     }
 
 }    
-
+for(let i=0;i<liste.length;i++){   
 listeDiv.innerHTML +=
 '<div class="item" onclick="erledigt('+i+')">☐ '+
 liste[i] +
 '</div>';
-
+}
+    
 }
 
 for(let i=0;i<historyListe.length;i++){
