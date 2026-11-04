@@ -3,62 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SmartShop Schweiz</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
 }
 
-.container {
-    max-width: 500px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.container{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
 }
 
-h1 {
-    text-align: center;
-    color: #0078ff;
+h1{
+    text-align:center;
+    color:#0078ff;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+    margin-bottom:10px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: #0078ff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#0078ff;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
 }
 
-button:hover {
-    background: #005fd1;
+button:hover{
+    background:#005fd1;
 }
 
-.item {
-    background: #eeeeee;
-    padding: 10px;
-    margin-top: 8px;
-    border-radius: 8px;
+.item{
+    background:#eeeeee;
+    margin-top:8px;
+    padding:12px;
+    border-radius:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
+
+.deleteBtn{
+    width:auto;
+    background:#d60000;
+    padding:6px 10px;
+}
+
+.deleteBtn:hover{
+    background:#a00000;
+}
+
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -66,8 +84,8 @@ button:hover {
 <h1>🛒 SmartShop Schweiz</h1>
 
 <input
-type="text"
 id="produkt"
+type="text"
 placeholder="Produkt eingeben">
 
 <button onclick="addProduct()">
@@ -82,41 +100,100 @@ Produkt hinzufügen
 
 <script>
 
-let liste = [];
+let liste =
+JSON.parse(localStorage.getItem("liste")) || [];
 
-function addProduct() {
+function speichern(){
 
-    const feld = document.getElementById("produkt");
-    const wert = feld.value.trim();
+    localStorage.setItem(
+        "liste",
+        JSON.stringify(liste)
+    );
 
-    if (wert === "") {
+}
+
+function addProduct(){
+
+    let feld =
+    document.getElementById("produkt");
+
+    let wert =
+    feld.value.trim();
+
+    if(wert===""){
         return;
     }
 
-    liste.push(wert);
-    feld.value = "";
+    liste.push({
+        text: wert,
+        erledigt: false
+    });
+
+    speichern();
+
+    feld.value="";
 
     renderListe();
+
 }
 
-function renderListe() {
+function umschalten(index){
+
+    liste[index].erledigt =
+    !liste[index].erledigt;
+
+    speichern();
+
+    renderListe();
+
+}
+
+function loeschen(index){
+
+    liste.splice(index,1);
+
+    speichern();
+
+    renderListe();
+
+}
+
+function renderListe(){
 
     const anzeige =
     document.getElementById("liste");
 
-    anzeige.innerHTML = "";
+    anzeige.innerHTML="";
 
-    liste.forEach(function(produkt){
+    liste.forEach(function(produkt,index){
 
         anzeige.innerHTML += `
+
         <div class="item">
-            ✅ ${produkt}
+
+            <div onclick="umschalten(${index})"
+                 style="cursor:pointer">
+
+                ${produkt.erledigt ? "✅" : "⬜"}
+                ${produkt.text}
+
+            </div>
+
+            <button
+            class="deleteBtn"
+            onclick="loeschen(${index})">
+            🗑️
+            </button>
+
         </div>
+
         `;
 
     });
 
 }
+
+renderListe();
 
 </script>
 
