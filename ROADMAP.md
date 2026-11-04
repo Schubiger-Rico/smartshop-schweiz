@@ -8,6 +8,11 @@ Version 1.2
 Produktsuche
 Produktvorschläge
 Häufig gekaufte Produkte
+Version 1.2d
+- Stückzahl
+- Gewicht
+- Mengenvorschläge
+- Standardmengen merken
 Version 1.3
 Familienfreigabe
 Einladungslink
