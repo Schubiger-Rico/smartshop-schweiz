@@ -76,6 +76,20 @@ h3{
 <h1>🛒 SmartShop Schweiz</h1>
 
 <input id="produkt" placeholder="Produkt eingeben">
+<input
+id="menge"
+type="number"
+value="1"
+min="1"
+placeholder="Menge">
+<select id="einheit">
+<option value="">Keine</option>
+<option value="Stück">Stück</option>
+<option value="g">g</option>
+<option value="kg">kg</option>
+<option value="Liter">Liter</option>
+<option value="Packung">Packung</option>
+</select> 
 <div id="vorschlaege"></div>
 <button onclick="addProduct()">
 Produkt hinzufügen
@@ -180,7 +194,11 @@ function addProduct(){
 
 let feld =
 document.getElementById("produkt");
+let menge =
+document.getElementById("menge").value;
 
+let einheit =
+document.getElementById("einheit").value;
 let text =
 feld.value.trim();
 
@@ -196,7 +214,14 @@ if(!produkte.includes(text)){
     produkte.push(text);
 }
 
-liste.push(text);
+let anzeigeText = text;
+
+if(einheit !== ""){
+    anzeigeText =
+    text + " (" + menge + " " + einheit + ")";
+}
+
+liste.push(anzeigeText);
 
 feld.value="";
 
