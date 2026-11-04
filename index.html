@@ -18,39 +18,41 @@ body{
     margin:auto;
     background:white;
     padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    border-radius:24px;
+    box-shadow:0 16px 40px rgba(15,23,42,.12);
 }
 
 h1{
     text-align:center;
-    color:#4e5ff2;
+    color:#0f766e;
+    font-size:32px;
 }
 
 input{
     width:100%;
-    padding:12px;
+    padding:16px;
     box-sizing:border-box;
     border:1px solid #ccc;
-    border-radius:8px;
+    border-radius:14px;
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:16px;
     margin-top:10px;
     border:none;
-    border-radius:8px;
-    background:#4e5ff2;
+    border-radius:14px;
+    background:#0f766e;
     color:white;
     cursor:pointer;
 }
 
 .item{
-    background:#f1f1f1;
-    padding:12px;
-    margin-top:8px;
-    border-radius:8px;
+    background:white;
+    padding:14px;
+    margin-top:10px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
     cursor:pointer;
 }
 
@@ -83,9 +85,39 @@ button{
     margin-top:-10px;
     margin-bottom:20px;
     font-size:14px;
-}  
+} 
+.eingabeKarte{
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    margin-top:15px;
+    margin-bottom:25px;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+ .mengenZeile{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+.mengenZeile input{
+    flex:1;
+}
+
+.mengenZeile select{
+    flex:2;
+}
+.mengenZeile input{
+    flex:1;
+}
+
+.mengenZeile select{
+    flex:2;
+}   
 h3{
     margin-top:25px;
+    color:#0f766e;
+    border-bottom:2px solid #e2e8f0;
+    padding-bottom:8px;
 }
 </style>
 
@@ -129,8 +161,11 @@ Aktiv
 <p style="text-align:center;color:#64748b;">
 Intelligent einkaufen. Einfach entscheiden.
 </p>
+<div class="eingabeKarte">
 
+<h3>➕ Produkt hinzufügen</h3>
 <input id="produkt" placeholder="Produkt eingeben">
+<div class="mengenZeile">  
 <input
 id="menge"
 type="number"
@@ -144,11 +179,19 @@ placeholder="Menge">
 <option value="kg">kg</option>
 <option value="Liter">Liter</option>
 <option value="Packung">Packung</option>
-</select> 
+</select>
+<input id="produkt"...>
+
+<div class="mengenZeile">
+
+<input
+id="menge"
+    
 <div id="vorschlaege"></div>
 <button onclick="addProduct()">
 Produkt hinzufügen
 </button>
+</div>
 
 <h3>Aktuelle Einkaufsliste</h3>
 <div id="liste"></div>
