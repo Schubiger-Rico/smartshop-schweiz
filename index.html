@@ -93,4 +93,115 @@ Produkt hinzufügen
 <script>
 
 let liste =
-JSON.parse(localStorage.
+JSON.parse(localStorage.getItem("liste")) || [];
+
+let historyListe =
+JSON.parse(localStorage.getItem("history")) || [];
+
+function speichern(){
+
+localStorage.setItem(
+"liste",
+JSON.stringify(liste)
+);
+
+localStorage.setItem(
+"history",
+JSON.stringify(historyListe)
+);
+
+}
+
+function addProduct(){
+
+let feld =
+document.getElementById("produkt");
+
+let text =
+feld.value.trim();
+
+if(text===""){
+return;
+}
+
+liste.push(text);
+
+feld.value="";
+
+speichern();
+
+anzeigen();
+
+}
+
+function erledigt(index){
+
+let produkt = liste[index];
+
+historyListe.unshift(produkt);
+
+if(historyListe.length>20){
+historyListe.pop();
+}
+
+liste.splice(index,1);
+
+speichern();
+
+anzeigen();
+
+}
+
+function erneut(produkt){
+
+if(!liste.includes(produkt)){
+
+liste.push(produkt);
+
+speichern();
+
+anzeigen();
+
+}
+
+}
+
+function anzeigen(){
+
+let listeDiv =
+document.getElementById("liste");
+
+let historyDiv =
+document.getElementById("history");
+
+listeDiv.innerHTML="";
+historyDiv.innerHTML="";
+
+for(let i=0;i<liste.length;i++){
+
+listeDiv.innerHTML +=
+'<div class="item" onclick="erledigt('+i+')">☐ '
++ liste[i] +
+'</div>';
+
+}
+
+for(let i=0;i<historyListe.length;i++){
+
+historyDiv.innerHTML +=
+'<div class="history" onclick="erneut(\''+
+historyListe[i]+
+'\')">'+
+historyListe[i]+
+'</div>';
+
+}
+
+}
+
+anzeigen();
+
+</script>
+
+</body>
+</html>
