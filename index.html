@@ -96,7 +96,53 @@ JSON.parse(localStorage.getItem("liste")) || [];
 
 let historyListe =
 JSON.parse(localStorage.getItem("history")) || [];
+let produkte = [
+"Milch",
+"Mozzarella",
+"Käse",
+"Butter",
+"Bananen",
+"Äpfel",
+"Tomaten",
+"Eier",
+"Cola"
+];
+let feld =
+document.getElementById("produkt");
 
+feld.addEventListener("input",function(){
+
+let suche =
+feld.value.toLowerCase();
+
+let treffer =
+produkte.filter(p =>
+p.toLowerCase().startsWith(suche)
+);
+
+let vorschlaege =
+document.getElementById("vorschlaege");
+
+vorschlaege.innerHTML="";
+
+if(suche.length<1){
+return;
+}
+
+treffer.slice(0,5).forEach(function(produkt){
+
+vorschlaege.innerHTML +=
+'<div class="history" onclick="waehleProdukt(\''+
+produkt+
+'\')">'+
+produkt+
+'</div>';
+
+});
+
+});
+
+];
 function speichern(){
 
 localStorage.setItem(
