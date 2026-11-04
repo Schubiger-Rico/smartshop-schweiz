@@ -123,7 +123,8 @@ Bald verfügbar
 Aktiv
 </div>
 
-
+<h3>⭐ Favoriten</h3>
+<div id="favoriten"></div>
 </div>
 <p style="text-align:center;color:#64748b;">
 Intelligent einkaufen. Einfach entscheiden.
@@ -408,6 +409,8 @@ let historyDiv =
 document.getElementById("history");
 let haeufigDiv =
 document.getElementById("haeufig");
+let favoritenDiv =
+document.getElementById("favoriten");    
 let favoritenCount =
 document.getElementById("favoritenCount");
 
@@ -416,6 +419,7 @@ document.getElementById("listeCount");
 listeDiv.innerHTML="";
 historyDiv.innerHTML="";
 haeufigDiv.innerHTML="";
+favoritenDiv.innerHTML="";   
 listeCount.textContent =
 liste.length;
     
@@ -433,7 +437,35 @@ for(let produkt in produkteInfo){
 }
 
 favoritenCount.textContent =
-favoritenAnzahl;    
+favoritenAnzahl;  
+ for(let produkt in produkteInfo){
+
+    if(produkteInfo[produkt].favorit){
+
+        favoritenDiv.innerHTML +=
+        '<div class="history" onclick="erneut(\''+
+        produkt+
+        '\')">'+
+        produkt+
+        '</div>';
+
+    }
+
+}   
+for(let produkt in produkteInfo){
+
+    if(produkteInfo[produkt].favorit){
+
+        favoritenDiv.innerHTML +=
+        '<div class="history" onclick="erneut(\''+
+        produkt+
+        '\')">'+
+        produkt+
+        '</div>';
+
+    }
+
+}    
 for(let i=0;i<liste.length;i++){
 
 let produktName =
