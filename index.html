@@ -62,7 +62,28 @@ button{
     border-radius:8px;
     cursor:pointer;
 }
+.dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+}
 
+.karte{
+    background:white;
+    padding:14px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    font-weight:bold;
+}
+.untertitel{
+    text-align:center;
+    color:#64748b;
+    margin-top:-10px;
+    margin-bottom:20px;
+    font-size:14px;
+}  
 h3{
     margin-top:25px;
 }
@@ -73,7 +94,40 @@ h3{
 
 <div class="container">
 
-<h1>🛒 SmartShop Schweiz</h1>
+<h1>🛒 Der Einkaufsassistent</h1>
+
+<p class="untertitel">
+Intelligent einkaufen. Einfach entscheiden.
+</p>
+<div class="dashboard">
+
+<div class="karte">
+⭐ Favoriten
+</div>
+
+<div class="karte">
+🛒 Liste
+<br>
+<span id="listeCount">0</span>
+</div>
+
+<div class="karte">
+🔥 Aktionen
+<br>
+Bald verfügbar
+</div>
+
+<div class="karte">
+⚙️ Assistent
+<br>
+Aktiv
+</div>
+
+
+</div>
+<p style="text-align:center;color:#64748b;">
+Intelligent einkaufen. Einfach entscheiden.
+</p>
 
 <input id="produkt" placeholder="Produkt eingeben">
 <input
@@ -354,10 +408,32 @@ let historyDiv =
 document.getElementById("history");
 let haeufigDiv =
 document.getElementById("haeufig");
+let favoritenCount =
+document.getElementById("favoritenCount");
+
+let listeCount =
+document.getElementById("listeCount");    
 listeDiv.innerHTML="";
 historyDiv.innerHTML="";
 haeufigDiv.innerHTML="";
+listeCount.textContent =
+liste.length;
+    
 let letzteKategorie = "";
+let favoritenAnzahl = 0;
+
+for(let produkt in produkteInfo){
+
+    if(produkteInfo[produkt].favorit){
+
+        favoritenAnzahl++;
+
+    }
+
+}
+
+favoritenCount.textContent =
+favoritenAnzahl;    
 for(let i=0;i<liste.length;i++){
 
 let produktName =
