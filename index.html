@@ -119,6 +119,10 @@ document.getElementById("produkt");
 let text =
 feld.value.trim();
 
+text =
+text.charAt(0).toUpperCase() +
+text.slice(1).toLowerCase();
+
 if(text===""){
 return;
 }
