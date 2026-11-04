@@ -86,7 +86,8 @@ Produkt hinzufügen
 
 <h3>🕓 Zuletzt gekauft</h3>
 <div id="history"></div>
-
+<h3>⭐ Häufig gekauft</h3>
+<div id="haeufig"></div>
 </div>
 
 <script>
@@ -96,6 +97,8 @@ JSON.parse(localStorage.getItem("liste")) || [];
 
 let historyListe =
 JSON.parse(localStorage.getItem("history")) || [];
+let gekauft =
+JSON.parse(localStorage.getItem("gekauft")) || {};
 let standardProdukte = [
 "Milch",
 "Mozzarella",
@@ -206,7 +209,8 @@ anzeigen();
 function erledigt(index){
 
 let produkt = liste[index];
-
+gekauft[produkt] =
+(gekauft[produkt] || 0) + 1;
 if(!historyListe.includes(produkt)){
     historyListe.unshift(produkt);
 }
@@ -253,10 +257,11 @@ document.getElementById("liste");
 
 let historyDiv =
 document.getElementById("history");
-
+let haeufigDiv =
+document.getElementById("haeufig");
 listeDiv.innerHTML="";
 historyDiv.innerHTML="";
-
+haeufigDiv.innerHTML="";
 for(let i=0;i<liste.length;i++){
 
 listeDiv.innerHTML +=
@@ -282,7 +287,21 @@ historyListe[i]
 '<span onclick="loescheHistory('+i+')" style="color:red;cursor:pointer;">🗑️</span>'
 +
 '</div>';
+let sortiert =
+Object.keys(gekauft).sort(
+(a,b) => gekauft[b] - gekauft[a]
+);
 
+for(let i=0;i<sortiert.length && i<5;i++){
+
+haeufigDiv.innerHTML +=
+'<div class="history" onclick="erneut(\''+
+sortiert[i]+
+'\')">'+
+sortiert[i]+
+' ('+gekauft[sortiert[i]]+'x)</div>';
+
+}
 }
 
 }
