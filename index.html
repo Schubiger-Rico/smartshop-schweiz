@@ -166,6 +166,15 @@ anzeigen();
 }
 
 }
+function loescheHistory(index){
+
+historyListe.splice(index,1);
+
+speichern();
+
+anzeigen();
+
+}
 
 function anzeigen(){
 
@@ -190,10 +199,18 @@ listeDiv.innerHTML +=
 for(let i=0;i<historyListe.length;i++){
 
 historyDiv.innerHTML +=
-'<div class="history" onclick="erneut(\''+
+'<div class="history" style="display:flex;justify-content:space-between;">'
++
+'<span onclick="erneut(\''+
 historyListe[i]+
-'\')">'+
-historyListe[i]+
+'\')" style="cursor:pointer;">'
++
+historyListe[i]
++
+'</span>'
++
+'<span onclick="loescheHistory('+i+')" style="color:red;cursor:pointer;">🗑️</span>'
++
 '</div>';
 
 }
