@@ -105,13 +105,7 @@ button{
 
 .mengenZeile select{
     flex:2;
-}
-.mengenZeile input{
-    flex:1;
-}
 
-.mengenZeile select{
-    flex:2;
 }   
 h3{
     margin-top:25px;
@@ -132,11 +126,11 @@ h3{
 Intelligent einkaufen. Einfach entscheiden.
 </p>
 <div class="dashboard">
-
 <div class="karte">
 ⭐ Favoriten
+<br>
+<span id="favoritenCount">0</span>
 </div>
-
 <div class="karte">
 🛒 Liste
 <br>
@@ -209,8 +203,6 @@ let standardMengen =
 JSON.parse(localStorage.getItem("standardMengen")) || {};
 let produkteInfo =
 JSON.parse(localStorage.getItem("produkteInfo")) || {};   
-let produkteInfo =
-JSON.parse(localStorage.getItem("produkteInfo")) || {};
 let standardProdukte = [
 "Milch",
 "Mozzarella",
@@ -340,16 +332,6 @@ if(!produkteInfo[text]){
 
 produkteInfo[text].menge = menge;
 produkteInfo[text].einheit = einheit;    
-if(!produkteInfo[text]){
-
-    produkteInfo[text] = {
-        name: text,
-        kaufAnzahl: 0,
-        favorit: false
-    };
-
-}
-
 produkteInfo[text].menge = menge;
 produkteInfo[text].einheit = einheit;
 if(text===""){
