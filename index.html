@@ -101,4 +101,24 @@ function addProduct() {
 
 function renderListe() {
 
-    const
+    const anzeige =
+    document.getElementById("liste");
+
+    anzeige.innerHTML = "";
+
+    liste.forEach(function(produkt){
+
+        anzeige.innerHTML += `
+        <div class="item">
+            ✅ ${produkt}
+        </div>
+        `;
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
