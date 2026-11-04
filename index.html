@@ -472,15 +472,30 @@ favoritenAnzahl;
     }
 
 }    
-for(let i=0;i<liste.length;i++){   
+for(let i=0;i<liste.length;i++){  
+    
+let produktName =
+liste[i].split(" (")[0];
+
+let kategorie =
+kategorien[produktName] || "📦 Sonstiges";
+
+if(kategorie !== letzteKategorie){
+
+    listeDiv.innerHTML +=
+    '<h3>'+kategorie+'</h3>';
+
+    letzteKategorie = kategorie;
+
+}
+
 listeDiv.innerHTML +=
 '<div class="item" onclick="erledigt('+i+')">☐ '+
 liste[i] +
 '</div>';
-}
     
-}
-
+} 
+    
 for(let i=0;i<historyListe.length;i++){
 
 historyDiv.innerHTML +=
