@@ -174,7 +174,9 @@ placeholder="Menge">
 <option value="Liter">Liter</option>
 <option value="Packung">Packung</option>
 </select>
-
+    
+</div>
+    
 <div id="vorschlaege"></div>
 <button onclick="addProduct()">
 Produkt hinzufügen
@@ -297,6 +299,11 @@ localStorage.setItem(
 "standardMengen",
 JSON.stringify(standardMengen)
 );
+localStorage.setItem(
+"produkteInfo",
+JSON.stringify(produkteInfo)
+);
+    
 }
 
 function addProduct(){
@@ -332,8 +339,6 @@ if(!produkteInfo[text]){
 
 produkteInfo[text].menge = menge;
 produkteInfo[text].einheit = einheit;    
-produkteInfo[text].menge = menge;
-produkteInfo[text].einheit = einheit;
 if(text===""){
 return;
 }
