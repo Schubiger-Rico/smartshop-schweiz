@@ -105,8 +105,8 @@ button{
 
 .mengenZeile select{
     flex:2;
-
 }   
+    
 h3{
     margin-top:25px;
     color:#0f766e;
@@ -459,6 +459,7 @@ for(let produkt in produkteInfo){
 
 favoritenCount.textContent =
 favoritenAnzahl;  
+    
  for(let produkt in produkteInfo){
 
     if(produkteInfo[produkt].favorit){
@@ -512,6 +513,9 @@ historyListe[i]
 '<span onclick="loescheHistory('+i+')" style="color:red;cursor:pointer;">🗑️</span>'
 +
 '</div>';
+    
+}   
+    
 let sortiert =
 Object.keys(gekauft).sort(
 (a,b) => gekauft[b] - gekauft[a]
