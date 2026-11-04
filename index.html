@@ -206,17 +206,17 @@ document.getElementById("menge").value;
 
 let einheit =
 document.getElementById("einheit").value;
-standardMengen[text] = {
-    menge: menge,
-    einheit: einheit
-};    
+
 let text =
 feld.value.trim();
 
 text =
 text.charAt(0).toUpperCase() +
 text.slice(1).toLowerCase();
-
+standardMengen[text] = {
+    menge: menge,
+    einheit: einheit
+};    
 if(text===""){
 return;
 }
