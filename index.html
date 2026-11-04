@@ -115,7 +115,10 @@ let gekauft =
 JSON.parse(localStorage.getItem("gekauft")) || {};
 let standardMengen =
 JSON.parse(localStorage.getItem("standardMengen")) || {};
-
+let produkteInfo =
+JSON.parse(localStorage.getItem("produkteInfo")) || {};   
+let produkteInfo =
+JSON.parse(localStorage.getItem("produkteInfo")) || {};
 let standardProdukte = [
 "Milch",
 "Mozzarella",
@@ -231,7 +234,32 @@ text.slice(1).toLowerCase();
 standardMengen[text] = {
     menge: menge,
     einheit: einheit
-};    
+}; 
+if(!produkteInfo[text]){
+
+    produkteInfo[text] = {
+        name: text,
+        kaufAnzahl: 0,
+        favorit: false,
+        letzterKauf: ""
+    };
+
+}
+
+produkteInfo[text].menge = menge;
+produkteInfo[text].einheit = einheit;    
+if(!produkteInfo[text]){
+
+    produkteInfo[text] = {
+        name: text,
+        kaufAnzahl: 0,
+        favorit: false
+    };
+
+}
+
+produkteInfo[text].menge = menge;
+produkteInfo[text].einheit = einheit;
 if(text===""){
 return;
 }
@@ -260,7 +288,22 @@ anzeigen();
 function erledigt(index){
 
 let produkt = liste[index];
-    
+let produktName =
+produkt.split(" (")[0];
+
+if(produkteInfo[produktName]){
+
+    produkteInfo[produktName].kaufAnzahl++;
+produkteInfo[produktName].letzterKauf =
+new Date().toLocaleDateString();
+
+if(produkteInfo[produktName].kaufAnzahl >= 5){
+
+    produkteInfo[produktName].favorit = true;
+
+}
+
+}    
 gekauft[produkt] =
 (gekauft[produkt] || 0) + 1;
 if(!historyListe.includes(produkt)){
