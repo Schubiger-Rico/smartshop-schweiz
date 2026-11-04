@@ -113,6 +113,9 @@ let historyListe =
 JSON.parse(localStorage.getItem("history")) || [];
 let gekauft =
 JSON.parse(localStorage.getItem("gekauft")) || {};
+let standardMengen =
+JSON.parse(localStorage.getItem("standardMengen")) || {};
+
 let standardProdukte = [
 "Milch",
 "Mozzarella",
@@ -188,6 +191,10 @@ localStorage.setItem(
 "produkte",
 JSON.stringify(produkte)
 );
+localStorage.setItem(
+"standardMengen",
+JSON.stringify(standardMengen)
+);
 }
 
 function addProduct(){
@@ -199,6 +206,10 @@ document.getElementById("menge").value;
 
 let einheit =
 document.getElementById("einheit").value;
+standardMengen[text] = {
+    menge: menge,
+    einheit: einheit
+};    
 let text =
 feld.value.trim();
 
