@@ -96,7 +96,7 @@ JSON.parse(localStorage.getItem("liste")) || [];
 
 let historyListe =
 JSON.parse(localStorage.getItem("history")) || [];
-let produkte = [
+let standardProdukte = [
 "Milch",
 "Mozzarella",
 "Käse",
@@ -107,6 +107,12 @@ let produkte = [
 "Eier",
 "Cola"
 ];
+
+let produkte =
+JSON.parse(localStorage.getItem("produkte")) ||
+standardProdukte;
+    
+    
 let feld =
 document.getElementById("produkt");
 
@@ -161,7 +167,10 @@ localStorage.setItem(
 "history",
 JSON.stringify(historyListe)
 );
-
+localStorage.setItem(
+"produkte",
+JSON.stringify(produkte)
+);
 }
 
 function addProduct(){
