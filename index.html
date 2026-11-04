@@ -35,46 +35,42 @@ input{
     border:1px solid #ccc;
     border-radius:8px;
     box-sizing:border-box;
-    margin-bottom:10px;
 }
 
 button{
     width:100%;
+    margin-top:10px;
     padding:12px;
     border:none;
     border-radius:8px;
     background:#0078ff;
     color:white;
     font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#005fd1;
 }
 
 .item{
-    background:#eeeeee;
-    margin-top:8px;
+    background:#f1f1f1;
     padding:12px;
+    margin-top:8px;
     border-radius:8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    cursor:pointer;
 }
 
-.deleteBtn{
-    width:auto;
-    background:#d60000;
-    padding:6px 10px;
+.history{
+    background:#fafafa;
+    color:#666;
+    padding:10px;
+    margin-top:6px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
 }
 
-.deleteBtn:hover{
-    background:#a00000;
+h3{
+    margin-top:25px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -85,117 +81,14 @@ button:hover{
 
 <input
 id="produkt"
-type="text"
 placeholder="Produkt eingeben">
 
 <button onclick="addProduct()">
 Produkt hinzufügen
 </button>
 
-<h3>Einkaufsliste</h3>
-
+<h3>Aktuelle Einkaufsliste</h3>
 <div id="liste"></div>
 
-</div>
-
-<script>
-
-let liste =
-JSON.parse(localStorage.getItem("liste")) || [];
-
-function speichern(){
-
-    localStorage.setItem(
-        "liste",
-        JSON.stringify(liste)
-    );
-
-}
-
-function addProduct(){
-
-    let feld =
-    document.getElementById("produkt");
-
-    let wert =
-    feld.value.trim();
-
-    if(wert===""){
-        return;
-    }
-
-    liste.push({
-        text: wert,
-        erledigt: false
-    });
-
-    speichern();
-
-    feld.value="";
-
-    renderListe();
-
-}
-
-function umschalten(index){
-
-    liste[index].erledigt =
-    !liste[index].erledigt;
-
-    speichern();
-
-    renderListe();
-
-}
-
-function loeschen(index){
-
-    liste.splice(index,1);
-
-    speichern();
-
-    renderListe();
-
-}
-
-function renderListe(){
-
-    const anzeige =
-    document.getElementById("liste");
-
-    anzeige.innerHTML="";
-
-    liste.forEach(function(produkt,index){
-
-        anzeige.innerHTML += `
-
-        <div class="item">
-
-            <div onclick="umschalten(${index})"
-                 style="cursor:pointer">
-
-                ${produkt.erledigt ? "✅" : "⬜"}
-                ${produkt.text}
-
-            </div>
-
-            <button
-            class="deleteBtn"
-            onclick="loeschen(${index})">
-            🗑️
-            </button>
-
-        </div>
-
-        `;
-
-    });
-
-}
-
-renderListe();
-
-</script>
-
-</body>
-</html>
+<h3>🕓 Zuletzt gekauft</h3>
+<div id="history
