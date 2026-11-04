@@ -330,12 +330,25 @@ Object.keys(gekauft).sort(
 
 for(let i=0;i<sortiert.length && i<5;i++){
 
+let info = sortiert[i];
+
+if(standardMengen[sortiert[i]] &&
+standardMengen[sortiert[i]].einheit !== ""){
+
+info += " (" +
+standardMengen[sortiert[i]].menge +
+" " +
+standardMengen[sortiert[i]].einheit +
+")";
+
+}
+
 haeufigDiv.innerHTML +=
 '<div class="history" onclick="erneut(\''+
 sortiert[i]+
 '\')">'+
-sortiert[i]+
-' ('+gekauft[sortiert[i]]+'x)</div>';
+info+
+'</div>';
 
 }
 }
