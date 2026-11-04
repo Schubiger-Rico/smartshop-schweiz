@@ -137,7 +137,9 @@ function erledigt(index){
 
 let produkt = liste[index];
 
-historyListe.unshift(produkt);
+if(!historyListe.includes(produkt)){
+    historyListe.unshift(produkt);
+}
 
 if(historyListe.length>20){
 historyListe.pop();
