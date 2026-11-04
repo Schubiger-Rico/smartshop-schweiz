@@ -472,39 +472,9 @@ favoritenAnzahl;
         '\')">'+
         produkt+
         '</div>';
-
-    }
-
-}   
-for(let produkt in produkteInfo){
-
-    if(produkteInfo[produkt].favorit){
-
-        favoritenDiv.innerHTML +=
-        '<div class="history" onclick="erneut(\''+
-        produkt+
-        '\')">'+
-        produkt+
-        '</div>';
-
     }
 
 }    
-for(let i=0;i<liste.length;i++){
-
-let produktName =
-liste[i].split(" (")[0];
-
-let kategorie =
-kategorien[produktName] || "📦 Sonstiges";
-
-if(kategorie !== letzteKategorie){
-
-listeDiv.innerHTML +=
-'<h3>'+kategorie+'</h3>';
-
-letzteKategorie = kategorie;
-}
 
 listeDiv.innerHTML +=
 '<div class="item" onclick="erledigt('+i+')">☐ '+
