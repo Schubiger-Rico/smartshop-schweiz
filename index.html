@@ -141,7 +141,15 @@ produkt+
 });
 
 });
+function waehleProdukt(produkt){
 
+document.getElementById("produkt").value =
+produkt;
+
+document.getElementById("vorschlaege").innerHTML =
+"";
+
+}
 function speichern(){
 
 localStorage.setItem(
