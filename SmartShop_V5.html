@@ -445,3 +445,159 @@ return;
 }
 
 navigator.geolocation 
+/* =========================
+   SUCHVORSCHLÄGE
+========================= */
+
+let produkte = [
+
+"Milch",
+"Käse",
+"Butter",
+"Tomaten",
+"Gurken",
+"Eier",
+"Cola",
+"Rivella",
+"Brot",
+"Äpfel",
+"Bananen"
+
+];
+
+let vorschlagBox =
+document.createElement("div");
+
+document
+.getElementById("produkt")
+.parentNode
+.appendChild(vorschlagBox);
+
+document
+.getElementById("produkt")
+.addEventListener(
+"input",
+function(){
+
+let suche =
+this.value.toLowerCase();
+
+vorschlagBox.innerHTML = "";
+
+if(suche.length < 1){
+return;
+}
+
+produkte
+.filter(p =>
+p.toLowerCase().startsWith(suche)
+)
+.slice(0,5)
+.forEach(function(p){
+
+vorschlagBox.innerHTML +=
+`
+<div class="item"
+onclick="waehleProdukt('${p}')">
+${p}
+</div>
+`;
+
+});
+
+});
+
+function waehleProdukt(name){
+
+document.getElementById("produkt")
+.value = name;
+
+vorschlagBox.innerHTML = "";
+
+}
+
+
+/* =========================
+   FAVORITEN
+========================= */
+
+function favoritenBerechnen(){
+
+let zaehler = {};
+
+verlauf.forEach(function(item){
+
+zaehler[item] =
+(zaehler[item] || 0) + 1;
+
+});
+
+favoriten = [];
+
+Object.keys(zaehler)
+.forEach(function(item){
+
+if(zaehler[item] >= 3){
+
+favoriten.push(item);
+
+}
+
+});
+
+anzeigenFavoriten();
+
+}
+
+
+/* =========================
+   STAMMARTIKEL
+========================= */
+
+function stammartikelAnzeigen(){
+
+let div =
+document.getElementById(
+"stammartikel"
+);
+
+div.innerHTML = "";
+
+favoriten.forEach(function(item){
+
+div.innerHTML +=
+`
+<div class="item">
+${item}
+</div>
+`;
+
+});
+
+}
+
+
+/* =========================
+   AKTIONEN
+========================= */
+
+function ladeAktionen(){
+
+document.getElementById(
+"aktionen"
+).innerHTML =
+
+`
+<div class="item">
+🔥 Coop Aktionen
+</div>
+
+<div class="item">
+🔥 Migros Aktionen
+</div>
+
+<div class="item">
+🔥 Lidl Aktionen
+</div>
+
+<div class="item">
