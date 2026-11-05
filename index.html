@@ -37,7 +37,6 @@ input{
 }
 
 button{
-    width:100%;
     padding:16px;
     margin-top:10px;
     border:none;
@@ -96,20 +95,22 @@ button{
     box-shadow:0 6px 18px rgba(0,0,0,.08);
 }
  
-.mengenZeile input{
-    flex:none;
+.mengenZeile{
+    display:flex;
+    gap:8px;
+    align-items:center;
 }
   
 #produkt{
-    flex:1;
+    flex:5;
     width:auto;
 }
 #menge{
-    width:60px;
+    width:55px;
     flex:none;
 }
 .mengenZeile select{
-    width:90px;
+    width:100px;
     flex:none;
     padding:12px;
     border:1px solid #ccc;
