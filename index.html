@@ -66,19 +66,19 @@ button{
 }
 .dashboard{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
     margin-bottom:20px;
 }
 
 .karte{
     background:white;
     padding:8px;
-    border-radius:14px;
+    border-radius:10px;
     text-align:center;
     box-shadow:0 4px 12px rgba(0,0,0,.08);
     font-weight:bold;
-    font-size:14px
+    font-size:12px
 }
 .untertitel{
     text-align:center;
@@ -131,11 +131,7 @@ h3{
 Intelligent einkaufen. Einfach entscheiden.
 </p>
 <div class="dashboard">
-<div class="karte">
-⭐ Favoriten
-<br>
-<span id="favoritenCount">0</span>
-</div>
+    
 <div class="karte">
 🛒 Liste
 <br>
@@ -154,11 +150,9 @@ Bald verfügbar
 Aktiv
 </div>
 
-<h3>⭐ Favoriten</h3>
-<div id="favoriten"></div>
 </div>
 <div class="eingabeKarte">
-
+    
 <input id="produkt" placeholder="+ Produkt hinzufügen">
 <div class="mengenZeile">  
 <input
@@ -180,17 +174,39 @@ placeholder="Menge">
     
 <div id="vorschlaege"></div>
 <button onclick="addProduct()">
-Produkt hinzufügen
+➕ Zur Liste
 </button>
 </div>
-
-<h3>Aktuelle Einkaufsliste</h3>
+<h3>🛒 Einkaufsliste</h3>
 <div id="liste"></div>
+    
+<h3>⭐ Meine Favoriten</h3>
+<div id="favoriten"></div>  
 
 <h3>🕓 Zuletzt gekauft</h3>
 <div id="history"></div>
-<h3>⭐ Häufig gekauft</h3>
+    
+<h3>⭐ Stammartikel</h3>
 <div id="haeufig"></div>
+    
+<div class="dashboard">
+
+<div class="karte">
+⭐ <span id="favoritenCount">0</span>
+</div>
+
+<div class="karte">
+🛒 <span id="listeCount">0</span>
+</div>
+
+<div class="karte">
+🔥
+</div>
+
+<div class="karte">
+⚙️
+</div>
+
 </div>
 
 <script>
