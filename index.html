@@ -95,23 +95,32 @@ button{
     margin-bottom:25px;
     box-shadow:0 6px 18px rgba(0,0,0,.08);
 }
- .mengenZeile{
-    display:flex;
-    gap:10px;
-    margin-top:10px;
-}
+ 
 .mengenZeile input{
-    flex:0.6;
+    flex:none;
+}
+  
+}#produkt{
+    flex:1;
 }
 
+#menge{
+    width:60px;
+}
+
+}   
 .mengenZeile select{
-    flex:1.2;
-    border-radius:14px;
-    border:1px solid #ccc;
-    padding:16px;
-    background:white;
+    width:110px;
+    flex:none;
 }
     
+} 
+.mengenZeile button{
+    width:50px;
+    padding:8px;
+    margin-top:0;
+    border-radius:14px;
+}    
 h3{
     margin-top:25px;
     color:#0f766e;
@@ -153,8 +162,10 @@ Aktiv
 </div>
 <div class="eingabeKarte">
     
-<input id="produkt" placeholder="+ Produkt hinzufügen">
 <div class="mengenZeile">  
+    
+<input id="produkt" placeholder="+ Produkt hinzufügen"> 
+    
 <input
 id="menge"
 type="number"
@@ -170,12 +181,12 @@ placeholder="Menge">
 <option value="Packung">Packung</option>
 </select>
     
+<button onclick="addProduct()">➕</button>  
+    
 </div>
     
 <div id="vorschlaege"></div>
-<button onclick="addProduct()">
-➕ Zur Liste
-</button>
+
 </div>
 <h3>🛒 Einkaufsliste</h3>
 <div id="liste"></div>
