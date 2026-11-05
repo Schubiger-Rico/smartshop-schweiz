@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartShop Schweiz V5</title>
+
+<style>
+
+:root{
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --primary:#0f766e;
+    --text:#1e293b;
+    --border:#dbe2e8;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:Arial,sans-serif;
+    color:var(--text);
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+    padding-bottom:90px;
+}
+
+h1{
+    text-align:center;
+    color:var(--primary);
+    margin:10px 0 15px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:18px;
+    padding:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.eingabeZeile{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+#produkt,
+#menge,
+#einheit,
+#addBtn{
+    height:50px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    box-sizing:border-box;
+}
+
+#produkt{
+    flex:1;
+    padding:0 12px;
+}
+
+#menge{
+    width:70px;
+    text-align:center;
+}
+
+#einheit{
+    width:100px;
+}
+
+#addBtn{
+    width:50px;
+    border
+  <!-- Einkaufsliste -->
+
+<div class="section">
+
+<h3>🛒 Einkaufsliste</h3>
+
+<div id="liste"></div>
+
+</div>
+
+<!-- Favoriten -->
+
+<details class="section">
+
+<summary>⭐ Favoriten</summary>
+
+<div id="favoriten"></div>
+
+</details>
+
+<!-- Verlauf -->
+
+<details class="section">
+
+<summary>🕓 Verlauf</summary>
+
+<div id="verlauf"></div>
+
+</details>
+
+<!-- Stammartikel -->
+
+<details class="section">
+
+<summary>📦 Stammartikel</summary>
+
+<div id="stammartikel"></div>
+
+</details>
+
+<!-- Aktionen -->
+
+<details class="section">
+
+<summary>🔥 Aktionen</summary>
+
+<div id="aktionen">
+
+<div class="item">
+Alle Aktionen werden hier angezeigt
+</div>
+
+</div>
+
+</details>
+
+<!-- GPS -->
+
+<details class="section">
+
+<summary>📍 Filialfinder</summary>
+
+<div class="card">
+
+<select id="radius">
+
+<option>5 km</option>
+<option>10 km</option>
+<option>20 km</option>
+<option>50 km</option>
+<option>100 km</option>
+
+</select>
+
+<button id="gpsBtn">
+📍 Standort verwenden
+</button>
+
+<div id="filialen"></div>
+
+</div>
+
+</details>
+
+<!-- Einstellungen -->
+
+<details class="section">
+
+<summary>⚙️ Einstellungen</summary>
+
+<div class="card">
+
+<label>
+
+<input type="checkbox" id="darkMode">
+
+ Dark Mode
+
+</label>
+
+<br><br>
+
+<label>
+
+Schriftfarbe
+
+<select id="farbe">
+
+<option value="#1e293b">Standard</option>
+<option value="#0f766e">Grün</option>
+<option value="#2563eb">Blau</option>
+<option value="#dc2626">Rot</option>
+
+</select>
+
+</label>
+
+</div>
+
+</details>
+
+<!-- Navigation -->
+
+<div class="bottomNav">
+
+<div class="navBtn">🛒</div>
+
+<div class="navBtn">
+</body>
+</html>
+<script>
+
+let liste =
+JSON.parse(localStorage.getItem("liste")) || [];
+
+let favoriten =
+JSON.parse(localStorage.getItem("favoriten")) || [];
+
+let verlauf =
+JSON.parse(localStorage.getItem("verlauf")) || [];
+
+function speichern(){
+
+localStorage.setItem(
+"liste",
+JSON.stringify(liste)
+);
+
+localStorage.setItem(
+"favoriten",
+JSON.stringify(favoriten)
+);
+
+localStorage.setItem(
+"verlauf",
+JSON.stringify(verlauf)
+);
+
+}
+
+function anzeigen(){
+
+let listeDiv =
+document.getElementById("liste");
+
+listeDiv.innerHTML = "";
+
+liste.forEach(function(eintrag,index){
+
+listeDiv.innerHTML +=
+`
+<div class="item">
+☐ ${eintrag}
+</div>
+`;
+
+});
+
+anzeigenFavoriten();
+anzeigenVerlauf();
+
+}
+
+function addProdukt(){
+
+let produkt =
+document.getElementById("produkt")
+.value.trim();
+
+let menge =
+document.getElementById("menge")
+.value;
+
+let einheit =
+document.getElementById("einheit")
+.value;
+
+if(produkt === ""){
+return;
+}
+
+let text = produkt;
+
+if(einheit !== "Einheit"){
+
+text =
+produkt +
+" (" +
+menge +
+" " +
+einheit +
+")";
+
+}
+
+liste.push(text);
+
+verlauf.unshift(text);
+
+if(verlauf.length > 30){
+
+verlauf.pop();
+
+}
+
+document.getElementById("produkt")
+.value = "";
+
+speichern();
+
+anzeigen();
+
+}
+
+function anzeigenFavoriten(){
+
+let div =
+document.getElementById("favoriten");
+
+div.innerHTML = "";
+
+favoriten.forEach(function(item){
+
+div.innerHTML +=
+`
+<div class="item">
+${item}
+</div>
+`;
+
+});
+
+}
+
+function anzeigenVerlauf(){
+
+let div =
+document.getElementById("verlauf");
+
+div.innerHTML = "";
+
+verlauf.forEach(function(item){
+
+div.innerHTML +=
+`
+<div class="item">
+${item}
+</div>
+`;
+
+});
+
+}
+
+document
+.getElementById("addBtn")
+.addEventListener(
+"click",
+addProdukt
+);
+
+anzeigen();
+
+</script>
+ /* =========================
+   DARK MODE
+========================= */
+
+const darkMode =
+document.getElementById("darkMode");
+
+if(localStorage.getItem("darkMode")==="true"){
+
+document.body.classList.add("dark");
+darkMode.checked = true;
+
+}
+
+darkMode.addEventListener("change",function(){
+
+if(this.checked){
+
+document.body.classList.add("dark");
+localStorage.setItem("darkMode","true");
+
+}else{
+
+document.body.classList.remove("dark");
+localStorage.setItem("darkMode","false");
+
+}
+
+});
+
+
+/* =========================
+   SCHRIFTFARBE
+========================= */
+
+const farbe =
+document.getElementById("farbe");
+
+if(localStorage.getItem("schriftfarbe")){
+
+document.documentElement.style
+.setProperty(
+"--text",
+localStorage.getItem("schriftfarbe")
+);
+
+farbe.value =
+localStorage.getItem("schriftfarbe");
+
+}
+
+farbe.addEventListener("change",function(){
+
+document.documentElement.style
+.setProperty(
+"--text",
+this.value
+);
+
+localStorage.setItem(
+"schriftfarbe",
+this.value
+);
+
+});
+
+
+/* =========================
+   GPS
+========================= */
+
+document
+.getElementById("gpsBtn")
+.addEventListener(
+"click",
+function(){
+
+if(!navigator.geolocation){
+
+alert("GPS wird nicht unterstützt.");
+return;
+
+}
+
+navigator.geolocation 
