@@ -1,1 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>SmartShop Schweiz V5</title>
+
+<style>
+:root{
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --text:#1f2937;
+    --accent:#6CBF3A;
+    --border:#dcdcdc;
+    --fontSize:18px;
+}
+
+body.dark{
+    --bg:#111111;
+    --card:#1d1d1d;
+    --text:#ffffff;
+    --border:#444;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,Arial,sans-serif;
+    font-size:var(--fontSize);
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:15px;
+    padding-bottom:100px;
+}
+
+h1{
+    text-align:center;
+    color:var(--accent);
+}
+
+.card{
+    background:var(--card);
+    border-radius:15px;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid var(--border);
+}
+
+.input-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.input-row input,
+.input-row select,
+.input-row button{
+    height:50px;
+}
+
+#produkt{
+    flex:1;
+    min-width:180px;
+    padding:10px;
+}
+
+#menge{
+    width:70px;
+}
+
+#einheit{
+    width:90px;
+}
+
+#addBtn{
+    width:55px;
+    background:var(--accent);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:20px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    background:var(--card);
+    border:1px solid var(--border);
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:var(--card);
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0;
+    border-top:1px solid var(--border);
+}
+
+.bottom-nav div{
+    text-align:center;
+    font-size:14px;
+}
+
+details{
+    margin-bottom:10px;
+}
+
+summary{
+    cursor:pointer;
+    font-weight:bold;
+    padding:8px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🛒 SmartShop V5</h1>
+
+<div class="card">
+<div class="input-row">
+
+<input id="produkt" placeholder="Produkt">
+
+<input id="menge" type="number" value="1">
+
+<select id="einheit">
+<option>Stk</option>
+<option>kg</option>
+<option>g</option>
+<option>Liter</option>
+<option>ml</option>
+</select>
+
+<button id="addBtn">➕</button>
+
+</div>
+</div>
+
+<div class="card">
+<h3>🛒 Einkaufsliste</h3>
+<div id="liste"></div>
+</div>
+
+<details class="card">
+<summary>⭐ Favoriten</summary>
+<div id="favoriten"></div>
+</details>
+
+<details class="card">
+<summary>🕓 Verlauf</summary>
+<div id="verlauf"></div>
+</details>
+
+<details class="card">
+<summary>📦 Stammartikel</summary>
+<div id="stammartikel"></div>
+</details>
+
+<details class="card">
+<summary>⚙️ Einstellungen</summary>
+
+<label>
+<input type="checkbox" id="darkMode">
+Dark Mode
+</label>
+
+<br><br>
+
+<label>
+Schriftgröße
+<select id="schrift">
+<option value="16">Klein</option>
+<option value="18" selected>Mittel</option>
+<option value="22">Gross</option>
+</select>
+</label>
+
+</details>
+
+</div>
+
+<div class="bottom-nav">
+<div>🛒<br>Liste</div>
+<div>⭐<br>Favoriten</div>
+<div>💡<br>Ideen</div>
+<div>🔥<br>Aktionen</div>
+<div>⚙️<br>Settings</div>
+</div>
+
+<script>
+
+let liste = JSON.parse(localStorage.getItem("liste")) || [];
+let verlauf = JSON.parse(localStorage.getItem("verlauf")) || [];
+
+function speichern(){
+    localStorage.setItem("liste",JSON.stringify(liste));
+    localStorage.setItem("verlauf",JSON.stringify(verlauf));
+}
+
+function render(){
+
+    let listeDiv=document.getElementById("liste");
+    listeDiv.innerHTML="";
+
+    liste.forEach((item,index)=>{
+
+        listeDiv.innerHTML += `
+        <div class="item">
+            <span>${item}</span>
+            <button onclick="erledigt(${index})">
+                ✅
+            </button>
+        </div>
+        `;
+    });
+
+    renderVerlauf();
+    renderFavoriten();
+}
+
+function addProdukt(){
+
+    let produkt=document.getElementById("produkt").value.trim();
+
+    if(!produkt)return;
+
+    let menge=document.getElementById("menge").value;
+    let einheit=document.getElementById("einheit").value;
+
+    liste.push(`${produkt} (${menge} ${einheit})`);
+
+    document.getElementById("produkt").value="";
+
+    speichern();
+    render();
+}
+
+function erledigt(index){
+
+    verlauf.unshift(liste[index]);
+
+    liste.splice(index,1);
+
+    speichern();
+    render();
+}
+
+function renderVerlauf(){
+
+    let div=document.getElementById("verlauf");
+
+    div.innerHTML="";
+
+    verlauf.slice(0,20).forEach(item=>{
+
+        div.innerHTML+=`
+        <div class="item">${item}</div>
+        `;
+    });
+}
+
+function renderFavoriten(){
+
+    let count={};
+
+    verlauf.forEach(item=>{
+        count[item]=(count[item]||0)+1;
+    });
+
+    let div=document.getElementById("favoriten");
+    let stamm=document.getElementById("stammartikel");
+
+    div.innerHTML="";
+    stamm.innerHTML="";
+
+    Object.keys(count).forEach(item=>{
+
+        if(count[item]>=3){
+
+            div.innerHTML+=`
+            <div class="item">${item}</div>
+            `;
+
+            stamm.innerHTML+=`
+            <div class="item">${item}</div>
+            `;
+        }
+    });
+}
+
+document.getElementById("addBtn")
+.addEventListener("click",addProdukt);
+
+document.getElementById("darkMode")
+.addEventListener("change",function(){
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
+});
+
+if(localStorage.getItem("darkMode")==="true"){
+    document.body.classList.add("dark");
+    document.getElementById("darkMode").checked=true;
+}
+
+document.getElementById("schrift")
+.addEventListener("change",function(){
+
+    document.documentElement.style
+    .setProperty("--fontSize",this.value+"px");
+
+    localStorage.setItem("fontSize",this.value);
+});
+
+let fontSize=localStorage.getItem("fontSize");
+
+if(fontSize){
+
+    document.documentElement.style
+    .setProperty("--fontSize",fontSize+"px");
+
+    document.getElementById("schrift").value=fontSize;
+}
+
+render();
+
+</script>
+
+</body>
+</html>
