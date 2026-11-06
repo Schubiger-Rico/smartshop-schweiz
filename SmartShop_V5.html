@@ -7,597 +7,348 @@
 <title>SmartShop Schweiz V5</title>
 
 <style>
-
 :root{
     --bg:#f4f6f8;
     --card:#ffffff;
-    --primary:#0f766e;
-    --text:#1e293b;
-    --border:#dbe2e8;
+    --text:#1f2937;
+    --accent:#6CBF3A;
+    --border:#dcdcdc;
+    --fontSize:18px;
+}
+
+body.dark{
+    --bg:#111111;
+    --card:#1d1d1d;
+    --text:#ffffff;
+    --border:#444;
+}
+
+*{
+    box-sizing:border-box;
 }
 
 body{
     margin:0;
     background:var(--bg);
-    font-family:Arial,sans-serif;
     color:var(--text);
+    font-family:Inter,Arial,sans-serif;
+    font-size:var(--fontSize);
 }
 
 .container{
-    max-width:700px;
+    max-width:800px;
     margin:auto;
     padding:15px;
-    padding-bottom:90px;
+    padding-bottom:100px;
 }
 
 h1{
     text-align:center;
-    color:var(--primary);
-    margin:10px 0 15px;
+    color:var(--accent);
 }
 
 .card{
     background:var(--card);
-    border-radius:18px;
+    border-radius:15px;
     padding:12px;
-    box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
-
-.eingabeZeile{
-    display:flex;
-    gap:8px;
-    align-items:center;
-}
-
-#produkt,
-#menge,
-#einheit,
-#addBtn{
-    height:50px;
-    border-radius:12px;
+    margin-bottom:15px;
     border:1px solid var(--border);
-    box-sizing:border-box;
+}
+
+.input-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.input-row input,
+.input-row select,
+.input-row button{
+    height:50px;
 }
 
 #produkt{
     flex:1;
-    padding:0 12px;
+    min-width:180px;
+    padding:10px;
 }
 
 #menge{
     width:70px;
-    text-align:center;
 }
 
 #einheit{
-    width:100px;
+    width:90px;
 }
 
 #addBtn{
-    width:50px;
-    border
-  <!-- Einkaufsliste -->
+    width:55px;
+    background:var(--accent);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:20px;
+}
 
-<div class="section">
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    background:var(--card);
+    border:1px solid var(--border);
+}
 
-<h3>🛒 Einkaufsliste</h3>
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:var(--card);
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0;
+    border-top:1px solid var(--border);
+}
 
-<div id="liste"></div>
+.bottom-nav div{
+    text-align:center;
+    font-size:14px;
+}
 
-</div>
+details{
+    margin-bottom:10px;
+}
 
-<!-- Favoriten -->
+summary{
+    cursor:pointer;
+    font-weight:bold;
+    padding:8px 0;
+}
+</style>
+</head>
 
-<details class="section">
+<body>
 
-<summary>⭐ Favoriten</summary>
+<div class="container">
 
-<div id="favoriten"></div>
-
-</details>
-
-<!-- Verlauf -->
-
-<details class="section">
-
-<summary>🕓 Verlauf</summary>
-
-<div id="verlauf"></div>
-
-</details>
-
-<!-- Stammartikel -->
-
-<details class="section">
-
-<summary>📦 Stammartikel</summary>
-
-<div id="stammartikel"></div>
-
-</details>
-
-<!-- Aktionen -->
-
-<details class="section">
-
-<summary>🔥 Aktionen</summary>
-
-<div id="aktionen">
-
-<div class="item">
-Alle Aktionen werden hier angezeigt
-</div>
-
-</div>
-
-</details>
-
-<!-- GPS -->
-
-<details class="section">
-
-<summary>📍 Filialfinder</summary>
+<h1>🛒 SmartShop V5</h1>
 
 <div class="card">
+<div class="input-row">
 
-<select id="radius">
+<input id="produkt" placeholder="Produkt">
 
-<option>5 km</option>
-<option>10 km</option>
-<option>20 km</option>
-<option>50 km</option>
-<option>100 km</option>
+<input id="menge" type="number" value="1">
 
+<select id="einheit">
+<option>Stk</option>
+<option>kg</option>
+<option>g</option>
+<option>Liter</option>
+<option>ml</option>
 </select>
 
-<button id="gpsBtn">
-📍 Standort verwenden
-</button>
-
-<div id="filialen"></div>
+<button id="addBtn">➕</button>
 
 </div>
-
-</details>
-
-<!-- Einstellungen -->
-
-<details class="section">
-
-<summary>⚙️ Einstellungen</summary>
+</div>
 
 <div class="card">
+<h3>🛒 Einkaufsliste</h3>
+<div id="liste"></div>
+</div>
+
+<details class="card">
+<summary>⭐ Favoriten</summary>
+<div id="favoriten"></div>
+</details>
+
+<details class="card">
+<summary>🕓 Verlauf</summary>
+<div id="verlauf"></div>
+</details>
+
+<details class="card">
+<summary>📦 Stammartikel</summary>
+<div id="stammartikel"></div>
+</details>
+
+<details class="card">
+<summary>⚙️ Einstellungen</summary>
 
 <label>
-
 <input type="checkbox" id="darkMode">
-
- Dark Mode
-
+Dark Mode
 </label>
 
 <br><br>
 
 <label>
-
-Schriftfarbe
-
-<select id="farbe">
-
-<option value="#1e293b">Standard</option>
-<option value="#0f766e">Grün</option>
-<option value="#2563eb">Blau</option>
-<option value="#dc2626">Rot</option>
-
+Schriftgröße
+<select id="schrift">
+<option value="16">Klein</option>
+<option value="18" selected>Mittel</option>
+<option value="22">Gross</option>
 </select>
-
 </label>
-
-</div>
 
 </details>
 
-<!-- Navigation -->
+</div>
 
-<div class="bottomNav">
+<div class="bottom-nav">
+<div>🛒<br>Liste</div>
+<div>⭐<br>Favoriten</div>
+<div>💡<br>Ideen</div>
+<div>🔥<br>Aktionen</div>
+<div>⚙️<br>Settings</div>
+</div>
 
-<div class="navBtn">🛒</div>
-
-<div class="navBtn">
-</body>
-</html>
 <script>
 
-let liste =
-JSON.parse(localStorage.getItem("liste")) || [];
-
-let favoriten =
-JSON.parse(localStorage.getItem("favoriten")) || [];
-
-let verlauf =
-JSON.parse(localStorage.getItem("verlauf")) || [];
+let liste = JSON.parse(localStorage.getItem("liste")) || [];
+let verlauf = JSON.parse(localStorage.getItem("verlauf")) || [];
 
 function speichern(){
-
-localStorage.setItem(
-"liste",
-JSON.stringify(liste)
-);
-
-localStorage.setItem(
-"favoriten",
-JSON.stringify(favoriten)
-);
-
-localStorage.setItem(
-"verlauf",
-JSON.stringify(verlauf)
-);
-
+    localStorage.setItem("liste",JSON.stringify(liste));
+    localStorage.setItem("verlauf",JSON.stringify(verlauf));
 }
 
-function anzeigen(){
+function render(){
 
-let listeDiv =
-document.getElementById("liste");
+    let listeDiv=document.getElementById("liste");
+    listeDiv.innerHTML="";
 
-listeDiv.innerHTML = "";
+    liste.forEach((item,index)=>{
 
-liste.forEach(function(eintrag,index){
+        listeDiv.innerHTML += `
+        <div class="item">
+            <span>${item}</span>
+            <button onclick="erledigt(${index})">
+                ✅
+            </button>
+        </div>
+        `;
+    });
 
-listeDiv.innerHTML +=
-`
-<div class="item">
-☐ ${eintrag}
-</div>
-`;
-
-});
-
-anzeigenFavoriten();
-anzeigenVerlauf();
-
+    renderVerlauf();
+    renderFavoriten();
 }
 
 function addProdukt(){
 
-let produkt =
-document.getElementById("produkt")
-.value.trim();
+    let produkt=document.getElementById("produkt").value.trim();
 
-let menge =
-document.getElementById("menge")
-.value;
+    if(!produkt)return;
 
-let einheit =
-document.getElementById("einheit")
-.value;
+    let menge=document.getElementById("menge").value;
+    let einheit=document.getElementById("einheit").value;
 
-if(produkt === ""){
-return;
+    liste.push(`${produkt} (${menge} ${einheit})`);
+
+    document.getElementById("produkt").value="";
+
+    speichern();
+    render();
 }
 
-let text = produkt;
+function erledigt(index){
 
-if(einheit !== "Einheit"){
+    verlauf.unshift(liste[index]);
 
-text =
-produkt +
-" (" +
-menge +
-" " +
-einheit +
-")";
+    liste.splice(index,1);
 
+    speichern();
+    render();
 }
 
-liste.push(text);
+function renderVerlauf(){
 
-verlauf.unshift(text);
+    let div=document.getElementById("verlauf");
 
-if(verlauf.length > 30){
+    div.innerHTML="";
 
-verlauf.pop();
+    verlauf.slice(0,20).forEach(item=>{
 
+        div.innerHTML+=`
+        <div class="item">${item}</div>
+        `;
+    });
 }
 
-document.getElementById("produkt")
-.value = "";
+function renderFavoriten(){
 
-speichern();
+    let count={};
 
-anzeigen();
+    verlauf.forEach(item=>{
+        count[item]=(count[item]||0)+1;
+    });
 
+    let div=document.getElementById("favoriten");
+    let stamm=document.getElementById("stammartikel");
+
+    div.innerHTML="";
+    stamm.innerHTML="";
+
+    Object.keys(count).forEach(item=>{
+
+        if(count[item]>=3){
+
+            div.innerHTML+=`
+            <div class="item">${item}</div>
+            `;
+
+            stamm.innerHTML+=`
+            <div class="item">${item}</div>
+            `;
+        }
+    });
 }
 
-function anzeigenFavoriten(){
+document.getElementById("addBtn")
+.addEventListener("click",addProdukt);
 
-let div =
-document.getElementById("favoriten");
+document.getElementById("darkMode")
+.addEventListener("change",function(){
 
-div.innerHTML = "";
+    document.body.classList.toggle("dark");
 
-favoriten.forEach(function(item){
-
-div.innerHTML +=
-`
-<div class="item">
-${item}
-</div>
-`;
-
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
 });
-
-}
-
-function anzeigenVerlauf(){
-
-let div =
-document.getElementById("verlauf");
-
-div.innerHTML = "";
-
-verlauf.forEach(function(item){
-
-div.innerHTML +=
-`
-<div class="item">
-${item}
-</div>
-`;
-
-});
-
-}
-
-document
-.getElementById("addBtn")
-.addEventListener(
-"click",
-addProdukt
-);
-
-anzeigen();
-
-</script>
- /* =========================
-   DARK MODE
-========================= */
-
-const darkMode =
-document.getElementById("darkMode");
 
 if(localStorage.getItem("darkMode")==="true"){
-
-document.body.classList.add("dark");
-darkMode.checked = true;
-
+    document.body.classList.add("dark");
+    document.getElementById("darkMode").checked=true;
 }
 
-darkMode.addEventListener("change",function(){
+document.getElementById("schrift")
+.addEventListener("change",function(){
 
-if(this.checked){
+    document.documentElement.style
+    .setProperty("--fontSize",this.value+"px");
 
-document.body.classList.add("dark");
-localStorage.setItem("darkMode","true");
-
-}else{
-
-document.body.classList.remove("dark");
-localStorage.setItem("darkMode","false");
-
-}
-
+    localStorage.setItem("fontSize",this.value);
 });
 
+let fontSize=localStorage.getItem("fontSize");
 
-/* =========================
-   SCHRIFTFARBE
-========================= */
+if(fontSize){
 
-const farbe =
-document.getElementById("farbe");
+    document.documentElement.style
+    .setProperty("--fontSize",fontSize+"px");
 
-if(localStorage.getItem("schriftfarbe")){
-
-document.documentElement.style
-.setProperty(
-"--text",
-localStorage.getItem("schriftfarbe")
-);
-
-farbe.value =
-localStorage.getItem("schriftfarbe");
-
+    document.getElementById("schrift").value=fontSize;
 }
 
-farbe.addEventListener("change",function(){
+render();
 
-document.documentElement.style
-.setProperty(
-"--text",
-this.value
-);
+</script>
 
-localStorage.setItem(
-"schriftfarbe",
-this.value
-);
-
-});
-
-
-/* =========================
-   GPS
-========================= */
-
-document
-.getElementById("gpsBtn")
-.addEventListener(
-"click",
-function(){
-
-if(!navigator.geolocation){
-
-alert("GPS wird nicht unterstützt.");
-return;
-
-}
-
-navigator.geolocation 
-/* =========================
-   SUCHVORSCHLÄGE
-========================= */
-
-let produkte = [
-
-"Milch",
-"Käse",
-"Butter",
-"Tomaten",
-"Gurken",
-"Eier",
-"Cola",
-"Rivella",
-"Brot",
-"Äpfel",
-"Bananen"
-
-];
-
-let vorschlagBox =
-document.createElement("div");
-
-document
-.getElementById("produkt")
-.parentNode
-.appendChild(vorschlagBox);
-
-document
-.getElementById("produkt")
-.addEventListener(
-"input",
-function(){
-
-let suche =
-this.value.toLowerCase();
-
-vorschlagBox.innerHTML = "";
-
-if(suche.length < 1){
-return;
-}
-
-produkte
-.filter(p =>
-p.toLowerCase().startsWith(suche)
-)
-.slice(0,5)
-.forEach(function(p){
-
-vorschlagBox.innerHTML +=
-`
-<div class="item"
-onclick="waehleProdukt('${p}')">
-${p}
-</div>
-`;
-
-});
-
-});
-
-function waehleProdukt(name){
-
-document.getElementById("produkt")
-.value = name;
-
-vorschlagBox.innerHTML = "";
-
-}
-
-
-/* =========================
-   FAVORITEN
-========================= */
-
-function favoritenBerechnen(){
-
-let zaehler = {};
-
-verlauf.forEach(function(item){
-
-zaehler[item] =
-(zaehler[item] || 0) + 1;
-
-});
-
-favoriten = [];
-
-Object.keys(zaehler)
-.forEach(function(item){
-
-if(zaehler[item] >= 3){
-
-favoriten.push(item);
-
-}
-
-});
-
-anzeigenFavoriten();
-
-}
-
-
-/* =========================
-   STAMMARTIKEL
-========================= */
-
-function stammartikelAnzeigen(){
-
-let div =
-document.getElementById(
-"stammartikel"
-);
-
-div.innerHTML = "";
-
-favoriten.forEach(function(item){
-
-div.innerHTML +=
-`
-<div class="item">
-${item}
-</div>
-`;
-
-});
-
-}
-
-
-/* =========================
-   AKTIONEN
-========================= */
-
-function ladeAktionen(){
-
-document.getElementById(
-"aktionen"
-).innerHTML =
-
-`
-<div class="item">
-🔥 Coop Aktionen
-</div>
-
-<div class="item">
-🔥 Migros Aktionen
-</div>
-
-<div class="item">
-🔥 Lidl Aktionen
-</div>
-
-<div class="item">
+</body>
+</html>
