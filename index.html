@@ -12,8 +12,9 @@
     --bg:#f4f6f8;
     --card:#ffffff;
     --text:#1f2937;
+
     --accent:#5FAF3C;
-    --border:#d6dce2;
+    --accentBorder:#2f6d1d;
 
     --fontSize:14px;
     --plusSize:17px;
@@ -23,7 +24,6 @@ body.dark{
     --bg:#121212;
     --card:#1c1c1c;
     --text:#ffffff;
-    --border:#2f2f2f;
 }
 
 *{
@@ -53,17 +53,45 @@ body{
 }
 
 .logo{
-    font-size:24px;
+    font-size:28px;
     font-weight:700;
     color:var(--accent);
+
+    text-shadow:
+    -1px -1px 0 var(--accentBorder),
+     1px -1px 0 var(--accentBorder),
+    -1px  1px 0 var(--accentBorder),
+     1px  1px 0 var(--accentBorder);
 }
 
 .card{
     background:var(--card);
-    border:1px solid var(--border);
+    border:1px solid var(--accentBorder);
     border-radius:12px;
     padding:8px;
     margin-bottom:8px;
+}
+
+input,
+select,
+textarea{
+    border:1px solid var(--accentBorder);
+    border-radius:10px;
+    outline:none;
+}
+
+button{
+    border:1px solid var(--accentBorder);
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
 }
 
 .bottom-nav{
@@ -71,11 +99,12 @@ body{
     bottom:0;
     left:0;
     right:0;
+
     height:65px;
 
     background:var(--card);
 
-    border-top:1px solid var(--border);
+    border-top:1px solid var(--accentBorder);
 
     display:flex;
     justify-content:space-around;
@@ -88,27 +117,23 @@ body{
 
     flex:1;
 
-    border:none;
+    height:100%;
 
     background:none;
 
-    color:var(--text);
+    color:var(--accent);
 
     font-size:11px;
 
     font-weight:600;
 
-    cursor:pointer;
+    border:none;
 
-    height:100%;
+    border-left:1px solid var(--accentBorder);
 }
 
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
+.bottom-nav button:first-child{
+    border-left:none;
 }
 
 </style>
@@ -199,9 +224,7 @@ function showPage(page){
     .forEach(p => p.classList.remove("active"));
 
     document
-    .getElementById(
-        "page-" + page
-    )
+    .getElementById("page-" + page)
     .classList
     .add("active");
 }
