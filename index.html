@@ -4,136 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartShop Schweiz V5</title>
+<title>SmartShop V5 Schriftentest</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@800&family=Nunito:wght@800&family=Poppins:wght@800&family=Outfit:wght@800&display=swap" rel="stylesheet">
 
 <style>
 
-:root{
-    --bg:#f4f6f8;
-    --card:#ffffff;
-    --text:#1f2937;
-
-    --accent:#5FAF3C;
-    --accentBorder:#2f6d1d;
-
-    --fontSize:14px;
-    --plusSize:17px;
-}
-
-body.dark{
-    --bg:#121212;
-    --card:#1c1c1c;
-    --text:#ffffff;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:Inter,Arial,sans-serif;
-    font-size:var(--fontSize);
-    min-height:100vh;
+    background:#f4f6f8;
+    padding:20px;
+    font-family:Arial,sans-serif;
 }
 
-.container{
-    max-width:800px;
-    margin:auto;
-    padding:10px;
-    padding-bottom:90px;
+.test{
+    margin-bottom:30px;
 }
 
-.header{
-    text-align:center;
-    margin-bottom:10px;
+.rubik{
+    font-family:'Rubik',sans-serif;
+}
+
+.nunito{
+    font-family:'Nunito',sans-serif;
+}
+
+.poppins{
+    font-family:'Poppins',sans-serif;
+}
+
+.outfit{
+    font-family:'Outfit',sans-serif;
 }
 
 .logo{
-    font-size:28px;
-    font-weight:700;
-    color:var(--accent);
+
+    font-size:40px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    color:#5FAF3C;
 
     text-shadow:
-    -1px -1px 0 var(--accentBorder),
-     1px -1px 0 var(--accentBorder),
-    -1px  1px 0 var(--accentBorder),
-     1px  1px 0 var(--accentBorder);
+    -2px -2px 0 #2f6d1d,
+     2px -2px 0 #2f6d1d,
+    -2px  2px 0 #2f6d1d,
+     2px  2px 0 #2f6d1d;
+
 }
 
-.card{
-    background:var(--card);
-    border:1px solid var(--accentBorder);
-    border-radius:12px;
-    padding:8px;
-    margin-bottom:8px;
-}
-
-input,
-select,
-textarea{
-    border:1px solid var(--accentBorder);
-    border-radius:10px;
-    outline:none;
-}
-
-button{
-    border:1px solid var(--accentBorder);
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-
-    height:65px;
-
-    background:var(--card);
-
-    border-top:1px solid var(--accentBorder);
-
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-
-    z-index:100;
-}
-
-.bottom-nav button{
-
-    flex:1;
-
-    height:100%;
-
-    background:none;
-
-    color:var(--accent);
-
-    font-size:11px;
-
-    font-weight:600;
-
-    border:none;
-
-    border-left:1px solid var(--accentBorder);
-}
-
-.bottom-nav button:first-child{
-    border-left:none;
+.beschriftung{
+    font-size:16px;
+    color:black;
+    margin-bottom:5px;
+    font-weight:bold;
 }
 
 </style>
@@ -141,95 +66,53 @@ button{
 
 <body>
 
-<div class="container">
+<div class="test">
 
-    <div class="header">
-        <div class="logo">
-            🛒 SmartShop V5
-        </div>
+    <div class="beschriftung">
+        Schrift 1 - Rubik
     </div>
 
-    <div id="page-list" class="page active">
-
-        <div class="card">
-            Einkaufsliste wird im nächsten Block erstellt.
-        </div>
-
-    </div>
-
-    <div id="page-favoriten" class="page">
-
-        <div class="card">
-            Favoriten folgen später.
-        </div>
-
-    </div>
-
-    <div id="page-ideen" class="page">
-
-        <div class="card">
-            Ideenbereich folgt später.
-        </div>
-
-    </div>
-
-    <div id="page-aktionen" class="page">
-
-        <div class="card">
-            Aktionen folgen später.
-        </div>
-
-    </div>
-
-    <div id="page-settings" class="page">
-
-        <div class="card">
-            Einstellungen folgen später.
-        </div>
-
+    <div class="logo rubik">
+        SmartShop V5
     </div>
 
 </div>
 
-<div class="bottom-nav">
+<div class="test">
 
-    <button onclick="showPage('list')">
-        🛒<br>Liste
-    </button>
+    <div class="beschriftung">
+        Schrift 2 - Nunito
+    </div>
 
-    <button onclick="showPage('favoriten')">
-        ⭐<br>Favoriten
-    </button>
-
-    <button onclick="showPage('ideen')">
-        💡<br>Ideen
-    </button>
-
-    <button onclick="showPage('aktionen')">
-        🔥<br>Aktionen
-    </button>
-
-    <button onclick="showPage('settings')">
-        ⚙️<br>Settings
-    </button>
+    <div class="logo nunito">
+        SmartShop V5
+    </div>
 
 </div>
 
-<script>
+<div class="test">
 
-function showPage(page){
+    <div class="beschriftung">
+        Schrift 3 - Poppins
+    </div>
 
-    document
-    .querySelectorAll(".page")
-    .forEach(p => p.classList.remove("active"));
+    <div class="logo poppins">
+        SmartShop V5
+    </div>
 
-    document
-    .getElementById("page-" + page)
-    .classList
-    .add("active");
-}
+</div>
 
-</script>
+<div class="test">
+
+    <div class="beschriftung">
+        Schrift 4 - Outfit
+    </div>
+
+    <div class="logo outfit">
+        SmartShop V5
+    </div>
+
+</div>
 
 </body>
 </html>
