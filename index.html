@@ -4,67 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartShop V5 Schriftentest</title>
+<title>SmartShop V5</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&family=Comfortaa:wght@700&family=Quicksand:wght@700&family=Red+Hat+Display:wght@800&family=Fredoka:wght@700&family=Manrope:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+
+    --bg:#f4f6f8;
+    --card:#ffffff;
+
+    --text:#000000;
+
+    --green:#78b84d;
+
+    --border:#2f6d1d;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
-    background:#f4f6f8;
-    padding:20px;
+
+    background:var(--bg);
+
+    color:var(--text);
+
     font-family:Arial,sans-serif;
+
+    min-height:100vh;
 }
 
-.beispiel{
-    margin-bottom:40px;
-}
+.container{
 
-.name{
-    font-size:16px;
-    font-weight:bold;
-    margin-bottom:10px;
+    max-width:800px;
+
+    margin:auto;
+
+    padding:10px;
+
+    padding-bottom:60px;
 }
 
 .logo{
 
-    font-size:42px;
+    text-align:center;
 
-    color:#5FAF3C;
+    font-family:'Quicksand',sans-serif;
 
-    letter-spacing:2px;
+    font-size:36px;
+
+    font-weight:700;
+
+    color:var(--green);
+
+    letter-spacing:1px;
+
+    margin:10px 0 15px;
 
     text-shadow:
-    -2px -2px 0 #2f6d1d,
-     2px -2px 0 #2f6d1d,
-    -2px  2px 0 #2f6d1d,
-     2px  2px 0 #2f6d1d;
+    -1px 0 #000,
+     1px 0 #000,
+     0 -1px #000,
+     0 1px #000;
 }
 
-/* Schriftarten */
+.card{
 
-.nunito{
-    font-family:'Nunito',sans-serif;
+    background:var(--card);
+
+    border:2px solid var(--border);
+
+    border-radius:12px;
+
+    padding:10px;
+
+    margin-bottom:8px;
+
+    color:black;
 }
 
-.comfortaa{
-    font-family:'Comfortaa',sans-serif;
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+
+    left:0;
+
+    right:0;
+
+    height:48px;
+
+    background:white;
+
+    border-top:2px solid var(--border);
+
+    display:flex;
 }
 
-.quicksand{
-    font-family:'Quicksand',sans-serif;
+.bottom-nav button{
+
+    flex:1;
+
+    background:white;
+
+    color:black;
+
+    border:none;
+
+    border-left:2px solid var(--border);
+
+    font-size:12px;
+
+    font-weight:600;
 }
 
-.redhat{
-    font-family:'Red Hat Display',sans-serif;
-}
+.bottom-nav button:first-child{
 
-.fredoka{
-    font-family:'Fredoka',sans-serif;
-}
-
-.manrope{
-    font-family:'Manrope',sans-serif;
+    border-left:none;
 }
 
 </style>
@@ -72,46 +134,30 @@ body{
 
 <body>
 
-<div class="beispiel">
-    <div class="name">1. Nunito</div>
-    <div class="logo nunito">
+<div class="container">
+
+    <div class="logo">
         SmartShop V5
     </div>
+
+    <div class="card">
+        Einkaufsliste wird im nächsten Block erstellt.
+    </div>
+
 </div>
 
-<div class="beispiel">
-    <div class="name">2. Comfortaa</div>
-    <div class="logo comfortaa">
-        SmartShop V5
-    </div>
-</div>
+<div class="bottom-nav">
 
-<div class="beispiel">
-    <div class="name">3. Quicksand</div>
-    <div class="logo quicksand">
-        SmartShop V5
-    </div>
-</div>
+    <button>🛒 Liste</button>
 
-<div class="beispiel">
-    <div class="name">4. Red Hat Display</div>
-    <div class="logo redhat">
-        SmartShop V5
-    </div>
-</div>
+    <button>⭐ Favoriten</button>
 
-<div class="beispiel">
-    <div class="name">5. Fredoka</div>
-    <div class="logo fredoka">
-        SmartShop V5
-    </div>
-</div>
+    <button>💡 Ideen</button>
 
-<div class="beispiel">
-    <div class="name">6. Manrope</div>
-    <div class="logo manrope">
-        SmartShop V5
-    </div>
+    <button>🔥 Aktionen</button>
+
+    <button>⚙️ Settings</button>
+
 </div>
 
 </body>
