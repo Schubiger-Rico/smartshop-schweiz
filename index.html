@@ -37,45 +37,72 @@ body{
 /* TITEL */
 
 .titleRow{
+
     position:relative;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     margin-bottom:6px;
 }
 
 .logo{
+
     font-family:'Quicksand',sans-serif;
+
     font-size:34px;
+
     color:var(--green);
+
     text-align:center;
+
     text-shadow:
-    -1px 0 #000,
-     1px 0 #000,
-     0 -1px #000,
-     0 1px #000;
+        -1px 0 #000,
+         1px 0 #000,
+         0 -1px #000,
+         0 1px #000;
 }
 
 .menu-btn{
+
     position:absolute;
+
     right:0;
+
     top:58%;
+
     transform:translateY(-50%);
+
     background:none;
+
     border:none;
-    color:#000;
+
+    color:black;
+
     font-size:22px;
+
     font-weight:900;
+
     cursor:pointer;
-    letter-spacing:-1px;
+
+    letter-spacing:-2px;
+
+    padding:0;
 }
 
-/* MENÜ */
+/* NAVIGATION */
 
 .menu{
+
     display:none;
+
     justify-content:space-between;
+
     gap:0;
+
     margin-bottom:10px;
 }
 
@@ -84,41 +111,62 @@ body{
 }
 
 .navBtn{
+
     width:19%;
-    border:2px solid var(--darkgreen);
-    border-radius:4px;
+
     background:white;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
     text-align:center;
+
     padding:4px 2px;
 }
 
 .navIcon{
+
     font-size:18px;
+
     margin-bottom:2px;
 }
 
 .navText{
+
     font-size:12px;
+
     font-weight:600;
 }
 
 /* EINGABE */
 
 .inputRow{
+
     display:flex;
+
     gap:0;
+
     margin-bottom:8px;
 }
 
 .inputRow input,
 .inputRow select{
+
     height:36px;
+
     border:2px solid var(--darkgreen);
+
     border-radius:4px;
+
     background:white;
+
     font-size:16px;
+
     font-weight:600;
-    color:#000;
+
+    color:black;
+
     padding:0 8px;
 }
 
@@ -127,101 +175,166 @@ body{
 }
 
 #menge{
-    width:80px;
-    min-width:80px;
+
+    width:72px;
+
+    min-width:72px;
+
     flex-shrink:0;
+
     text-align:center;
 }
 
 #einheit{
-    width:65px;
-    min-width:65px;
+
+    width:58px;
+
+    min-width:58px;
+
     flex-shrink:0;
 }
 
 .addBtn{
-    width:80px;
-    min-width:80px;
+
+    width:60px;
+
+    min-width:60px;
+
     flex-shrink:0;
+
     height:36px;
+
     border:none;
+
     border-radius:4px;
+
     background:var(--green);
+
     color:white;
+
     font-size:22px;
+
     font-weight:600;
+
     cursor:pointer;
 }
 
 /* KARTE */
 
 .card{
+
     border:2px solid var(--darkgreen);
+
     border-radius:4px;
+
     background:white;
+
     padding:5px;
 }
 
 .cardTitel{
+
     font-size:16px;
+
     font-weight:600;
+
     margin-bottom:6px;
 }
 
 /* LISTE */
 
 .item{
+
     display:flex;
+
     gap:0;
+
     margin-bottom:4px;
 }
 
 .produkt{
+
     flex:1;
+
     height:30px;
+
     border:2px solid var(--darkgreen);
+
     border-radius:4px;
+
     display:flex;
+
     align-items:center;
+
     padding:0 8px;
-    font-size:16px;
-    font-weight:600;
+
     background:white;
+
+    font-size:16px;
+
+    font-weight:600;
 }
 
 .menge{
-    width:80px;
+
+    width:72px;
+
     height:30px;
+
     border:2px solid var(--darkgreen);
+
     border-radius:4px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     background:white;
+
     font-size:16px;
+
     font-weight:600;
 }
 
 .einheit{
-    width:65px;
+
+    width:58px;
+
     height:30px;
+
     border:2px solid var(--darkgreen);
+
     border-radius:4px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     background:white;
+
     font-size:16px;
+
     font-weight:600;
 }
 
 .actionBtn{
+
     width:40px;
+
     height:30px;
+
     border:none;
+
     border-radius:4px;
+
     color:white;
+
     font-size:15px;
+
     cursor:pointer;
 }
 
@@ -234,19 +347,29 @@ body{
 }
 
 .doneBtn{
+
     width:40px;
+
     height:30px;
+
     border:none;
+
     border-radius:4px;
+
     background:var(--green);
+
     color:white;
+
     font-size:15px;
+
     font-weight:600;
+
     cursor:pointer;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -265,7 +388,9 @@ body{
 
     </div>
 
-    <div class="menu" id="menu">
+    <div
+    class="menu"
+    id="menu">
 
         <div class="navBtn">
             <div class="navIcon">🛒</div>
@@ -305,11 +430,13 @@ body{
         value="0">
 
         <select id="einheit">
+
             <option>Stk</option>
             <option>kg</option>
             <option>g</option>
             <option>Liter</option>
             <option>ml</option>
+
         </select>
 
         <button class="addBtn">
@@ -348,6 +475,30 @@ body{
 
         </div>
 
+        <div class="item">
+
+            <div class="produkt">
+                Kaffee
+            </div>
+
+            <div class="menge">
+                2
+            </div>
+
+            <div class="einheit">
+                Stk
+            </div>
+
+            <button class="actionBtn action-red">
+                🔥
+            </button>
+
+            <button class="doneBtn">
+                ✓
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -357,10 +508,9 @@ body{
 function toggleMenu(){
 
     document
-    .getElementById("menu")
-    .classList
-    .toggle("show");
-
+        .getElementById("menu")
+        .classList
+        .toggle("show");
 }
 
 /*
