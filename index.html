@@ -6,16 +6,14 @@
 
 <title>SmartShop V5</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-    --green:#78b84d;
-    --darkgreen:#2f6d1d;
-    --bg:#f4f6f8;
-
-    /* Smarte Schriftgrösse */
+    --green:#8BC34A;
+    --darkgreen:#3E7C2A;
+    --bg:#f5f6f7;
     --fontSize:16px;
 }
 
@@ -38,8 +36,6 @@ body{
 
 .container{
 
-    width:100%;
-
     max-width:900px;
 
     margin:auto;
@@ -47,9 +43,9 @@ body{
     padding:8px;
 }
 
-/* ==========================
+/* =========================
    TITEL
-========================== */
+========================= */
 
 .titleRow{
 
@@ -61,7 +57,7 @@ body{
 
     align-items:center;
 
-    margin-bottom:8px;
+    margin-bottom:10px;
 }
 
 .logo{
@@ -71,8 +67,6 @@ body{
     font-size:34px;
 
     color:var(--green);
-
-    text-align:center;
 
     text-shadow:
     -1px 0 #000,
@@ -91,9 +85,9 @@ body{
 
     transform:translateY(-50%);
 
-    background:none;
-
     border:none;
+
+    background:none;
 
     color:#000;
 
@@ -106,15 +100,13 @@ body{
     cursor:pointer;
 }
 
-/* ==========================
+/* =========================
    NAVIGATION
-========================== */
+========================= */
 
 .menu{
 
     display:none;
-
-    justify-content:space-between;
 
     gap:4px;
 
@@ -122,6 +114,7 @@ body{
 }
 
 .menu.show{
+
     display:flex;
 }
 
@@ -154,9 +147,9 @@ body{
     font-weight:600;
 }
 
-/* ==========================
-   EINGABEZEILE SMART
-========================== */
+/* =========================
+   EINGABEZEILE
+========================= */
 
 .inputRow{
 
@@ -171,35 +164,37 @@ body{
 
     flex:1;
 
-    min-width:0;
+    min-width:120px;
 }
 
 #menge{
 
-    flex:0 0 auto;
-
-    min-width:4ch;
+    width:5ch;
 
     text-align:center;
+
+    flex-shrink:0;
 }
 
 #einheit{
 
-    flex:0 0 auto;
+    width:6ch;
 
-    min-width:5ch;
+    flex-shrink:0;
 }
 
 .inputRow input,
 .inputRow select{
 
-    height:38px;
+    height:40px;
 
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
 
     background:white;
+
+    font-family:'Inter',sans-serif;
 
     font-size:var(--fontSize);
 
@@ -210,11 +205,11 @@ body{
 
 .addBtn{
 
-    min-width:60px;
+    width:40px;
 
-    padding:0 14px;
+    height:40px;
 
-    height:38px;
+    flex-shrink:0;
 
     border:none;
 
@@ -224,18 +219,16 @@ body{
 
     color:white;
 
-    font-size:20px;
+    font-size:22px;
 
     font-weight:600;
 
     cursor:pointer;
-
-    flex-shrink:0;
 }
 
-/* ==========================
-   EINKAUFSLISTE
-========================== */
+/* =========================
+   KARTE
+========================= */
 
 .card{
 
@@ -245,7 +238,7 @@ body{
 
     background:white;
 
-    padding:6px;
+    padding:8px;
 }
 
 .cardTitel{
@@ -256,6 +249,10 @@ body{
 
     margin-bottom:8px;
 }
+
+/* =========================
+   LISTE
+========================= */
 
 .item{
 
@@ -270,9 +267,9 @@ body{
 
     flex:1;
 
-    min-width:0;
+    min-width:120px;
 
-    height:34px;
+    height:40px;
 
     border:2px solid var(--darkgreen);
 
@@ -282,9 +279,11 @@ body{
 
     align-items:center;
 
-    padding:0 8px;
+    padding:0 10px;
 
     background:white;
+
+    font-family:'Inter',sans-serif;
 
     font-size:var(--fontSize);
 
@@ -293,9 +292,9 @@ body{
 
 .menge{
 
-    min-width:4ch;
+    width:5ch;
 
-    height:34px;
+    height:40px;
 
     border:2px solid var(--darkgreen);
 
@@ -308,17 +307,15 @@ body{
     align-items:center;
 
     background:white;
-
-    font-size:var(--fontSize);
 
     font-weight:600;
 }
 
 .einheit{
 
-    min-width:5ch;
+    width:6ch;
 
-    height:34px;
+    height:40px;
 
     border:2px solid var(--darkgreen);
 
@@ -332,16 +329,14 @@ body{
 
     background:white;
 
-    font-size:var(--fontSize);
-
     font-weight:600;
 }
 
 .actionBtn{
 
-    min-width:40px;
+    width:40px;
 
-    height:34px;
+    height:40px;
 
     border:none;
 
@@ -349,24 +344,26 @@ body{
 
     color:white;
 
-    font-size:16px;
+    font-size:18px;
 
     cursor:pointer;
 }
 
 .action-green{
+
     background:#43a047;
 }
 
 .action-red{
+
     background:#d84315;
 }
 
 .doneBtn{
 
-    min-width:40px;
+    width:40px;
 
-    height:34px;
+    height:40px;
 
     border:none;
 
@@ -376,18 +373,18 @@ body{
 
     color:white;
 
-    font-size:16px;
+    font-size:18px;
 
     font-weight:600;
 
     cursor:pointer;
 }
 
-/* ==========================
-   RESPONSIVE SMART
-========================== */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media (max-width:420px){
+@media(max-width:420px){
 
     .logo{
         font-size:30px;
@@ -412,16 +409,16 @@ body{
         </div>
 
         <button
-        class="menu-btn"
-        onclick="toggleMenu()">
+            class="menu-btn"
+            onclick="toggleMenu()">
             •••
         </button>
 
     </div>
 
     <div
-    class="menu"
-    id="menu">
+        class="menu"
+        id="menu">
 
         <div class="navBtn">
             <div class="navIcon">🛒</div>
@@ -453,20 +450,20 @@ body{
     <div class="inputRow">
 
         <input
-        id="produkt"
-        placeholder="Produkt">
+            id="produkt"
+            placeholder="Produkt">
 
         <input
-        id="menge"
-        value="0">
+            id="menge"
+            value="0">
 
         <select id="einheit">
 
             <option>Stk</option>
             <option>kg</option>
             <option>g</option>
-            <option>Liter</option>
             <option>ml</option>
+            <option>Liter</option>
 
         </select>
 
