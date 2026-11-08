@@ -6,15 +6,25 @@
 
 <title>SmartShop V5</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-    --green:#8BC34A;
-    --darkgreen:#3E7C2A;
+
+    --green:#9BC45A;
+    --darkgreen:#4C8A34;
     --bg:#f5f6f7;
+
+    /* EINZIGE VARIABLE */
     --fontSize:16px;
+
+    /* ALLES WIRD DARAUS BERECHNET */
+    --rowHeight:calc(var(--fontSize) * 2);
+
+    --buttonSize:var(--rowHeight);
+
+    --iconSize:calc(var(--fontSize) + 2px);
 }
 
 *{
@@ -29,7 +39,7 @@ body{
 
     color:#000;
 
-    font-family:'Inter',sans-serif;
+    font-family:'Roboto Condensed',sans-serif;
 
     font-size:var(--fontSize);
 }
@@ -43,9 +53,9 @@ body{
     padding:8px;
 }
 
-/* =========================
+/* =====================
    TITEL
-========================= */
+===================== */
 
 .titleRow{
 
@@ -57,7 +67,7 @@ body{
 
     align-items:center;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .logo{
@@ -93,16 +103,16 @@ body{
 
     font-size:22px;
 
-    font-weight:900;
-
     letter-spacing:-2px;
+
+    font-weight:900;
 
     cursor:pointer;
 }
 
-/* =========================
+/* =====================
    NAVIGATION
-========================= */
+===================== */
 
 .menu{
 
@@ -122,22 +132,22 @@ body{
 
     flex:1;
 
+    background:#fff;
+
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
 
-    background:white;
-
     text-align:center;
 
-    padding:4px 2px;
+    padding:2px;
 }
 
 .navIcon{
 
-    font-size:18px;
+    font-size:var(--iconSize);
 
-    margin-bottom:2px;
+    line-height:1;
 }
 
 .navText{
@@ -147,9 +157,9 @@ body{
     font-weight:600;
 }
 
-/* =========================
+/* =====================
    EINGABEZEILE
-========================= */
+===================== */
 
 .inputRow{
 
@@ -160,33 +170,10 @@ body{
     margin-bottom:10px;
 }
 
-#produkt{
-
-    flex:1;
-
-    min-width:120px;
-}
-
-#menge{
-
-    width:5ch;
-
-    text-align:center;
-
-    flex-shrink:0;
-}
-
-#einheit{
-
-    width:6ch;
-
-    flex-shrink:0;
-}
-
 .inputRow input,
 .inputRow select{
 
-    height:40px;
+    height:var(--rowHeight);
 
     border:2px solid var(--darkgreen);
 
@@ -194,7 +181,7 @@ body{
 
     background:white;
 
-    font-family:'Inter',sans-serif;
+    font-family:'Roboto Condensed',sans-serif;
 
     font-size:var(--fontSize);
 
@@ -203,11 +190,44 @@ body{
     padding:0 8px;
 }
 
+#produkt{
+
+    flex:1;
+
+    min-width:100px;
+}
+
+/* PLATZ FÜR 999 */
+
+#menge{
+
+    width:4ch;
+
+    min-width:4ch;
+
+    text-align:center;
+
+    flex-shrink:0;
+}
+
+/* PLATZ FÜR LITER */
+
+#einheit{
+
+    width:6ch;
+
+    min-width:6ch;
+
+    flex-shrink:0;
+}
+
+/* QUADRATISCH */
+
 .addBtn{
 
-    width:40px;
+    width:var(--buttonSize);
 
-    height:40px;
+    height:var(--buttonSize);
 
     flex-shrink:0;
 
@@ -217,42 +237,38 @@ body{
 
     background:var(--green);
 
-    color:white;
+    color:#fff;
 
-    font-size:22px;
+    font-size:calc(var(--fontSize) + 4px);
 
-    font-weight:600;
+    font-weight:700;
 
     cursor:pointer;
 }
 
-/* =========================
-   KARTE
-========================= */
+/* =====================
+   EINKAUFSLISTE
+===================== */
 
 .card{
+
+    background:#fff;
 
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
-
-    background:white;
 
     padding:8px;
 }
 
 .cardTitel{
 
-    font-size:18px;
+    font-size:calc(var(--fontSize) + 2px);
 
-    font-weight:600;
+    font-weight:700;
 
     margin-bottom:8px;
 }
-
-/* =========================
-   LISTE
-========================= */
 
 .item{
 
@@ -267,9 +283,9 @@ body{
 
     flex:1;
 
-    min-width:120px;
+    min-width:100px;
 
-    height:40px;
+    height:var(--rowHeight);
 
     border:2px solid var(--darkgreen);
 
@@ -279,22 +295,24 @@ body{
 
     align-items:center;
 
-    padding:0 10px;
+    padding:0 8px;
 
     background:white;
-
-    font-family:'Inter',sans-serif;
 
     font-size:var(--fontSize);
 
     font-weight:600;
 }
 
+/* PLATZ FÜR 999 */
+
 .menge{
 
-    width:5ch;
+    width:4ch;
 
-    height:40px;
+    min-width:4ch;
+
+    height:var(--rowHeight);
 
     border:2px solid var(--darkgreen);
 
@@ -308,14 +326,20 @@ body{
 
     background:white;
 
+    font-size:var(--fontSize);
+
     font-weight:600;
 }
+
+/* PLATZ FÜR LITER */
 
 .einheit{
 
     width:6ch;
 
-    height:40px;
+    min-width:6ch;
+
+    height:var(--rowHeight);
 
     border:2px solid var(--darkgreen);
 
@@ -328,15 +352,17 @@ body{
     align-items:center;
 
     background:white;
+
+    font-size:var(--fontSize);
 
     font-weight:600;
 }
 
 .actionBtn{
 
-    width:40px;
+    width:var(--buttonSize);
 
-    height:40px;
+    height:var(--buttonSize);
 
     border:none;
 
@@ -344,7 +370,7 @@ body{
 
     color:white;
 
-    font-size:18px;
+    font-size:var(--iconSize);
 
     cursor:pointer;
 }
@@ -361,9 +387,9 @@ body{
 
 .doneBtn{
 
-    width:40px;
+    width:var(--buttonSize);
 
-    height:40px;
+    height:var(--buttonSize);
 
     border:none;
 
@@ -373,25 +399,21 @@ body{
 
     color:white;
 
-    font-size:18px;
+    font-size:var(--iconSize);
 
-    font-weight:600;
+    font-weight:700;
 
     cursor:pointer;
 }
 
-/* =========================
+/* =====================
    RESPONSIVE
-========================= */
+===================== */
 
 @media(max-width:420px){
 
     .logo{
         font-size:30px;
-    }
-
-    .navText{
-        font-size:11px;
     }
 }
 
@@ -416,9 +438,7 @@ body{
 
     </div>
 
-    <div
-        class="menu"
-        id="menu">
+    <div class="menu" id="menu">
 
         <div class="navBtn">
             <div class="navIcon">🛒</div>
