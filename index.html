@@ -11,15 +11,8 @@
 <style>
 
 :root{
-
-    --bg:#f4f6f8;
-    --card:#ffffff;
-
-    --text:#000000;
-
     --green:#78b84d;
-
-    --border:#2f6d1d;
+    --darkgreen:#2f6d1d;
 }
 
 *{
@@ -29,25 +22,37 @@
 }
 
 body{
-
-    background:var(--bg);
-
-    color:var(--text);
-
+    background:#f4f6f8;
     font-family:Arial,sans-serif;
-
-    min-height:100vh;
 }
 
 .container{
-
-    max-width:800px;
-
+    max-width:900px;
     margin:auto;
-
     padding:10px;
+}
 
-    padding-bottom:60px;
+.topbar{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.menu-btn{
+
+    width:34px;
+    height:34px;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    background:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:bold;
 }
 
 .logo{
@@ -58,13 +63,11 @@ body{
 
     font-size:36px;
 
-    font-weight:700;
-
     color:var(--green);
 
     letter-spacing:1px;
 
-    margin:10px 0 15px;
+    margin:10px 0 20px;
 
     text-shadow:
     -1px 0 #000,
@@ -73,92 +76,353 @@ body{
      0 1px #000;
 }
 
-.card{
+.menu{
 
-    background:var(--card);
+    display:none;
 
-    border:2px solid var(--border);
+    gap:6px;
 
-    border-radius:12px;
+    margin-bottom:15px;
 
-    padding:10px;
+    justify-content:center;
 
-    margin-bottom:8px;
-
-    color:black;
+    flex-wrap:wrap;
 }
 
-.bottom-nav{
-
-    position:fixed;
-
-    bottom:0;
-
-    left:0;
-
-    right:0;
-
-    height:48px;
-
-    background:white;
-
-    border-top:2px solid var(--border);
-
+.menu.show{
     display:flex;
 }
 
-.bottom-nav button{
+.navBtn{
 
-    flex:1;
+    width:70px;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
 
     background:white;
 
-    color:black;
+    padding:4px;
+}
 
-    border:none;
+.navIcon{
+    font-size:18px;
+}
 
-    border-left:2px solid var(--border);
-
+.navText{
     font-size:12px;
+    font-weight:600;
+}
+
+.inputRow{
+
+    display:flex;
+
+    gap:4px;
+
+    margin-bottom:10px;
+}
+
+.inputRow input,
+.inputRow select{
+
+    height:40px;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    padding:0 8px;
+
+    font-size:16px;
 
     font-weight:600;
 }
 
-.bottom-nav button:first-child{
+#produkt{
+    flex:1;
+}
 
-    border-left:none;
+#menge{
+    width:60px;
+    text-align:center;
+}
+
+#einheit{
+    width:80px;
+}
+
+.addBtn{
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:4px;
+
+    background:var(--green);
+
+    color:white;
+
+    font-size:24px;
+
+    font-weight:700;
+}
+
+.card{
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    background:white;
+
+    padding:8px;
+}
+
+.cardTitel{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+}
+
+.item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    margin-bottom:4px;
+}
+
+.produkt{
+
+    flex:1;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 8px;
+
+    font-weight:600;
+
+    background:white;
+}
+
+.menge,
+.einheit{
+
+    width:45px;
+
+    height:32px;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:600;
+
+    background:white;
+}
+
+.einheit{
+    width:55px;
+}
+
+.actionBtn,
+.doneBtn,
+.status{
+
+    width:32px;
+
+    height:32px;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:600;
+
+    background:white;
+
+    cursor:pointer;
+}
+
+.status.green{
+    background:#43a047;
+}
+
+.status.red{
+    background:#e53935;
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-    <div class="logo">
-        SmartShop V5
-    </div>
+<div class="topbar">
+<button class="menu-btn" onclick="toggleMenu()">⋮</button>
+</div>
 
-    <div class="card">
-        Einkaufsliste wird im nächsten Block erstellt.
-    </div>
+<div class="logo">
+SmartShop V5
+</div>
+
+<div class="menu" id="menu">
+
+<div class="navBtn">
+<div class="navIcon">🛒</div>
+<div class="navText">Liste</div>
+</div>
+
+<div class="navBtn">
+<div class="navIcon">⭐</div>
+<div class="navText">Favoriten</div>
+</div>
+
+<div class="navBtn">
+<div class="navIcon">💡</div>
+<div class="navText">Ideen</div>
+</div>
+
+<div class="navBtn">
+<div class="navIcon">🔥</div>
+<div class="navText">Aktionen</div>
+</div>
+
+<div class="navBtn">
+<div class="navIcon">⚙️</div>
+<div class="navText">Settings</div>
+</div>
 
 </div>
 
-<div class="bottom-nav">
+<div class="inputRow">
 
-    <button>🛒 Liste</button>
+<input
+id="produkt"
+placeholder="Produkt">
 
-    <button>⭐ Favoriten</button>
+<input
+id="menge"
+value="1">
 
-    <button>💡 Ideen</button>
+<select id="einheit">
+<option>Stk</option>
+<option>kg</option>
+<option>g</option>
+<option>Liter</option>
+<option>ml</option>
+</select>
 
-    <button>🔥 Aktionen</button>
-
-    <button>⚙️ Settings</button>
+<button class="addBtn">+</button>
 
 </div>
+
+<div class="card">
+
+<div class="cardTitel">
+🛒 Einkaufsliste
+</div>
+
+<div class="item">
+
+<div class="produkt">
+Milch
+</div>
+
+<div class="menge">
+1
+</div>
+
+<div class="einheit">
+Stk
+</div>
+
+<div class="actionBtn">
+🔥
+</div>
+
+<div class="status green">
+</div>
+
+<div class="doneBtn">
+✓
+</div>
+
+</div>
+
+<div class="item">
+
+<div class="produkt">
+Kaffee
+</div>
+
+<div class="menge">
+1
+</div>
+
+<div class="einheit">
+Stk
+</div>
+
+<div class="actionBtn">
+🔥
+</div>
+
+<div class="status red">
+</div>
+
+<div class="doneBtn">
+✓
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+
+    document
+    .getElementById("menu")
+    .classList
+    .toggle("show");
+}
+
+</script>
 
 </body>
 </html>
