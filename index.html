@@ -34,44 +34,30 @@ body{
     padding:8px;
 }
 
-/* ===== MENÜ ===== */
+/* TITEL */
 
-.topbar{
+.titleRow{
+
+    position:relative;
+
     display:flex;
-    justify-content:flex-end;
-    margin-bottom:2px;
-}
 
-.menu-btn{
+    justify-content:center;
 
-    background:none;
+    align-items:center;
 
-    border:none;
-
-    color:#000;
-
-    font-size:20px;
-
-    font-weight:900;
-
-    cursor:pointer;
-
-    padding:0 6px;
-
-    line-height:20px;
+    margin-bottom:6px;
 }
 
 .logo{
 
-    text-align:center;
-
     font-family:'Quicksand',sans-serif;
 
-    font-size:38px;
-
-    margin-bottom:10px;
+    font-size:34px;
 
     color:var(--green);
+
+    text-align:center;
 
     text-shadow:
     -1px 0 #000,
@@ -80,7 +66,34 @@ body{
      0 1px #000;
 }
 
-/* ===== NAVIGATION ===== */
+.menu-btn{
+
+    position:absolute;
+
+    right:0;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    background:none;
+
+    border:none;
+
+    color:#000;
+
+    font-size:22px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    letter-spacing:-1px;
+
+    padding:0;
+}
+
+/* NAVIGATION */
 
 .menu{
 
@@ -101,22 +114,20 @@ body{
 
     width:19%;
 
+    background:white;
+
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
 
-    background:white;
-
     text-align:center;
 
-    padding:3px 1px;
+    padding:4px 2px;
 }
 
 .navIcon{
 
     font-size:18px;
-
-    text-align:center;
 
     margin-bottom:2px;
 }
@@ -126,11 +137,9 @@ body{
     font-size:12px;
 
     font-weight:600;
-
-    text-align:center;
 }
 
-/* ===== EINGABE ===== */
+/* EINGABE */
 
 .inputRow{
 
@@ -150,13 +159,13 @@ body{
 
     border-radius:4px;
 
+    background:white;
+
     font-size:16px;
 
     font-weight:600;
 
     color:#000;
-
-    background:white;
 
     padding:0 8px;
 }
@@ -167,7 +176,7 @@ body{
 
 #menge{
 
-    width:60px;
+    width:70px;
 
     text-align:center;
 }
@@ -179,7 +188,7 @@ body{
 
 .addBtn{
 
-    width:52px;
+    width:70px;
 
     height:36px;
 
@@ -198,7 +207,7 @@ body{
     cursor:pointer;
 }
 
-/* ===== KARTE ===== */
+/* KARTE */
 
 .card{
 
@@ -217,10 +226,10 @@ body{
 
     font-weight:600;
 
-    margin-bottom:5px;
+    margin-bottom:6px;
 }
 
-/* ===== PRODUKTZEILEN ===== */
+/* LISTE */
 
 .item{
 
@@ -269,11 +278,11 @@ body{
 
     justify-content:center;
 
+    background:white;
+
     font-size:16px;
 
     font-weight:600;
-
-    background:white;
 }
 
 .menge{
@@ -281,7 +290,7 @@ body{
 }
 
 .einheit{
-    width:52px;
+    width:55px;
 }
 
 .actionBtn{
@@ -336,7 +345,11 @@ body{
 
 <div class="container">
 
-    <div class="topbar">
+    <div class="titleRow">
+
+        <div class="logo">
+            SmartShop V5
+        </div>
 
         <button
         class="menu-btn"
@@ -344,10 +357,6 @@ body{
             •••
         </button>
 
-    </div>
-
-    <div class="logo">
-        SmartShop V5
     </div>
 
     <div
@@ -392,11 +401,13 @@ body{
         value="0">
 
         <select id="einheit">
+
             <option>Stk</option>
             <option>kg</option>
             <option>g</option>
             <option>Liter</option>
             <option>ml</option>
+
         </select>
 
         <button class="addBtn">
@@ -425,13 +436,11 @@ body{
                 Stk
             </div>
 
-            <button
-            class="actionBtn action-green">
+            <button class="actionBtn action-green">
                 🔥
             </button>
 
-            <button
-            class="doneBtn">
+            <button class="doneBtn">
                 ✓
             </button>
 
@@ -451,13 +460,11 @@ body{
                 Stk
             </div>
 
-            <button
-            class="actionBtn action-red">
+            <button class="actionBtn action-red">
                 🔥
             </button>
 
-            <button
-            class="doneBtn">
+            <button class="doneBtn">
                 ✓
             </button>
 
@@ -477,6 +484,31 @@ function toggleMenu(){
     .toggle("show");
 
 }
+
+/*
+BLOCK 2
+Produkt hinzufügen
+*/
+
+/*
+BLOCK 3
+LocalStorage
+*/
+
+/*
+BLOCK 4
+Produkt abhaken
+*/
+
+/*
+BLOCK 5
+Favoriten
+*/
+
+/*
+BLOCK 6
+Verlauf
+*/
 
 </script>
 
