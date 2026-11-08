@@ -6,7 +6,7 @@
 
 <title>SmartShop V5</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 
@@ -14,6 +14,9 @@
     --green:#78b84d;
     --darkgreen:#2f6d1d;
     --bg:#f4f6f8;
+
+    /* Smarte Schriftgrösse */
+    --fontSize:16px;
 }
 
 *{
@@ -23,18 +26,30 @@
 }
 
 body{
+
     background:var(--bg);
+
     color:#000;
-    font-family:Arial,sans-serif;
+
+    font-family:'Inter',sans-serif;
+
+    font-size:var(--fontSize);
 }
 
 .container{
+
+    width:100%;
+
     max-width:900px;
+
     margin:auto;
+
     padding:8px;
 }
 
-/* TITEL */
+/* ==========================
+   TITEL
+========================== */
 
 .titleRow{
 
@@ -46,7 +61,7 @@ body{
 
     align-items:center;
 
-    margin-bottom:6px;
+    margin-bottom:8px;
 }
 
 .logo{
@@ -60,10 +75,10 @@ body{
     text-align:center;
 
     text-shadow:
-        -1px 0 #000,
-         1px 0 #000,
-         0 -1px #000,
-         0 1px #000;
+    -1px 0 #000,
+     1px 0 #000,
+     0 -1px #000,
+     0 1px #000;
 }
 
 .menu-btn{
@@ -80,20 +95,20 @@ body{
 
     border:none;
 
-    color:black;
+    color:#000;
 
     font-size:22px;
 
     font-weight:900;
 
-    cursor:pointer;
-
     letter-spacing:-2px;
 
-    padding:0;
+    cursor:pointer;
 }
 
-/* NAVIGATION */
+/* ==========================
+   NAVIGATION
+========================== */
 
 .menu{
 
@@ -101,7 +116,7 @@ body{
 
     justify-content:space-between;
 
-    gap:0;
+    gap:4px;
 
     margin-bottom:10px;
 }
@@ -112,13 +127,13 @@ body{
 
 .navBtn{
 
-    width:19%;
-
-    background:white;
+    flex:1;
 
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
+
+    background:white;
 
     text-align:center;
 
@@ -139,21 +154,46 @@ body{
     font-weight:600;
 }
 
-/* EINGABE */
+/* ==========================
+   EINGABEZEILE SMART
+========================== */
 
 .inputRow{
 
     display:flex;
 
-    gap:0;
+    gap:4px;
 
-    margin-bottom:8px;
+    margin-bottom:10px;
+}
+
+#produkt{
+
+    flex:1;
+
+    min-width:0;
+}
+
+#menge{
+
+    flex:0 0 auto;
+
+    min-width:4ch;
+
+    text-align:center;
+}
+
+#einheit{
+
+    flex:0 0 auto;
+
+    min-width:5ch;
 }
 
 .inputRow input,
 .inputRow select{
 
-    height:36px;
+    height:38px;
 
     border:2px solid var(--darkgreen);
 
@@ -161,48 +201,20 @@ body{
 
     background:white;
 
-    font-size:16px;
+    font-size:var(--fontSize);
 
     font-weight:600;
-
-    color:black;
 
     padding:0 8px;
 }
 
-#produkt{
-    flex:1;
-}
-
-#menge{
-
-    width:72px;
-
-    min-width:72px;
-
-    flex-shrink:0;
-
-    text-align:center;
-}
-
-#einheit{
-
-    width:58px;
-
-    min-width:58px;
-
-    flex-shrink:0;
-}
-
 .addBtn{
-
-    width:60px;
 
     min-width:60px;
 
-    flex-shrink:0;
+    padding:0 14px;
 
-    height:36px;
+    height:38px;
 
     border:none;
 
@@ -212,14 +224,18 @@ body{
 
     color:white;
 
-    font-size:22px;
+    font-size:20px;
 
     font-weight:600;
 
     cursor:pointer;
+
+    flex-shrink:0;
 }
 
-/* KARTE */
+/* ==========================
+   EINKAUFSLISTE
+========================== */
 
 .card{
 
@@ -229,25 +245,23 @@ body{
 
     background:white;
 
-    padding:5px;
+    padding:6px;
 }
 
 .cardTitel{
 
-    font-size:16px;
+    font-size:18px;
 
     font-weight:600;
 
-    margin-bottom:6px;
+    margin-bottom:8px;
 }
-
-/* LISTE */
 
 .item{
 
     display:flex;
 
-    gap:0;
+    gap:4px;
 
     margin-bottom:4px;
 }
@@ -256,7 +270,9 @@ body{
 
     flex:1;
 
-    height:30px;
+    min-width:0;
+
+    height:34px;
 
     border:2px solid var(--darkgreen);
 
@@ -270,16 +286,16 @@ body{
 
     background:white;
 
-    font-size:16px;
+    font-size:var(--fontSize);
 
     font-weight:600;
 }
 
 .menge{
 
-    width:72px;
+    min-width:4ch;
 
-    height:30px;
+    height:34px;
 
     border:2px solid var(--darkgreen);
 
@@ -287,22 +303,22 @@ body{
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
+
+    align-items:center;
 
     background:white;
 
-    font-size:16px;
+    font-size:var(--fontSize);
 
     font-weight:600;
 }
 
 .einheit{
 
-    width:58px;
+    min-width:5ch;
 
-    height:30px;
+    height:34px;
 
     border:2px solid var(--darkgreen);
 
@@ -310,22 +326,22 @@ body{
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
+
+    align-items:center;
 
     background:white;
 
-    font-size:16px;
+    font-size:var(--fontSize);
 
     font-weight:600;
 }
 
 .actionBtn{
 
-    width:40px;
+    min-width:40px;
 
-    height:30px;
+    height:34px;
 
     border:none;
 
@@ -333,7 +349,7 @@ body{
 
     color:white;
 
-    font-size:15px;
+    font-size:16px;
 
     cursor:pointer;
 }
@@ -348,9 +364,9 @@ body{
 
 .doneBtn{
 
-    width:40px;
+    min-width:40px;
 
-    height:30px;
+    height:34px;
 
     border:none;
 
@@ -360,11 +376,26 @@ body{
 
     color:white;
 
-    font-size:15px;
+    font-size:16px;
 
     font-weight:600;
 
     cursor:pointer;
+}
+
+/* ==========================
+   RESPONSIVE SMART
+========================== */
+
+@media (max-width:420px){
+
+    .logo{
+        font-size:30px;
+    }
+
+    .navText{
+        font-size:11px;
+    }
 }
 
 </style>
