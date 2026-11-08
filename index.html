@@ -1,7 +1,7 @@
 <!-- BLOCK 1 FINAL -->
-<!-- SMARTSHOP V5 -->
+<!-- SMARTSHOP V5.1.4 -->
 
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Oswald:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 
@@ -11,19 +11,18 @@
     --darkgreen:#4C8A34;
     --bg:#f5f6f7;
 
-    /* EINSTELLBAR 10 - 30 */
+    /* Benutzer später 10-30px */
 
     --fontSize:18px;
 
-    /* 30 : 18 Verhältnis */
+    /* Verhältnis 30 : 18 */
 
     --rowHeight:calc(var(--fontSize) * 1.67);
 
     --buttonSize:var(--rowHeight);
-
 }
 
-/* ============================= */
+/* ===================================== */
 
 *{
     margin:0;
@@ -37,7 +36,7 @@ body{
 
     color:#000;
 
-    font-family:'Barlow Condensed',sans-serif;
+    font-family:'Oswald',sans-serif;
 
     font-size:var(--fontSize);
 
@@ -55,9 +54,9 @@ body{
     padding:8px;
 }
 
-/* ============================= */
+/* ===================================== */
 /* TITEL */
-/* ============================= */
+/* ===================================== */
 
 .titleRow{
 
@@ -97,9 +96,9 @@ body{
 
     transform:translateY(-50%);
 
-    border:none;
-
     background:none;
+
+    border:none;
 
     color:black;
 
@@ -112,9 +111,9 @@ body{
     cursor:pointer;
 }
 
-/* ============================= */
+/* ===================================== */
 /* NAVIGATION */
-/* ============================= */
+/* ===================================== */
 
 .menu{
 
@@ -134,36 +133,36 @@ body{
 
     flex:1;
 
+    background:white;
+
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
 
-    background:white;
+    padding:3px;
 
     text-align:center;
-
-    padding:3px;
 }
 
 .navIcon{
 
-    font-size:20px;
+    font-size:18px;
 
     line-height:1;
 }
 
 .navText{
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:500;
 
     line-height:1;
 }
 
-/* ============================= */
+/* ===================================== */
 /* EINGABE */
-/* ============================= */
+/* ===================================== */
 
 .inputRow{
 
@@ -185,15 +184,15 @@ body{
 
     background:white;
 
-    font-family:'Barlow Condensed',sans-serif;
+    font-family:'Oswald',sans-serif;
 
     font-size:var(--fontSize);
 
-    font-weight:500;
+    font-weight:400;
 
     line-height:1;
 
-    padding:0 8px;
+    padding:0 6px;
 }
 
 /* PRODUKT */
@@ -202,16 +201,16 @@ body{
 
     flex:1;
 
-    min-width:100px;
+    min-width:80px;
 }
 
 /* 999 */
 
 #menge{
 
-    width:4ch;
-
     min-width:4ch;
+
+    width:4ch;
 
     text-align:center;
 
@@ -222,14 +221,14 @@ body{
 
 #einheit{
 
-    width:8ch;
-
     min-width:8ch;
+
+    width:8ch;
 
     flex-shrink:0;
 }
 
-/* QUADRATISCH */
+/* QUADRAT */
 
 .addBtn{
 
@@ -247,24 +246,26 @@ body{
 
     color:white;
 
+    font-family:'Oswald',sans-serif;
+
     font-size:calc(var(--fontSize) + 2px);
 
-    font-weight:600;
+    font-weight:500;
 
     cursor:pointer;
 }
 
-/* ============================= */
+/* ===================================== */
 /* KARTE */
-/* ============================= */
+/* ===================================== */
 
 .card{
+
+    background:white;
 
     border:2px solid var(--darkgreen);
 
     border-radius:4px;
-
-    background:white;
 
     padding:6px;
 }
@@ -273,14 +274,14 @@ body{
 
     font-size:calc(var(--fontSize) + 2px);
 
-    font-weight:600;
+    font-weight:500;
 
     margin-bottom:8px;
 }
 
-/* ============================= */
+/* ===================================== */
 /* PRODUKTE */
-/* ============================= */
+/* ===================================== */
 
 .item{
 
@@ -295,7 +296,7 @@ body{
 
     flex:1;
 
-    min-width:100px;
+    min-width:80px;
 
     height:var(--rowHeight);
 
@@ -313,7 +314,7 @@ body{
 
     font-size:var(--fontSize);
 
-    font-weight:500;
+    font-weight:400;
 
     line-height:1;
 }
@@ -340,7 +341,7 @@ body{
 
     background:white;
 
-    font-weight:500;
+    font-weight:400;
 }
 
 /* LITER */
@@ -365,7 +366,7 @@ body{
 
     background:white;
 
-    font-weight:500;
+    font-weight:400;
 }
 
 /* FEUER */
@@ -415,7 +416,7 @@ body{
 
     font-size:18px;
 
-    font-weight:600;
+    font-weight:500;
 
     cursor:pointer;
 }
@@ -431,16 +432,14 @@ body{
         </div>
 
         <button
-        class="menu-btn"
-        onclick="toggleMenu()">
+            class="menu-btn"
+            onclick="toggleMenu()">
             •••
         </button>
 
     </div>
 
-    <div
-    class="menu"
-    id="menu">
+    <div class="menu" id="menu">
 
         <div class="navBtn">
             <div class="navIcon">🛒</div>
@@ -472,12 +471,12 @@ body{
     <div class="inputRow">
 
         <input
-        id="produkt"
-        placeholder="Produkt">
+            id="produkt"
+            placeholder="Produkt">
 
         <input
-        id="menge"
-        value="0">
+            id="menge"
+            value="0">
 
         <select id="einheit">
 
@@ -525,6 +524,30 @@ body{
 
         </div>
 
+        <div class="item">
+
+            <div class="produkt">
+                Kaffee
+            </div>
+
+            <div class="menge">
+                2
+            </div>
+
+            <div class="einheit">
+                Stk
+            </div>
+
+            <button class="actionBtn action-red">
+                🔥
+            </button>
+
+            <button class="doneBtn">
+                ✓
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -537,7 +560,6 @@ function toggleMenu(){
         .getElementById("menu")
         .classList
         .toggle("show");
-
 }
 
 </script>
