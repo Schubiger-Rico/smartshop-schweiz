@@ -203,3 +203,213 @@ body{
     flex:1;
 
     min-width:50px;
+}
+
+/* 999 */
+
+#menge{
+
+    flex:0 0 auto;
+
+    width:4ch;
+
+    min-width:4ch;
+
+    text-align:center;
+}
+
+/* STK. / LT. */
+
+#einheit{
+
+    flex:0 0 auto;
+
+    width:5ch;
+
+    min-width:5ch;
+}
+
+/* PLUS */
+
+.addBtn{
+
+    width:var(--buttonSize);
+
+    height:var(--buttonSize);
+
+    flex:0 0 auto;
+
+    border:none;
+
+    border-radius:4px;
+
+    background:var(--green);
+
+    color:white;
+
+    font-family:'Oswald',sans-serif;
+
+    font-size:20px;
+
+    font-weight:500;
+
+    cursor:pointer;
+}
+
+/* ========================= */
+/* LISTE */
+/* ========================= */
+
+.card{
+
+    background:white;
+
+    border:2px solid var(--darkgreen);
+
+    border-radius:4px;
+
+    padding:6px;
+}
+
+.cardTitel{
+
+    font-size:20px;
+
+    font-weight:500;
+}
+
+/* LEERE LISTE */
+
+.listContainer{
+
+    min-height:30px;
+}
+
+/* ========================= */
+/* NATEL FIRST */
+/* ========================= */
+
+@media(max-width:480px){
+
+    :root{
+
+        --fontSize:16px;
+    }
+
+    .logo{
+
+        font-size:30px;
+    }
+
+    .navText{
+
+        font-size:9px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="titleRow">
+
+        <div class="logo">
+            SmartShop V5
+        </div>
+
+        <button
+        class="menu-btn"
+        onclick="toggleMenu()">
+            •••
+        </button>
+
+    </div>
+
+    <div
+    class="menu"
+    id="menu">
+
+        <div class="navBtn">
+            <div class="navIcon">🛒</div>
+            <div class="navText">Liste</div>
+        </div>
+
+        <div class="navBtn">
+            <div class="navIcon">⭐</div>
+            <div class="navText">Favoriten</div>
+        </div>
+
+        <div class="navBtn">
+            <div class="navIcon">💡</div>
+            <div class="navText">Ideen</div>
+        </div>
+
+        <div class="navBtn">
+            <div class="navIcon">🔥</div>
+            <div class="navText">Aktionen</div>
+        </div>
+
+        <div class="navBtn">
+            <div class="navIcon">⚙️</div>
+            <div class="navText">Einstellungen</div>
+        </div>
+
+    </div>
+
+    <div class="inputRow">
+
+        <input
+        id="produkt"
+        placeholder="Produkt">
+
+        <input
+        id="menge"
+        value="0">
+
+        <select id="einheit">
+
+            <option>Stk.</option>
+            <option>kg</option>
+            <option>g</option>
+            <option>ml</option>
+            <option>lt.</option>
+
+        </select>
+
+        <button class="addBtn">
+            +
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <div class="cardTitel">
+            🛒 Einkaufsliste
+        </div>
+
+        <div class="listContainer">
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+
+    document
+        .getElementById("menu")
+        .classList
+        .toggle("show");
+}
+
+</script>
+
+</body>
+</html>
