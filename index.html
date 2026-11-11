@@ -1,5 +1,10 @@
-<!-- BLOCK 1 FINAL -->
-<!-- SMARTSHOP V5.1.4 -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartShop V5</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Oswald:wght@400;500&display=swap" rel="stylesheet">
 
@@ -21,8 +26,6 @@
 
     --buttonSize:var(--rowHeight);
 }
-
-/* ===================================== */
 
 *{
     margin:0;
@@ -54,9 +57,9 @@ body{
     padding:8px;
 }
 
-/* ===================================== */
+/* ========================= */
 /* TITEL */
-/* ===================================== */
+/* ========================= */
 
 .titleRow{
 
@@ -100,7 +103,7 @@ body{
 
     border:none;
 
-    color:black;
+    color:#000;
 
     font-size:22px;
 
@@ -111,17 +114,17 @@ body{
     cursor:pointer;
 }
 
-/* ===================================== */
+/* ========================= */
 /* NAVIGATION */
-/* ===================================== */
+/* ========================= */
 
 .menu{
 
     display:none;
 
-    gap:4px;
+    gap:2px;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .menu.show{
@@ -139,38 +142,38 @@ body{
 
     border-radius:4px;
 
-    padding:3px;
-
     text-align:center;
+
+    padding:2px;
 }
 
 .navIcon{
 
-    font-size:18px;
+    font-size:16px;
 
     line-height:1;
 }
 
 .navText{
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:500;
 
     line-height:1;
 }
 
-/* ===================================== */
-/* EINGABE */
-/* ===================================== */
+/* ========================= */
+/* EINGABEZEILE */
+/* ========================= */
 
 .inputRow{
 
     display:flex;
 
-    gap:4px;
+    gap:2px;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .inputRow input,
@@ -192,43 +195,43 @@ body{
 
     line-height:1;
 
-    padding:0 6px;
+    padding:0 4px;
 }
 
-/* PRODUKT */
+/* PRODUKT HAT PRIORITÄT */
 
 #produkt{
 
     flex:1;
 
-    min-width:80px;
+    min-width:50px;
 }
 
 /* 999 */
 
 #menge{
 
-    min-width:4ch;
+    flex:0 0 auto;
 
     width:4ch;
 
-    text-align:center;
+    min-width:4ch;
 
-    flex-shrink:0;
+    text-align:center;
 }
 
-/* LITER + PFEIL */
+/* STK / LT. */
 
 #einheit{
 
-    min-width:8ch;
+    flex:0 0 auto;
 
-    width:8ch;
+    width:5ch;
 
-    flex-shrink:0;
+    min-width:5ch;
 }
 
-/* QUADRAT */
+/* QUADRATISCH */
 
 .addBtn{
 
@@ -236,7 +239,7 @@ body{
 
     height:var(--buttonSize);
 
-    flex-shrink:0;
+    flex:0 0 auto;
 
     border:none;
 
@@ -248,16 +251,16 @@ body{
 
     font-family:'Oswald',sans-serif;
 
-    font-size:calc(var(--fontSize) + 2px);
+    font-size:20px;
 
     font-weight:500;
 
     cursor:pointer;
 }
 
-/* ===================================== */
+/* ========================= */
 /* KARTE */
-/* ===================================== */
+/* ========================= */
 
 .card{
 
@@ -272,22 +275,22 @@ body{
 
 .cardTitel{
 
-    font-size:calc(var(--fontSize) + 2px);
+    font-size:20px;
 
     font-weight:500;
 
-    margin-bottom:8px;
+    margin-bottom:6px;
 }
 
-/* ===================================== */
+/* ========================= */
 /* PRODUKTE */
-/* ===================================== */
+/* ========================= */
 
 .item{
 
     display:flex;
 
-    gap:4px;
+    gap:2px;
 
     margin-bottom:4px;
 }
@@ -296,7 +299,7 @@ body{
 
     flex:1;
 
-    min-width:80px;
+    min-width:50px;
 
     height:var(--rowHeight);
 
@@ -308,20 +311,20 @@ body{
 
     align-items:center;
 
-    padding:0 8px;
+    padding:0 6px;
 
     background:white;
 
     font-size:var(--fontSize);
 
     font-weight:400;
-
-    line-height:1;
 }
 
 /* 999 */
 
 .menge{
+
+    flex:0 0 auto;
 
     width:4ch;
 
@@ -340,17 +343,17 @@ body{
     align-items:center;
 
     background:white;
-
-    font-weight:400;
 }
 
-/* LITER */
+/* STK / LT. */
 
 .einheit{
 
-    width:8ch;
+    flex:0 0 auto;
 
-    min-width:8ch;
+    width:5ch;
+
+    min-width:5ch;
 
     height:var(--rowHeight);
 
@@ -365,8 +368,6 @@ body{
     align-items:center;
 
     background:white;
-
-    font-weight:400;
 }
 
 /* FEUER */
@@ -376,6 +377,8 @@ body{
     width:var(--buttonSize);
 
     height:var(--buttonSize);
+
+    flex:0 0 auto;
 
     border:none;
 
@@ -406,6 +409,8 @@ body{
 
     height:var(--buttonSize);
 
+    flex:0 0 auto;
+
     border:none;
 
     border-radius:4px;
@@ -421,7 +426,32 @@ body{
     cursor:pointer;
 }
 
+/* ========================= */
+/* NATEL FIRST */
+/* ========================= */
+
+@media (max-width:480px){
+
+    :root{
+
+        --fontSize:16px;
+    }
+
+    .logo{
+
+        font-size:30px;
+    }
+
+    .navText{
+
+        font-size:10px;
+    }
+}
+
 </style>
+</head>
+
+<body>
 
 <div class="container">
 
@@ -480,11 +510,11 @@ body{
 
         <select id="einheit">
 
-            <option>Stk</option>
+            <option>Stk.</option>
             <option>kg</option>
             <option>g</option>
             <option>ml</option>
-            <option>Liter</option>
+            <option>lt.</option>
 
         </select>
 
@@ -511,34 +541,10 @@ body{
             </div>
 
             <div class="einheit">
-                Stk
+                Stk.
             </div>
 
             <button class="actionBtn action-green">
-                🔥
-            </button>
-
-            <button class="doneBtn">
-                ✓
-            </button>
-
-        </div>
-
-        <div class="item">
-
-            <div class="produkt">
-                Kaffee
-            </div>
-
-            <div class="menge">
-                2
-            </div>
-
-            <div class="einheit">
-                Stk
-            </div>
-
-            <button class="actionBtn action-red">
                 🔥
             </button>
 
@@ -563,3 +569,6 @@ function toggleMenu(){
 }
 
 </script>
+
+</body>
+</html>
