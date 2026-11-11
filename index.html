@@ -402,14 +402,224 @@ body{
 <script>
 
 function toggleMenu(){
-
     document
         .getElementById("menu")
         .classList
         .toggle("show");
 }
 
-</script>
+/* =========================
+   BLOCK 2
+========================= */
 
+const produktInput = document.getElementById('produkt');
+const mengeInput = document.getElementById('menge');
+const einheitSelect = document.getElementById('einheit');
+const addBtn = document.querySelector('.addBtn');
+const listContainer = document.querySelector('.listContainer');
+
+let produkte = [];
+
+addBtn.addEventListener('click', produktHinzufuegen);
+
+produktInput.addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+        produktHinzufuegen();
+    }
+});
+
+mengeInput.addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+        produktHinzufuegen();
+    }
+});
+
+function produktHinzufuegen(){
+
+    let produkt = produktInput.value.trim();
+
+    if(produkt.length === 0){
+        alert("Bitte Produkt eingeben.");
+        produktInput.focus();
+        return;
+    }
+
+    if(produkt.length > 100){
+        alert("Maximal 100 Zeichen erlaubt.");
+        produktInput.focus();
+        return;
+    }
+
+    produkt =
+        produkt.charAt(0).toUpperCase() +
+        produkt.slice(1).toLowerCase();
+
+    let menge = parseInt(mengeInput.value);
+
+    if(isNaN(menge) || menge < 1 || menge > 999){
+        alert("Bitte Menge zwischen 1 und 999 eingeben.");
+        mengeInput.focus();
+        return;
+    }
+
+    const einheit = einheitSelect.value;
+
+    const vorhanden = produkte.find(item =>
+        item.product.toLowerCase() === produkt.toLowerCase() &&
+        item.unit === einheit
+    );
+
+    if(vorhanden){
+
+        const aktion = confirm(
+            produkt +
+            " existiert bereits.\n\n" +
+            "OK = Zusammenführen\n" +
+            "Abbrechen = Neues Produkt"
+        );
+
+        if(aktion){
+
+            vorhanden.quantity =
+                Math.min(
+                    999,
+                    vorhanden.quantity + menge
+                );
+
+            renderListe();
+
+            produktInput.value = "";
+            mengeInput.value = 1;
+            einheitSelect.value = "Stk.";
+            produktInput.focus();
+
+            return;
+        }
+    }
+
+    produkte.unshift({
+        id: Date.now(),
+        product: produkt,
+        quantity: menge,
+        unit: einheit,
+        checked: false,
+        actionFound: false,
+        createdAt: Date.now()
+    });
+
+    renderListe();
+
+    produktInput.value = "";
+    mengeInput.value = 1;
+    einheitSelect.value = "Stk.";
+
+    produktInput.focus();
+}
+
+function renderListe(){
+
+    listContainer.innerHTML = "";
+
+    produkte.forEach(item => {
+
+        const row = document.createElement("div");
+
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.gap = "4px";
+        row.style.marginTop = "4px";
+        row.style.padding = "4px";
+        row.style.borderBottom = "1px solid #ddd";
+
+        row.innerHTML = `
+            <div style="flex:1;overflow:hidden;text-overflow:ellipsis;">
+                ${item.product}
+            </div>
+
+            <div style="width:45px;text-align:center;">
+                ${item.quantity}
+            </div>
+
+            <div style="width:45px;text-align:center;">
+                ${item.unit}
+            </div>
+
+            <div style="width:30px;text-align:center;">
+                🔥
+            </div>
+
+            <div style="width:30px;text-align:center;">
+                ✓
+            </div>
+        `;
+
+        let startX = 0;
+
+        row.addEventListener('touchstart', e=>{
+            startX = e.changedTouches[0].clientX;
+        });
+
+        row.addEventListener('touchend', e=>{
+
+            const endX =
+                e.changedTouches[0].clientX;
+
+            if(startX - endX > 80){
+
+                const loeschen =
+                    confirm(
+                        item.product +
+                        " löschen?"
+                    );
+
+                if(loeschen){
+
+                    produkte =
+                        produkte.filter(
+                            p => p.id !== item.id
+                        );
+
+                    renderListe();
+                }
+            }
+        });
+
+        row.addEventListener('click', function(){
+
+            const neuerName =
+                prompt(
+                    "Produkt bearbeiten:",
+                    item.product
+                );
+
+            if(neuerName === null) return;
+
+            const neueMenge =
+                prompt(
+                    "Menge bearbeiten:",
+                    item.quantity
+                );
+
+            if(neueMenge === null) return;
+
+            item.product =
+                neuerName.trim();
+
+            item.quantity =
+                Math.min(
+                    999,
+                    parseInt(neueMenge) || 1
+                );
+
+            renderListe();
+        });
+
+        listContainer.appendChild(row);
+    });
+}
+
+mengeInput.value = 1;
+
+</script>
 </body>
 </html>
