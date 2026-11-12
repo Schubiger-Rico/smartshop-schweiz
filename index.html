@@ -1,31 +1,66 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartShop V5</title>
+<title>SmartEinkaufBegleiter</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Oswald:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
+/* =====================================
+   SMARTSHOP V5
+   BLOCK 1-8
+   DESIGN SYSTEM
+===================================== */
+
 :root{
 
-    --green:#9BC45A;
-    --darkgreen:#4C8A34;
+    /* AKZENTFARBE */
+    --accent:#9BC45A;
+    --accent-dark:#4C8A34;
+
+    /* HELLMODUS */
     --bg:#f5f6f7;
+    --card:#ffffff;
+    --text:#000000;
+    --border:var(--accent-dark);
 
-    /* Später einstellbar 10-30 */
-
+    /* SCHRIFT */
     --fontSize:18px;
 
-    /* Verhältnis 30:18 */
-
+    /* PROPORTIONAL */
     --rowHeight:calc(var(--fontSize) * 1.67);
 
     --buttonSize:var(--rowHeight);
+
+    --radius:6px;
+
+    --borderWidth:2px;
+
+    --shadow:
+    0 1px 2px rgba(0,0,0,.12);
+
 }
+
+/* =====================================
+   DARK MODE
+===================================== */
+
+body.dark{
+
+    --bg:#121212;
+    --card:#1E1E1E;
+    --text:#FFFFFF;
+
+}
+
+/* =====================================
+   RESET
+===================================== */
 
 *{
     margin:0;
@@ -33,147 +68,207 @@
     box-sizing:border-box;
 }
 
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
 body{
 
     background:var(--bg);
-
-    color:#000;
+    color:var(--text);
 
     font-family:'Oswald',sans-serif;
 
     font-size:var(--fontSize);
 
-    font-weight:400;
+    transition:.25s;
+
 }
+
+/* =====================================
+   CONTAINER
+===================================== */
 
 .container{
 
     width:100%;
-
     max-width:900px;
 
     margin:auto;
 
     padding:8px;
+
 }
 
-/* ========================= */
-/* TITEL */
-/* ========================= */
+/* =====================================
+   TITELZEILE
+===================================== */
 
 .titleRow{
 
-    position:relative;
-
     display:flex;
-
-    justify-content:center;
 
     align-items:center;
 
+    justify-content:space-between;
+
     margin-bottom:8px;
+
 }
 
 .logo{
 
+    color:var(--accent);
+
     font-family:'Quicksand',sans-serif;
 
-    font-size:34px;
+    font-size:calc(var(--fontSize) * 1.8);
 
-    color:var(--green);
+    font-weight:700;
+
+    line-height:1;
 
     text-shadow:
     -1px 0 #000,
      1px 0 #000,
      0 -1px #000,
      0 1px #000;
+
 }
 
-.menu-btn{
+.titleRight{
 
-    position:absolute;
+    display:flex;
 
-    right:0;
+    align-items:center;
 
-    top:58%;
+    gap:6px;
 
-    transform:translateY(-50%);
+}
+
+/* =====================================
+   GPS SYMBOL
+===================================== */
+
+.gpsIcon{
+
+    font-size:
+    calc(var(--fontSize) * 1.2);
+
+    display:none;
+
+}
+
+.gpsIcon.active{
+
+    display:block;
+
+}
+
+/* =====================================
+   MENU BUTTON
+===================================== */
+
+.menuButton{
 
     border:none;
 
     background:none;
 
-    color:#000;
+    color:var(--text);
 
-    font-size:22px;
-
-    font-weight:700;
-
-    letter-spacing:-2px;
+    font-size:
+    calc(var(--fontSize) * 1.5);
 
     cursor:pointer;
+
 }
 
-/* ========================= */
-/* NAVIGATION */
-/* ========================= */
+/* =====================================
+   NAVIGATION
+===================================== */
 
-.menu{
+.navigation{
 
     display:none;
 
-    gap:2px;
+    flex-direction:column;
+
+    gap:4px;
 
     margin-bottom:8px;
+
 }
 
-.menu.show{
+.navigation.open{
 
     display:flex;
+
 }
+
+/* NORMAL */
 
 .navBtn{
 
-    flex:1;
+    height:var(--rowHeight);
 
-    background:white;
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
 
-    border:2px solid var(--darkgreen);
+    border-radius:var(--radius);
 
-    border-radius:4px;
+    background:var(--card);
 
-    text-align:center;
+    color:var(--text);
 
-    padding:3px;
+    display:flex;
+
+    align-items:center;
+
+    padding:0 12px;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+
 }
 
 .navIcon{
 
-    font-size:16px;
+    flex:0 0 auto;
 
-    line-height:1;
+    font-size:
+    calc(var(--fontSize) * 1.2);
+
 }
 
 .navText{
 
-    font-size:10px;
+    flex:1;
 
-    font-weight:500;
+    font-size:
+    calc(var(--fontSize) * .8);
 
-    line-height:1;
 }
 
-/* ========================= */
-/* EINGABEZEILE */
-/* ========================= */
+/* =====================================
+   EINGABEBEREICH
+===================================== */
 
 .inputRow{
 
     display:flex;
 
-    gap:2px;
+    gap:4px;
 
     margin-bottom:8px;
+
 }
 
 .inputRow input,
@@ -181,55 +276,48 @@ body{
 
     height:var(--rowHeight);
 
-    border:2px solid var(--darkgreen);
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
 
-    border-radius:4px;
+    border-radius:var(--radius);
 
-    background:white;
+    background:var(--card);
 
-    font-family:'Oswald',sans-serif;
+    color:var(--text);
 
     font-size:var(--fontSize);
 
-    font-weight:400;
+    font-family:'Oswald',sans-serif;
 
-    padding:0 4px;
+    padding:0 8px;
+
 }
-
-/* PRODUKT */
 
 #produkt{
 
     flex:1;
 
-    min-width:50px;
 }
-
-/* 999 */
 
 #menge{
 
-    flex:0 0 auto;
-
     width:4ch;
 
-    min-width:4ch;
-
     text-align:center;
-}
 
-/* STK. / LT. */
+}
 
 #einheit{
 
-    flex:0 0 auto;
+    width:6ch;
 
-    width:5ch;
-
-    min-width:5ch;
 }
 
-/* PLUS */
+/* =====================================
+   PLUS BUTTON
+===================================== */
 
 .addBtn{
 
@@ -237,77 +325,205 @@ body{
 
     height:var(--buttonSize);
 
-    flex:0 0 auto;
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
 
-    border:none;
+    border-radius:var(--radius);
 
-    border-radius:4px;
+    background:var(--accent);
 
-    background:var(--green);
+    color:#fff;
 
-    color:white;
-
-    font-family:'Oswald',sans-serif;
-
-    font-size:20px;
-
-    font-weight:500;
+    font-size:
+    calc(var(--fontSize) * 1.2);
 
     cursor:pointer;
+
 }
 
-/* ========================= */
-/* LISTE */
-/* ========================= */
+/* =====================================
+   KARTEN
+===================================== */
 
 .card{
 
-    background:white;
+    background:var(--card);
 
-    border:2px solid var(--darkgreen);
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
 
-    border-radius:4px;
+    border-radius:var(--radius);
 
-    padding:6px;
+    padding:8px;
+
+    margin-bottom:8px;
+
+    box-shadow:var(--shadow);
+
 }
 
-.cardTitel{
+.cardTitle{
 
-    font-size:20px;
+    font-size:
+    calc(var(--fontSize) * 1.1);
 
-    font-weight:500;
+    margin-bottom:8px;
+
 }
 
-/* LEERE LISTE */
+/* =====================================
+   PRODUKTLISTEN
+===================================== */
 
 .listContainer{
 
-    min-height:30px;
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
 }
 
-/* ========================= */
-/* NATEL FIRST */
-/* ========================= */
+.productCard{
 
-@media(max-width:480px){
+    min-height:var(--rowHeight);
+
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
+
+    border-radius:var(--radius);
+
+    background:var(--card);
+
+    display:flex;
+
+    align-items:center;
+
+    padding:4px;
+
+    gap:4px;
+
+}
+
+.productName{
+
+    flex:1;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.productAmount{
+
+    width:55px;
+
+    text-align:center;
+
+}
+
+.productUnit{
+
+    width:55px;
+
+    text-align:center;
+
+}
+
+/* =====================================
+   FEUER BUTTON
+===================================== */
+
+.fireBtn{
+
+    width:var(--buttonSize);
+
+    height:var(--buttonSize);
+
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
+
+    border-radius:var(--radius);
+
+    background:var(--card);
+
+    opacity:.35;
+
+    cursor:pointer;
+
+}
+
+.fireBtn.active{
+
+    opacity:1;
+
+}
+
+/* =====================================
+   HAKEN BUTTON
+===================================== */
+
+.checkBtn{
+
+    width:var(--buttonSize);
+
+    height:var(--buttonSize);
+
+    border:
+    var(--borderWidth)
+    solid
+    var(--border);
+
+    border-radius:var(--radius);
+
+    background:var(--card);
+
+    cursor:pointer;
+
+}
+
+/* =====================================
+   SEITEN
+===================================== */
+
+.page{
+
+    display:none;
+
+}
+
+.page.active{
+
+    display:block;
+
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width:480px){
 
     :root{
 
         --fontSize:16px;
+
     }
 
-    .logo{
-
-        font-size:30px;
-    }
-
-    .navText{
-
-        font-size:9px;
-    }
 }
 
 </style>
+
 </head>
 
 <body>
@@ -320,54 +536,108 @@ body{
             SmartShop V5
         </div>
 
+        <div class="titleRight">
+
+            <div
+            id="gpsIcon"
+            class="gpsIcon">
+                📍
+            </div>
+
+            <button
+            id="menuButton"
+            class="menuButton">
+                •••
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <div
+    id="navigation"
+    class="navigation">
+
         <button
-        class="menu-btn"
-        onclick="toggleMenu()">
-            •••
+        class="navBtn">
+
+            <span class="navIcon">🛒</span>
+
+            <span class="navText">
+                Einkaufsliste
+            </span>
+
+        </button>
+
+        <button
+        class="navBtn">
+
+            <span class="navIcon">⭐</span>
+
+            <span class="navText">
+                Favoriten
+            </span>
+
+        </button>
+
+        <button
+        class="navBtn">
+
+            <span class="navIcon">🔥</span>
+
+            <span class="navText">
+                Aktionen
+            </span>
+
+        </button>
+
+        <button
+        class="navBtn">
+
+            <span class="navIcon">💡</span>
+
+            <span class="navText">
+                Ideen
+            </span>
+
+        </button>
+
+        <button
+        class="navBtn">
+
+            <span class="navIcon">⚙️</span>
+
+            <span class="navText">
+                Einstellungen
+            </span>
+
         </button>
 
     </div>
 
-    <div
-    class="menu"
-    id="menu">
+<!-- =====================================
+     EINKAUFSLISTE
+===================================== -->
 
-        <div class="navBtn">
-            <div class="navIcon">🛒</div>
-            <div class="navText">Liste</div>
-        </div>
-
-        <div class="navBtn">
-            <div class="navIcon">⭐</div>
-            <div class="navText">Favoriten</div>
-        </div>
-
-        <div class="navBtn">
-            <div class="navIcon">💡</div>
-            <div class="navText">Ideen</div>
-        </div>
-
-        <div class="navBtn">
-            <div class="navIcon">🔥</div>
-            <div class="navText">Aktionen</div>
-        </div>
-
-        <div class="navBtn">
-            <div class="navIcon">⚙️</div>
-            <div class="navText">Einstellungen</div>
-        </div>
-
-    </div>
+<div
+id="shoppingPage"
+class="page active">
 
     <div class="inputRow">
 
         <input
         id="produkt"
+        maxlength="100"
         placeholder="Produkt">
 
         <input
         id="menge"
-        value="0">
+        type="number"
+        min="1"
+        max="999"
+        value="1">
 
         <select id="einheit">
 
@@ -379,19 +649,27 @@ body{
 
         </select>
 
-        <button class="addBtn">
+        <button
+        id="addBtn"
+        class="addBtn">
+
             +
+
         </button>
 
     </div>
 
     <div class="card">
 
-        <div class="cardTitel">
+        <div class="cardTitle">
+
             🛒 Einkaufsliste
+
         </div>
 
-        <div class="listContainer">
+        <div
+        id="shoppingList"
+        class="listContainer">
 
         </div>
 
@@ -399,227 +677,468 @@ body{
 
 </div>
 
-<script>
+<!-- =====================================
+     FAVORITEN
+===================================== -->
 
-function toggleMenu(){
-    document
-        .getElementById("menu")
-        .classList
-        .toggle("show");
-}
+<div
+id="favoritesPage"
+class="page">
 
-/* =========================
-   BLOCK 2
-========================= */
+    <div class="card">
 
-const produktInput = document.getElementById('produkt');
-const mengeInput = document.getElementById('menge');
-const einheitSelect = document.getElementById('einheit');
-const addBtn = document.querySelector('.addBtn');
-const listContainer = document.querySelector('.listContainer');
+        <div class="cardTitle">
 
-let produkte = [];
+            ⭐ Favoriten
 
-addBtn.addEventListener('click', produktHinzufuegen);
+        </div>
 
-produktInput.addEventListener('keypress', function(e){
-    if(e.key === 'Enter'){
-        produktHinzufuegen();
-    }
-});
+        <div
+        id="favoritesList"
+        class="listContainer">
 
-mengeInput.addEventListener('keypress', function(e){
-    if(e.key === 'Enter'){
-        produktHinzufuegen();
-    }
-});
+        </div>
 
-function produktHinzufuegen(){
+    </div>
 
-    let produkt = produktInput.value.trim();
+</div>
 
-    if(produkt.length === 0){
-        alert("Bitte Produkt eingeben.");
-        produktInput.focus();
-        return;
-    }
+<!-- =====================================
+     LETZTE PRODUKTE
+===================================== -->
 
-    if(produkt.length > 100){
-        alert("Maximal 100 Zeichen erlaubt.");
-        produktInput.focus();
-        return;
-    }
+<div
+id="lastProductsPage"
+class="page">
 
-    produkt =
-        produkt.charAt(0).toUpperCase() +
-        produkt.slice(1).toLowerCase();
+    <div class="card">
 
-    let menge = parseInt(mengeInput.value);
+        <div class="cardTitle">
 
-    if(isNaN(menge) || menge < 1 || menge > 999){
-        alert("Bitte Menge zwischen 1 und 999 eingeben.");
-        mengeInput.focus();
-        return;
-    }
+            🕘 Letzte Produkte
 
-    const einheit = einheitSelect.value;
+        </div>
 
-    const vorhanden = produkte.find(item =>
-        item.product.toLowerCase() === produkt.toLowerCase() &&
-        item.unit === einheit
-    );
+        <div
+        id="lastProductsList"
+        class="listContainer">
 
-    if(vorhanden){
+        </div>
 
-        const aktion = confirm(
-            produkt +
-            " existiert bereits.\n\n" +
-            "OK = Zusammenführen\n" +
-            "Abbrechen = Neues Produkt"
-        );
+    </div>
 
-        if(aktion){
+</div>
 
-            vorhanden.quantity =
-                Math.min(
-                    999,
-                    vorhanden.quantity + menge
-                );
+<!-- =====================================
+     VERLAUF
+===================================== -->
 
-            renderListe();
+<div
+id="historyPage"
+class="page">
 
-            produktInput.value = "";
-            mengeInput.value = 1;
-            einheitSelect.value = "Stk.";
-            produktInput.focus();
+    <div class="card">
 
-            return;
-        }
-    }
+        <div class="cardTitle">
 
-    produkte.unshift({
-        id: Date.now(),
-        product: produkt,
-        quantity: menge,
-        unit: einheit,
-        checked: false,
-        actionFound: false,
-        createdAt: Date.now()
-    });
+            📋 Verlauf
 
-    renderListe();
+        </div>
 
-    produktInput.value = "";
-    mengeInput.value = 1;
-    einheitSelect.value = "Stk.";
+        <div
+        id="historyList"
+        class="listContainer">
 
-    produktInput.focus();
-}
+        </div>
 
-function renderListe(){
+    </div>
 
-    listContainer.innerHTML = "";
+</div>
 
-    produkte.forEach(item => {
+<!-- =====================================
+     AKTIONEN
+===================================== -->
 
-        const row = document.createElement("div");
+<div
+id="actionsPage"
+class="page">
 
-        row.style.display = "flex";
-        row.style.alignItems = "center";
-        row.style.gap = "4px";
-        row.style.marginTop = "4px";
-        row.style.padding = "4px";
-        row.style.borderBottom = "1px solid #ddd";
+    <div class="card">
 
-        row.innerHTML = `
-            <div style="flex:1;overflow:hidden;text-overflow:ellipsis;">
-                ${item.product}
+        <div class="cardTitle">
+
+            🔥 Aktionen
+
+        </div>
+
+        <div class="listContainer">
+
+            <div class="productCard">
+
+                Aktionen werden
+                in späteren Blöcken erweitert.
+
             </div>
 
-            <div style="width:45px;text-align:center;">
-                ${item.quantity}
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+     IDEEN
+===================================== -->
+
+<div
+id="ideasPage"
+class="page">
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            💡 Ideen
+
+        </div>
+
+        <div class="listContainer">
+
+            <div class="productCard">
+
+                Ideen werden
+                in späteren Blöcken erweitert.
+
             </div>
 
-            <div style="width:45px;text-align:center;">
-                ${item.unit}
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+     EINSTELLUNGEN
+===================================== -->
+
+<div
+id="settingsPage"
+class="page">
+
+<!-- ====================== -->
+<!-- DARSTELLUNG -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            🎨 Darstellung
+
+        </div>
+
+        <div class="listContainer">
+
+            <div class="productCard">
+
+                Schriftgrösse
+
             </div>
 
-            <div style="width:30px;text-align:center;">
-                🔥
+            <div class="productCard">
+
+                <input
+                id="fontSlider"
+                type="range"
+                min="10"
+                max="40"
+                value="18"
+                style="width:100%;">
+
             </div>
 
-            <div style="width:30px;text-align:center;">
-                ✓
-            </div>
-        `;
+        </div>
 
-        let startX = 0;
+    </div>
 
-        row.addEventListener('touchstart', e=>{
-            startX = e.changedTouches[0].clientX;
-        });
+<!-- ====================== -->
+<!-- SCHRIFT -->
+<!-- ====================== -->
 
-        row.addEventListener('touchend', e=>{
+    <div class="card">
 
-            const endX =
-                e.changedTouches[0].clientX;
+        <div class="cardTitle">
 
-            if(startX - endX > 80){
+            🔠 Schrift
 
-                const loeschen =
-                    confirm(
-                        item.product +
-                        " löschen?"
-                    );
+        </div>
 
-                if(loeschen){
+        <div class="listContainer">
 
-                    produkte =
-                        produkte.filter(
-                            p => p.id !== item.id
-                        );
+            <button
+            id="fontAuto"
+            class="navBtn">
 
-                    renderListe();
-                }
-            }
-        });
+                Automatisch
 
-        row.addEventListener('click', function(){
+            </button>
 
-            const neuerName =
-                prompt(
-                    "Produkt bearbeiten:",
-                    item.product
-                );
+            <button
+            id="fontManual"
+            class="navBtn">
 
-            if(neuerName === null) return;
+                Manuell
 
-            const neueMenge =
-                prompt(
-                    "Menge bearbeiten:",
-                    item.quantity
-                );
+            </button>
 
-            if(neueMenge === null) return;
+        </div>
 
-            item.product =
-                neuerName.trim();
+    </div>
 
-            item.quantity =
-                Math.min(
-                    999,
-                    parseInt(neueMenge) || 1
-                );
+<!-- ====================== -->
+<!-- DARK MODE -->
+<!-- ====================== -->
 
-            renderListe();
-        });
+    <div class="card">
 
-        listContainer.appendChild(row);
-    });
-}
+        <div class="cardTitle">
 
-mengeInput.value = 1;
+            🌙 Dark Mode
 
-</script>
-</body>
-</html>
+        </div>
+
+        <div class="listContainer">
+
+            <button
+            id="themeLight"
+            class="navBtn">
+                Hell
+            </button>
+
+            <button
+            id="themeDark"
+            class="navBtn">
+                Dunkel
+            </button>
+
+            <button
+            id="themeAuto"
+            class="navBtn">
+                Automatisch
+            </button>
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- FARBEN -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            🎨 Akzentfarbe
+
+        </div>
+
+        <div class="listContainer">
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#9BC45A">
+
+                Grün
+
+            </button>
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#808080">
+
+                Grau
+
+            </button>
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#4285F4">
+
+                Blau
+
+            </button>
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#D93025">
+
+                Rot
+
+            </button>
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#FB8C00">
+
+                Orange
+
+            </button>
+
+            <button
+            class="navBtn colorPreset"
+            data-color="#8E24AA">
+
+                Violett
+
+            </button>
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- BENUTZERDEFINIERT -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            🎯 Benutzerdefiniert
+
+        </div>
+
+        <div class="listContainer">
+
+            <input
+            id="customColor"
+            type="color"
+            value="#9BC45A">
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- FAVORITEN -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            ⭐ Favoriten
+
+        </div>
+
+        <div class="listContainer">
+
+            <button
+            id="autoFavorites"
+            class="navBtn">
+
+                Automatische Favoriten
+
+            </button>
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- LETZTE PRODUKTE -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            🕘 Letzte Produkte
+
+        </div>
+
+        <div class="listContainer">
+
+            <select
+            id="lastProductsLimit">
+
+                <option>10</option>
+                <option selected>20</option>
+                <option>50</option>
+                <option>100</option>
+                <option>Alle</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- GPS -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            📍 GPS
+
+        </div>
+
+        <div class="listContainer">
+
+            <button
+            id="gpsOff"
+            class="navBtn">
+                Aus
+            </button>
+
+            <button
+            id="gpsAsk"
+            class="navBtn">
+                Nachfragen
+            </button>
+
+            <button
+            id="gpsAuto"
+            class="navBtn">
+                Automatisch
+            </button>
+
+        </div>
+
+    </div>
+
+<!-- ====================== -->
+<!-- GPS RADIUS -->
+<!-- ====================== -->
+
+    <div class="card">
+
+        <div class="cardTitle">
+
+            📡 Radius
+
+        </div>
+
+        <div class="listContainer">
+
+            <select
+            id="gpsRadius">
+
+                <option selected>25</option>
+                <option>50</option>
+                <option>100</option>
+                <option>250</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Teil 2 Ende -->
