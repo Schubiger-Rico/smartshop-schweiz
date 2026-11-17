@@ -20,7 +20,7 @@ h1{font-size:1.3em;line-height:1.1}h2{font-size:1.15em;margin:1.2em 0 .5em}h3{fo
 header{display:flex;align-items:center;justify-content:space-between;position:relative;margin-bottom:.6em;gap:.5em}
 button,input,select,textarea{font:inherit;color:inherit}
 .brand{font-size:1.5em;color:#6fdc8c;-webkit-text-stroke:.07em #0d5a2e;paint-order:stroke fill;font-weight:700;letter-spacing:.03em;font-family:Quicksand,sans-serif}
-.sub{font:600 .55em Quicksand,sans-serif;color:var(--mute);display:block}
+.ttl{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:.5em}.sub{font:700 .8em Quicksand,sans-serif;color:var(--dg);display:inline}@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sub{color:#6fdc8c}}:root[data-theme=dark] .sub{color:#6fdc8c}
 .btn{min-height:var(--rh);min-width:var(--rh);padding:0 .8em;border:1px solid var(--line);background:var(--card);border-radius:.7em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.3em}
 .btn.sq{width:var(--rh);height:var(--rh);padding:0;flex:none}
 .btn.pri{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
@@ -654,7 +654,7 @@ var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['deals','�
 var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
-function head(){return'<header><div><div class="brand">SEBU</div><span class="sub">'+t('SmarterEinkaufsBerater')+'</span></div><div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
+function head(){return'<header><div class="ttl"><div class="brand">SEBU</div><span class="sub">'+t('SmarterEinkaufsBerater')+'</span></div><div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
 function hlTour(){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=$(s.sel);if(e){e.classList.add('hl');if(e.scrollIntoView)e.scrollIntoView({block:'center'})}}
 function R(){applyLook();var a=$('#app');if(!a)return;
  if(!S.ob.done){a.innerHTML=vOnb();save();return}
