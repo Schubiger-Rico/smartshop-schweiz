@@ -115,7 +115,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#1f8a70',mode:'normal',favAfter:'5',gps:'off',radius:25,quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true}}
+function setDef(){return{fs:18,theme:'auto',accent:'#1f8a70',mode:'normal',favAfter:'5',gps:'off',radius:25,quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -131,7 +131,7 @@ var STD=[
 ['👶','Baby & Kind',[]],['💊','Apotheke & Gesundheit',[]],['📦','Übrige',[]]];
 function mkCats(){var o=[],n=0;STD.forEach(function(m,i){var id='m'+i;o.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:n++,custom:false,hidden:false});
  m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:j,custom:false,hidden:false})})});return o}
-function DEF(){return{v:1,items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},on:true},units:[],mine:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,set:setDef()}}
+function DEF(){return{v:1,items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},on:true},units:[],mine:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
 function fixUnit(u){return u==='Stk'?'Stk.':u==='l'?'lt':u||''}
 function migrate(o){var r={};
  function mi(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:fixUnit(i.unit),fire:!!i.fire,cat:null,sub:null}}
@@ -146,7 +146,7 @@ function load(){var d=DEF(),r=null;try{r=JSON.parse(localStorage.getItem(KEY))}c
  if(!r){try{var o=JSON.parse(localStorage.getItem(OLDKEY));if(o)r=migrate(o)}catch(e){}}
  if(r)Object.keys(d).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')d[k]=Object.assign(d[k],r[k]||{});else if(r[k]!==undefined)d[k]=r[k]});
  return d}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){say(t('Speicher voll. Lösche alte Fotos oder Einträge.'))}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){say(t('Speicher voll. Lösche alte Fotos oder Einträge.'))}if(typeof pushSoon==='function')pushSoon()}
 S=load();
 
 /* ===== Kategorien ===== */
@@ -546,7 +546,7 @@ function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty(
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
-var SUBS=[['profil','👤','Profil'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
+var SUBS=[['profil','👤','Profil'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
 function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'" role="button" aria-label="'+c+'"></i>'}
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
@@ -585,6 +585,7 @@ function vSettings(){
  case'ai':h+='<p class="small mute">'+t('Für den Ratgeber trägst du deinen eigenen Anthropic-Schlüssel ein. Er bleibt auf diesem Gerät.')+'</p>'
   +rowS(t('API-Schlüssel'),'<input class="field" type="password" data-chg="apiKey" value="'+esc(S.set.apiKey)+'" placeholder="sk-ant-…" autocomplete="off">')
   +rowS(t('Modell'),'<input class="field" data-chg="model" value="'+esc(S.set.model)+'">')+rowS(t('Websuche verwenden'),sw('webSearch',S.set.webSearch));break;
+ case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
  case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="all">▶ '+t('Ganze Führung')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('Einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break;
  case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
@@ -667,6 +668,41 @@ function vOnb(){var h='<div style="padding:1em 0"><div class="brand" style="font
  if(p==='size')return h+'<h2>'+t('Wie gross soll die Schrift sein?')+'</h2><p>'+t('Verschiebe den Regler, die Anzeige ändert sich sofort.')+'</p><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'"><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onsize">'+t('Weiter')+'</button></div>';
  if(p==='tour')return h+'<h2>'+t(S.ob.name?'{0}, möchtest du eine Führung durch die App?':'Möchtest du eine Führung durch die App?',S.ob.name)+'</h2><p class="mute">'+t('Du kannst sie jederzeit in den Einstellungen starten.')+'</p><div class="seg"><button class="btn pri" data-a="ontour" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="ontour" data-v="0">'+t('Nein, danke')+'</button></div>';
  return h+'<h2>'+t('Und eine Führung durch die Einstellungen?')+'</h2><div class="seg"><button class="btn pri" data-a="onset" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="onset" data-v="0">'+t('Nein, danke')+'</button></div>'}
+
+/* ===== Liste teilen (Firebase Realtime Database, kostenloser Test) ===== */
+var shareMsg='',pushT=null,lastJson='',pollT=null,applying=false;
+function shareOn(){return !!(S.share&&S.share.code&&S.set.fbUrl&&/^https:\/\//.test(S.set.fbUrl))}
+function shUrl(){return S.set.fbUrl.replace(/\/+$/,'')+'/lists/'+encodeURIComponent(S.share.code)+'.json'}
+function liveItems(){return S.items.filter(function(i){return !i.tour})}
+function pushSoon(){if(!shareOn()||applying)return;clearTimeout(pushT);pushT=setTimeout(pushNow,800)}
+function pushNow(cb){if(!shareOn())return;var it=liveItems(),j=JSON.stringify(it);if(j===lastJson){if(cb)cb();return}var t0=Date.now();
+ fetch(shUrl(),{method:'PUT',body:JSON.stringify({items:it,t:t0,by:S.share.dev})}).then(function(r){if(!r.ok)throw r.status;lastJson=j;S.share.t=t0;shareMsg=t('Verbunden. Zuletzt gesendet {0}',new Date().toLocaleTimeString('de-CH'));if(cb)cb()}).catch(function(e){shareMsg=t('Senden fehlgeschlagen ({0}). Adresse und Regeln prüfen.',e)})}
+function remoteItems(d){var a=d&&d.items?(Array.isArray(d.items)?d.items:Object.keys(d.items).map(function(k){return d.items[k]})):[];
+ return a.filter(Boolean).map(function(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:i.unit||'',fire:!!i.fire,cat:i.cat||null,sub:i.sub||null,why:i.why||''}})}
+function pollNow(){if(!shareOn()||document.hidden)return;
+ fetch(shUrl()).then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(d){
+  if(!d){lastJson='';pushNow();return}
+  if(d.by!==S.share.dev&&d.t>(S.share.t||0)){var a=document.activeElement,busy=sh||editId||tour||(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName));if(busy)return;
+   applying=true;S.items=remoteItems(d);S.share.t=d.t;lastJson=JSON.stringify(liveItems());save();applying=false;shareMsg=t('Verbunden. Aktualisiert {0}',new Date().toLocaleTimeString('de-CH'));R()}
+ }).catch(function(e){shareMsg=t('Keine Verbindung ({0})',e)})}
+function startShare(){clearInterval(pollT);if(shareOn()){pollNow();pollT=setInterval(pollNow,5000)}}
+document.addEventListener('visibilitychange',function(){if(!document.hidden)pollNow()});
+function newCode(){var s='',c='abcdefghjkmnpqrstuvwxyz23456789';for(var i=0;i<14;i++)s+=c.charAt(Math.floor(Math.random()*c.length));return s}
+function shareNew(){if(!/^https:\/\//.test(S.set.fbUrl||'')){say(t('Bitte zuerst die Datenbank-Adresse eintragen.'));return}
+ S.share={code:newCode(),t:0,dev:S.share.dev||uid()};lastJson='';save();pushNow(function(){startShare();R()});R()}
+function shareJoin(code){if(!/^https:\/\//.test(S.set.fbUrl||'')){say(t('Bitte zuerst die Datenbank-Adresse eintragen.'));return}
+ if(code.length<8){say(t('Der Code ist zu kurz.'));return}
+ S.share={code:code.toLowerCase(),t:0,dev:S.share.dev||uid()};lastJson='';
+ fetch(shUrl()).then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(d){
+  var rem=remoteItems(d);liveItems().forEach(function(l){if(!rem.some(function(x){return norm(x.name)===norm(l.name)&&x.unit===l.unit}))rem.push(l)});
+  S.items=rem;if(d)S.share.t=d.t||0;save();pushNow(function(){startShare();R()});say(t('Liste verbunden.'));R()}).catch(function(e){S.share.code='';shareMsg=t('Verbindung fehlgeschlagen ({0})',e);R()})}
+function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen benutzen dieselbe Einkaufsliste. Zum Testen kostenlos mit Firebase. Geteilt wird nur die Einkaufsliste.')+'</p>'
+ +rowS(t('Datenbank-Adresse'),'<input class="field" data-chg="fbUrl" value="'+esc(S.set.fbUrl)+'" placeholder="https://…firebasedatabase.app" style="flex:1 1 12em">');
+ if(on)h+='<div class="ban" style="display:block"><div>'+t('Dein Listen-Code')+':</div><div style="font-size:1.2em;font-weight:700;overflow-wrap:anywhere">'+esc(S.share.code)+'</div><div class="seg" style="margin-top:.4em"><button class="btn" data-a="sharecopy">'+t('Code kopieren')+'</button><button class="btn" data-a="sharestop">'+t('Teilen beenden')+'</button></div><p class="small mute" style="margin:.4em 0 0">'+t('Die andere Person gibt diesen Code bei sich ein.')+'</p></div>';
+ else h+='<div class="seg"><button class="btn pri" data-a="sharenew">'+t('Neue geteilte Liste starten')+'</button></div><h3>'+t('Oder einer Liste beitreten')+'</h3><div class="seg"><input class="field" id="shc" placeholder="'+t('Listen-Code')+'" style="flex:1 1 9em"><button class="btn" data-a="sharejoin">'+t('Beitreten')+'</button></div>';
+ if(shareMsg)h+='<p class="small">'+esc(shareMsg)+'</p>';
+ h+='<details><summary>'+t('Einrichtung (einmalig, etwa 5 Minuten)')+'</summary><ol class="small"><li>'+t('Auf console.firebase.google.com mit einem Google-Konto ein Projekt erstellen (Google Analytics ausschalten).')+'</li><li>'+t('Links «Build» → «Realtime Database» → «Datenbank erstellen», Standort Europa, «Im Testmodus starten».')+'</li><li>'+t('Oben die Adresse kopieren (beginnt mit https://) und hier einfügen.')+'</li><li>'+t('Im Reiter «Regeln» diesen Text einfügen und veröffentlichen:')+' <code>{"rules":{"lists":{"$c":{".read":true,".write":true}}}}</code></li></ol><p class="small mute">'+t('Wer den langen Code kennt, kann die Liste lesen und ändern. Für den Test reicht das.')+'</p></details>';
+ return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
 var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
@@ -758,6 +794,10 @@ function act(a,el){var D=el.dataset,i,it;
  case'dealclose':dealOpen=null;break;
  case'qty':{if(D.id==='draft')sh={t:'qty',id:'draft',q:draft.q,u:draft.u};else{var qi=findItem(D.id);if(qi)sh={t:'qty',id:qi.id,q:String(qi.qty),u:qi.unit}}break}
  case'qtyok':{var qq=Math.min(999,Math.max(0,num(fval('qm'),0))),uu=fixU(fval('um'));rememberUnit(uu);if(sh.id==='draft'){draft.q=String(qq);draft.u=uu}else{var q2=findItem(sh.id);if(q2){q2.qty=qq;q2.unit=uu}}sh=null;break}
+ case'sharenew':shareNew();return;
+ case'sharejoin':shareJoin(fval('shc').trim());return;
+ case'sharestop':S.share.code='';shareMsg='';clearInterval(pollT);break;
+ case'sharecopy':if(navigator.clipboard)navigator.clipboard.writeText(S.share.code);say(t('Code kopiert.'));return;
  case'dealsall':allDealsOpen=!allDealsOpen;break;
  case'dealsave':{var d2={own:true};['chain','product','unit','from','to'].forEach(function(k){d2[k]=fval('dc_'+k)});['price','normal','qty'].forEach(function(k){d2[k]=num(fval('dc_'+k),0)});
   if(!d2.product||!(d2.price>0)){say(t('Produkt und Preis werden benötigt.'));return}d2.id=uid();S.deals.push(d2);sh=null;say(t('Aktion gespeichert.'));break}
@@ -809,7 +849,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  var v2=t0.value;
  if(k==='pname')S.ob.name=v2.trim();else if(k==='ptype')S.ob.type=v2;
  else if(k==='radius')S.set.radius=+v2;else if(k==='persons')S.set.persons=Math.max(1,+v2||4);
- else if(k==='apiKey'||k==='model')S.set[k]=v2.trim();
+ else if(k==='apiKey'||k==='model'||k==='fbUrl')S.set[k]=v2.trim();
  else S.set[k]=v2;
  save();R();if(k==='gps'&&v2!=='off')gpsDetect()});
 document.addEventListener('pointerdown',function(e){
@@ -836,7 +876,7 @@ document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!
   if(w.id==='wq')$('#qm').value=Math.min(99,Math.max(0,i));else{var u=allUnits()[Math.min(allUnits().length-1,Math.max(0,i))];$('#um').value=u}},120)},true);
 document.addEventListener('click',function(e){var o=e.target.closest&&e.target.closest('.wheel .o');if(o){var w=o.parentNode,i=Array.prototype.indexOf.call(w.querySelectorAll('.o'),o);wheelT=0;w.scrollTo({top:i*o.offsetHeight,behavior:'smooth'})}});
 /* ===== Start ===== */
-function init(){purgeDeals();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
+function init(){purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){});
  if(S.set.gps!=='off')gpsDetect();runQueue()}
 init();
