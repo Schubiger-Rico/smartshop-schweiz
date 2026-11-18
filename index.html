@@ -42,6 +42,7 @@ textarea.field{height:8em;padding:.6em;width:100%}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:.7em;padding:.1em .7em;min-height:calc(var(--rh)*.8);cursor:pointer;display:inline-flex;align-items:center;gap:.3em}
 header .stop{max-width:9em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:inline-block;line-height:var(--rh);flex:none;margin-left:auto;font-size:.85em;border-color:var(--red)}
 header .stop{}
+.chip.sel{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
 .qu{flex:none;padding:0 .5em;min-width:calc(var(--rh)*1.7)}
 .q[data-a]{cursor:pointer;text-decoration:underline dotted;text-underline-offset:.2em}
 .wheels{position:relative;display:flex;gap:.5em;margin:.5em 0}
@@ -136,7 +137,9 @@ var STD=[
 ['👶','Baby & Kind',[]],['💊','Apotheke & Gesundheit',[]],['📦','Übrige',[]]];
 function mkCats(){var o=[],n=0;STD.forEach(function(m,i){var id='m'+i;o.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:n++,custom:false,hidden:false});
  m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:j,custom:false,hidden:false})})});return o}
-function DEF(){return{v:1,items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},on:true},units:[],mine:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
+var OSMT={baumarkt:{shop:'doityourself|hardware'},kleider:{shop:'clothes|shoes|boutique|fashion'},elektronik:{shop:'electronics|computer|mobile_phone'},apotheke:{shop:'chemist',amenity:'pharmacy'},papeterie:{shop:'stationery|books'},moebel:{shop:'furniture|houseware|interior_decoration|kitchen|bed'},garten:{shop:'garden_centre|florist|nurseries'}};
+function mkTypes(){return[['baumarkt','🛠️','Baumarkt'],['kleider','👕','Kleider und Schuhe'],['elektronik','🔌','Elektronik'],['apotheke','💊','Apotheke und Drogerie'],['papeterie','✏️','Papeterie und Bücher'],['moebel','🛋️','Möbel und Haushalt'],['garten','🪴','Garten und Pflanzen'],['sonst','🛍️','Sonstiges']].map(function(x){return{id:x[0],icon:x[1],name:x[2],on:true,custom:false,kw:''}})}
+function DEF(){return{v:1,types:mkTypes(),dismiss:[],items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},types:{},on:true},units:[],mine:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
 function fixUnit(u){return u==='Stk'?'Stk.':u==='l'?'lt':u||''}
 function migrate(o){var r={};
  function mi(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:fixUnit(i.unit),fire:!!i.fire,cat:null,sub:null}}
@@ -159,7 +162,9 @@ function cat(id){for(var i=0;i<S.cats.length;i++)if(S.cats[i].id===id)return S.c
 function cname(c){return c.custom||c.ren?c.name:t(c.name)}
 function mains(all){return S.cats.filter(function(c){return !c.parentId&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
 function subsOf(pid,all){return S.cats.filter(function(c){return c.parentId===pid&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
-function iconOf(x){var c=(x.sub&&cat(x.sub))||(x.cat&&cat(x.cat));return c?c.icon:'❔'}
+function iconOf(x){var c=(x.sub&&cat(x.sub))||(x.cat&&cat(x.cat));return c?c.icon:(x.type&&typeOf(x.type)?typeOf(x.type).icon:'❔')}
+function typeOf(id){for(var i=0;i<S.types.length;i++)if(S.types[i].id===id)return S.types[i];return null}
+function tname(x){return x.custom?x.name:t(x.name)}
 function catLabel(x){var m=x.cat&&cat(x.cat),s=x.sub&&cat(x.sub);return m?(cname(m)+(s?' › '+cname(s):'')):t('Keine Kategorie')}
 
 /* ===== Stichwörter für die automatische Erkennung ===== */
@@ -226,6 +231,12 @@ function detect(name){var n=norm(name);if(!n)return null;
  return detectKw(n)}
 function learnCat(name,c,s){if(S.learn.on===false)return;var n=norm(name);if(!n)return;var o=S.learn.names[n]||{n:0};S.learn.names[n]={cat:c,sub:s||null,n:o.n+1}}
 
+var TKW={baumarkt:'schrauben,nägel,dübel,farbe,pinsel,werkzeug,hammer,bohrer,leim,silikon,schleifpapier,zange,schraubenzieher,klebeband',kleider:'pullover,hose,jacke,socken,t-shirt,schuhe,kleid,mütze,handschuhe,unterwäsche,jeans,hemd,schal',elektronik:'kabel,ladegerät,usb,maus,tastatur,kopfhörer,hdmi,akku,netzteil,adapter',apotheke:'salbe,medikament,rezept,tropfen',papeterie:'heft,kugelschreiber,notizbuch,ordner,couvert,bleistift,buch,filzstift',moebel:'regal,stuhl,tisch,kissen,vorhang,teppich,bettwäsche,sofa,vase',garten:'erde,blumenzwiebeln,setzlinge,pflanze,dünger,samen,blumentopf,gartenschlauch'};
+function detectType(name){var n=norm(name);if(n.length<3)return null;var l=S.learn.types&&S.learn.types[n];if(l&&typeOf(l))return l;
+ var ts=S.types.filter(function(x){return x.on!==false&&x.id!=='sonst'});
+ for(var i=0;i<ts.length;i++){var x=ts[i],ks=x.custom?String(x.kw||'').split(','):(TKW[x.id]||'').split(',');
+  for(var j=0;j<ks.length;j++){var k=ks[j].trim().toLowerCase();if(k&&(k.length<5?(' '+n+' ').indexOf(' '+k+' ')>-1:n.indexOf(k)>-1))return x.id}}return null}
+
 /* ===== Vorschläge (Tippfehler, Mundart, bekannte Produkte) ===== */
 function suggest(q){q=norm(q);if(q.length<2)return[];
  var pool={};
@@ -253,14 +264,15 @@ function say(m){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('
 
 /* ===== Laufzeitzustand ===== */
 var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,declined={},stMsg='',ask=null,tt0=0;
-var draft={n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false};
+function newDraft(){return{n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false,stores:[],type:null,stext:'',typeSug:null}}
+var draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
 var CH=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg'];
 function chainOn(c){return S.chains[c]!==false}
 function findItem(id){return S.items.filter(function(x){return x.id===id})[0]}
 function ev(){return S.ev.filter(function(x){return x.id===S.cev&&!x.arch})[0]}
 
 /* ===== Produkte ===== */
-function addItem(name,qty,unit,c,s,why){
+function addItem(name,qty,unit,c,s,why,x){
  name=String(name||'').trim();if(!name){say(t('Bitte einen Produktnamen eingeben.'));return null}
  qty=num(qty,0);if(qty<0)qty=0;unit=fixU(unit);rememberUnit(unit);
  var ce=S.learn.on!==false&&ev(),rt=ce&&ce.rate&&ce.rate[name];
@@ -268,7 +280,7 @@ function addItem(name,qty,unit,c,s,why){
  var d=S.items.filter(function(x){return norm(x.name)===norm(name)&&x.unit===unit})[0];
  if(d){d.qty=Math.round((d.qty+qty)*100)/100;say(t('Zusammengeführt: {0} ({1})',d.name,fmt(d)));return d}
  if(!c){var det=detect(name);if(det){c=det.cat;s=det.sub;why=det.why}}
- var it={id:uid(),name:name,qty:qty,unit:unit,fire:false,cat:c||null,sub:s||null,why:why||''};S.items.push(it);return it}
+ var it={id:uid(),name:name,qty:qty,unit:unit,fire:false,cat:c||null,sub:s||null,why:why||''};if(x){if(x.stores&&x.stores.length)it.stores=x.stores.slice();if(x.type)it.type=x.type;if(x.text)it.stext=x.text}S.items.push(it);return it}
 function autoFav(i){var f=S.favs.filter(function(x){return norm(x.name)===norm(i.name)})[0];
  if(f){f.qty=i.qty;f.unit=i.unit;f.cat=i.cat;f.sub=i.sub;return}
  if(S.set.favAfter==='off')return;
@@ -277,7 +289,7 @@ function autoFav(i){var f=S.favs.filter(function(x){return norm(x.name)===norm(i
 function checkItem(id){var i=findItem(id);if(!i)return;
  S.items=S.items.filter(function(x){return x.id!==id});
  S.recent=S.recent.filter(function(x){return norm(x.name)!==norm(i.name)});
- S.recent.unshift({id:uid(),name:i.name,qty:i.qty,unit:i.unit,cat:i.cat,sub:i.sub});S.recent=S.recent.slice(0,200);
+ S.recent.unshift({id:uid(),name:i.name,qty:i.qty,unit:i.unit,cat:i.cat,sub:i.sub,stores:i.stores,type:i.type,stext:i.stext});S.recent=S.recent.slice(0,200);
  S.hist.unshift({id:uid(),name:i.name,qty:i.qty,unit:i.unit,date:new Date().toISOString(),price:null,store:cur?cur.name:(S.shop?S.shop.store:null),deal:!!i.fire,cat:i.cat,sub:i.sub,ev:S.cev});
  S.hist=S.hist.slice(0,500);
  if(i.cat)learnCat(i.name,i.cat,i.sub);
@@ -324,6 +336,7 @@ function gpsDetect(manual){
  if(S.set.gps==='off'&&!manual)return;
  stMsg=t('Suche …');if(manual)R();
  locate(function(c){
+  lastGps=Date.now();typeCheck(c);
   var mine=S.mine.map(function(m){return{chain:t('Eigener Laden'),name:m.name,d:dist(c.latitude,c.longitude,m.lat,m.lon)}});
   search(c,function(o,fc){near=o;
    var vis=visits(),all=mine.concat(o.filter(function(s){return chainOn(s.chain)})).filter(function(s){return s.d<=S.set.radius});
@@ -333,6 +346,19 @@ function gpsDetect(manual){
    else if(S.set.gps==='auto')setCur(f);
    else if(!declined[f.name])pend=f;
    R()},function(m){stMsg=m;R()})},function(m){stMsg=m;R()})}
+function typeCheck(c){if(!navigator.onLine)return;
+ var act=S.types.filter(function(x){return x.on!==false&&x.id!=='sonst'&&S.items.some(function(i){return i.type===x.id})});if(!act.length){nearT=[];return}
+ var r=Math.max(25,S.set.radius),ll=r+','+c.latitude+','+c.longitude,parts=[];
+ act.forEach(function(x){if(x.custom){var k=String(x.kw||x.name).replace(/["\\]/g,'');parts.push('nwr["name"~"'+k+'",i](around:'+ll+');')}else{var o=OSMT[x.id];if(o.shop)parts.push('nwr["shop"~"'+o.shop+'"](around:'+ll+');');if(o.amenity)parts.push('nwr["amenity"="'+o.amenity+'"](around:'+ll+');')}});
+ var q='[out:json][timeout:15];('+parts.join('')+');out center tags;';
+ fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)}).then(function(x){if(!x.ok)throw 0;return x.json()}).then(function(j){
+  var res={};j.elements.forEach(function(e){var g=e.tags||{},la=e.lat||(e.center&&e.center.lat),lo=e.lon||(e.center&&e.center.lon);if(!la||!lo)return;var d=dist(c.latitude,c.longitude,la,lo);
+   act.forEach(function(x){var ok;if(x.custom){var kw=String(x.kw||x.name).toLowerCase();ok=String(g.name||'').toLowerCase().indexOf(kw)>-1}else{var o=OSMT[x.id];ok=(o.shop&&new RegExp('^('+o.shop+')$').test(g.shop||''))||(o.amenity&&g.amenity===o.amenity)}
+    if(ok&&d<=r&&(!res[x.id]||d<res[x.id].d))res[x.id]={id:x.id,d:d,key:x.id+'@'+la.toFixed(3)+','+lo.toFixed(3)}})});
+  nearT=Object.keys(res).map(function(k){return res[k]});
+  nearT.forEach(function(n){if(!dismissedNow[n.key]&&S.dismiss.indexOf(n.key)<0){dismissedNow[n.key]=1;if(S.set.vib&&navigator.vibrate)navigator.vibrate(120)}});R()}).catch(function(){})}
+function typBanner(){var h='';nearT.forEach(function(n){if(S.dismiss.indexOf(n.key)>-1)return;var c=S.items.filter(function(i){return i.type===n.id}).length,tp=typeOf(n.id);if(!c||!tp)return;
+ h+='<div class="ban"><span>'+tp.icon+' '+t('{0} in der Nähe: {1} zu besorgen',esc(tname(tp)),c===1?t('1 Ding'):t('{0} Dinge',c))+'</span><span class="seg"><button class="btn pri" data-a="typego">'+t('Ansehen')+'</button><button class="btn sq" data-a="typeno" data-k="'+esc(n.key)+'" aria-label="'+t('Schliessen')+'">✕</button></span></div>'});return h}
 function catsLine(){var o={};S.items.forEach(function(i){var c=i.cat&&cat(i.cat);var k=c?cname(c):t('Übrige');o[k]=(o[k]||0)+1});return Object.keys(o).map(function(k){return k+' ('+o[k]+')'}).join(' · ')}
 function banner(){
  if(pend)return'<div class="ban"><span>'+t('Du scheinst bei {0} zu sein ({1} m).','<b>'+esc(pend.name)+'</b>',pend.d)+'</span><div class="seg"><button class="btn pri" data-a="yes">'+t('Ja')+'</button><button class="btn" data-a="no">'+t('Nein')+'</button></div></div>';
@@ -341,34 +367,43 @@ function banner(){
  return''}
 function shopBar(){
  if(S.shop)return'';
- return'<div class="seg" style="margin-bottom:.5em"><button class="btn" id="shopbtn" data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'</div>'}
+ return'<div class="seg" style="margin-bottom:.5em"><button class="btn" id="shopbtn" data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq camb" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button></div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
-function sugHtml(){return suggest(draft.n).map(function(x){return'<button class="chip" data-a="sug" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')}
+function sugHtml(){var tp=draft.typeSug&&!draft.type&&typeOf(draft.typeSug);return(tp?'<button class="chip" data-a="typesug" data-v="'+tp.id+'">'+tp.icon+' '+esc(tname(tp))+'?</button>':'')+suggest(draft.n).map(function(x){return'<button class="chip" data-a="sug" data-v="'+esc(x)+'">'+esc(x)+'</button>'}).join('')}
 function updInput(){if(!draft.manual){var d=detect(draft.n);draft.cat=d?d.cat:null;draft.sub=d?d.sub:null;draft.why=d?d.why:''}
- var b=$('#catb');if(b)b.textContent=draftIcon();var s=$('#sug');if(s)s.innerHTML=sugHtml()}
+ if(!draft.type)draft.typeSug=detectType(draft.n);var b=$('#catb');if(b)b.textContent=draftIcon();var s=$('#sug');if(s)s.innerHTML=sugHtml()}
 function unitOpts(){return allUnits().map(function(u){return'<option value="'+esc(u)+'">'}).join('')}
 function unitW(){var m=0;allUnits().forEach(function(u){if(u.length>m)m=u.length});return'calc('+m+'ch + 2.2em)'}
 function askBar(){var i=ask&&findItem(ask);if(!i)return'';
  return'<div class="ban" style="display:block"><div>'+t('Wohin gehört «{0}»?',esc(i.name))+'</div><div class="sug" style="margin:.4em 0">'+mains().map(function(c){return'<button class="chip" data-a="askcat" data-c="'+c.id+'">'+esc(c.icon)+' '+esc(cname(c))+'</button>'}).join('')+'</div><div class="seg"><input class="field" id="askal" placeholder="'+t('Meint das Gleiche wie … (optional)')+'" style="flex:1 1 8em"><button class="btn" data-a="askskip">'+t('Überspringen')+'</button></div></div>'}
 function card(i){
- if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
- return'<div class="card" data-sw="'+i.id+'" data-swk="i"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button><span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
+ if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
+ return'<div class="card" data-sw="'+i.id+'" data-swk="i"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button><span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
   +'<button class="btn sq fire '+(i.fire?'on':'off')+'" style="'+(i.fire?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>'
   +'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>'
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
+function inTab(i){return ltab==='more'?!!i.type:!i.type}
+function curMatch(i){if(!cur||!i.stores||!i.stores.length)return true;var c=cur.chain||cur.name;return i.stores.indexOf(c)>-1||i.stores.indexOf(cur.name)>-1}
+function shopLbl(){var tp=draft.type&&typeOf(draft.type);return tp?tp.icon:(draft.stores.length?'🏪'+draft.stores.length:'🏪')}
 function vList(){
- var h=banner()+alarm()+shopBar()+askBar();
+ var h=banner()+typBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
+ if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
  h+='<div class="add"><button class="ic" id="catb" data-a="catpick" data-id="draft" aria-label="'+t('Kategorie')+'">'+esc(draftIcon())+'</button>'
   +'<input class="field nm" id="dn" placeholder="'+t('Produkt hinzufügen')+'" value="'+esc(draft.n)+'" autocomplete="off" enterkeyhint="done">'
   +'<button class="btn qu" data-a="qty" data-id="draft" aria-label="'+t('Menge und Einheit')+'">'+esc((draft.q||'0')+' '+draft.u)+'</button>'
-  +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button><button class="btn sq camb" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button></div><div id="sug" class="sug">'+sugHtml()+'</div>';
- if(!S.items.length)h+='<div class="empty">'+t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.')+'</div>';
+  +'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'" style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</button>'
+  +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div><div id="sug" class="sug">'+sugHtml()+'</div>';
+ var mineI=sortedItems().filter(inTab);
+ if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
  else h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
- sortedItems().forEach(function(i){h+=card(i)+(dealOpen===i.id?dealPanel(i):'')});
+ function row(i){return card(i)+(dealOpen===i.id?dealPanel(i):'')}
+ if(ltab==='food'){var vis=mineI.filter(curMatch),hid=mineI.filter(function(i){return !curMatch(i)});vis.forEach(function(i){h+=row(i)});
+  if(hid.length){h+='<button class="chip" data-a="other" style="margin:.2em 0 .5em">'+t('Für andere Läden')+' ('+hid.length+') '+(showOther?'▲':'▼')+'</button>';if(showOther)hid.forEach(function(i){h+=row(i)})}}
+ else S.types.forEach(function(tp){var l=mineI.filter(function(i){return(typeOf(i.type)?i.type:'sonst')===tp.id});if(!l.length)return;h+='<h3>'+tp.icon+' '+esc(tname(tp))+'</h3>';l.forEach(function(i){h+=row(i)})});
  h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2><span class="seg">'+selH('recN',[['10','10'],['20','20'],['50','50'],['100','100'],['all',t('Alle')]])+selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]])+'</span></div>';
  var rl=recList();
  if(!rl.length)h+='<div class="empty">'+t('Abgehakte Produkte erscheinen hier und lassen sich zurückholen.')+'</div>';
@@ -413,8 +448,13 @@ var emojiQ='';
 function shEmoji(){var q=norm(emojiQ),h='<h2>'+t('Symbol wählen')+'</h2><input class="field" id="emq" placeholder="'+t('Suchen (zum Beispiel Käse)')+'" value="'+esc(emojiQ)+'" style="width:100%;margin-bottom:.5em">';
  EMO.forEach(function(g){var l=g[1].filter(function(e){return !q||e[1].indexOf(q)>-1});if(!l.length)return;h+='<h3>'+t(g[0])+'</h3><div class="grid">'+l.map(function(e){return'<button class="ic" data-a="emopick" data-e="'+e[0]+'">'+e[0]+'</button>'}).join('')+'</div>'});
  return h+'<div class="seg" style="margin-top:.6em"><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>'}
+function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><h3>'+t('Lebensmittel-Läden')+'</h3><div class="seg">'
+ +CH.map(function(c){var on=s.stores.indexOf(c)>-1;return'<button class="chip'+(on?' sel':'')+'" data-a="shtog" data-v="'+c+'">'+(on?'✓ ':'')+c+'</button>'}).join('')+'</div><h3>'+t('Ladentypen (unter «Weitere»)')+'</h3><div class="seg">'
+ +S.types.filter(function(x){return x.on!==false}).map(function(x){var on=s.type===x.id;return'<button class="chip'+(on?' sel':'')+'" data-a="shtyp" data-v="'+x.id+'">'+(on?'✓ ':'')+x.icon+' '+esc(tname(x))+'</button>'}).join('')
+ +'</div><div class="seg" style="margin-top:.6em"><input class="field" id="sst" value="'+esc(s.text)+'" placeholder="'+t('Anderer Laden (optional, von Hand)')+'" style="flex:1"></div>'
+ +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="shok">OK</button><button class="btn" data-a="shclr">'+t('Zurücksetzen')+'</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
 function sheetHtml(){if(!sh)return'';var b='';
- switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break}
+ switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break}
  return'<div class="sheet" data-a="shclose"><div>'+b+'</div></div>'}
 
 function shQty(){var us=allUnits(),h='<h2>'+t('Menge und Einheit')+'</h2><div class="wheels"><div class="wheel" id="wq"><div class="sp"></div>';
@@ -503,10 +543,20 @@ function barcode(file){if(!('BarcodeDetector' in window)){say(t('Dein Browser ka
   if(!b.length){say(t('Kein Strichcode erkannt.'));return}
   fetch('https://world.openfoodfacts.org/api/v2/product/'+b[0].rawValue+'.json?fields=product_name,brands,quantity').then(function(x){return x.json()}).then(function(j){
    var p=j.product||{},n=[p.product_name,p.brands].filter(Boolean).join(' ');if(!n){say(t('Produkt nicht gefunden.'));return}draft.n=n;draft.manual=false;view='list';updInput();R();say(n)}).catch(function(){say(t('Kein Empfang.'))})}).catch(function(){say(t('Kein Strichcode erkannt.'))})};im.src=r.result};r.readAsDataURL(file)}
+function kiPrompt(q){return SYS+'\n\n'+t('Frage')+': '+(q||t('Was ist hier günstig, gut oder passend?'))}
+function copyText(s){var ok=false;try{var a=document.createElement('textarea');a.value=s;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();ok=document.execCommand('copy');a.remove()}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(s).catch(function(){});return ok}
+function kiShare(q){var p=kiPrompt(q);if(!navigator.share){copyText(p);say(t('Teilen geht hier nicht. Die Frage ist kopiert.'));return}
+ function go(f){var d={text:p};if(f&&navigator.canShare&&navigator.canShare({files:[f]}))d.files=[f];navigator.share(d).catch(function(){})}
+ if(ki.img)fetch(ki.img).then(function(r){return r.blob()}).then(function(b){go(new File([b],'foto.jpg',{type:'image/jpeg'}))}).catch(function(){go(null)});else go(null)}
+function kiTake(txt){var m=/PRODUKTE:\s*(.+)$/im.exec(txt);ki.prods=m?m[1].split(';').map(function(x){return x.trim()}).filter(Boolean):[];ki.ans=txt.replace(/PRODUKTE:.*$/im,'').trim();
+ var us=txt.match(/https?:\/\/[^\s)\]]+/g)||[];ki.src=us.filter(function(u,i){return us.indexOf(u)===i}).map(function(u){return{u:u,t:u.replace(/^https?:\/\/(www\.)?/,'').slice(0,40)}});ki.more=false}
 function vAdvice(){var h='<h2>📷 '+t('Ratgeber')+'</h2><p class="small mute">'+t('Fotografiere ein Produkt oder Regal und frage zum Beispiel: Welches Mehl ist für Zopf geeignet? Das Foto wird nur gesendet, wenn du auf «Fragen» tippst, und beim Verlassen dieser Seite verworfen. Jede Frage verursacht geringe Kosten über deinen KI-Schlüssel.')+'</p>';
  h+='<div class="seg"><label class="btn pri" for="kiimg">📷 '+t('Foto')+'</label><input type="file" id="kiimg" accept="image/*" capture="environment" hidden><label class="btn" for="kibar">▮▯▮ '+t('Strichcode')+'</label><input type="file" id="kibar" accept="image/*" capture="environment" hidden></div>';
  if(ki.img)h+='<p><img src="'+ki.img+'" alt="" style="max-width:100%;max-height:30vh;border-radius:.7em"></p>';
- h+='<div class="seg" style="margin-top:.5em"><input class="field" id="kiq" placeholder="'+t('Deine Frage')+'" value="'+esc(ki.q)+'" style="flex:1 1 10em"><button class="btn pri" data-a="kiask"'+(ki.busy?' disabled':'')+'>'+(ki.busy?'…':t('Fragen'))+'</button></div>';
+ h+='<div class="seg" style="margin-top:.5em"><input class="field" id="kiq" placeholder="'+t('Deine Frage')+'" value="'+esc(ki.q)+'" style="flex:1 1 10em"><button class="btn pri" data-a="kiask"'+(ki.busy?' disabled':'')+'>'+(ki.busy?'…':t('Fragen'))+'</button></div>'
+ +'<div class="seg" style="margin-top:.4em"><button class="btn" data-a="kicopy">'+t('Frage kopieren')+'</button><button class="btn" data-a="kishare">'+t('Teilen (mit Foto)')+'</button></div>'
+ +'<details><summary>'+t('Antwort einfügen')+'</summary><textarea class="field" id="kip" placeholder="'+t('Antwort aus der Claude-App hier einfügen')+'"></textarea><button class="btn" data-a="kipaste">'+t('Übernehmen')+'</button></details>'
+ +(S.set.apiKey?'':'<p class="small mute">'+t('Ohne KI-Schlüssel: Frage kopieren, in der Claude-App einfügen (Foto dort anhängen oder über «Teilen» senden) und die Antwort hier einfügen.')+'</p>');
  if(ki.err)h+='<p style="color:var(--red)">'+esc(ki.err)+'</p>';
  if(ki.ans){var s=ki.ans.split(/(?<=[.!?])\s+/),short=s.slice(0,2).join(' ');h+='<div class="card blk" style="margin-top:.6em">'+esc(ki.more?ki.ans:short)+(s.length>2?'<br><button class="btn" data-a="kimore" style="margin-top:.4em">'+(ki.more?t('Weniger'):t('Mehr'))+'</button>':'')+'</div>';
   if(ki.src.length)h+='<p class="small">'+t('Quellen')+': '+ki.src.slice(0,5).map(function(x){return'<a href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.t)+'</a>'}).join(' · ')+'</p>';
@@ -551,7 +601,7 @@ function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty(
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
-var SUBS=[['profil','👤','Profil'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
+var SUBS=[['profil','👤','Profil'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
 function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'" role="button" aria-label="'+c+'"></i>'}
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
@@ -590,6 +640,7 @@ function vSettings(){
  case'ai':h+='<p class="small mute">'+t('Für den Ratgeber trägst du deinen eigenen Anthropic-Schlüssel ein. Er bleibt auf diesem Gerät.')+'</p>'
   +rowS(t('API-Schlüssel'),'<input class="field" type="password" data-chg="apiKey" value="'+esc(S.set.apiKey)+'" placeholder="sk-ant-…" autocomplete="off">')
   +rowS(t('Modell'),'<input class="field" data-chg="model" value="'+esc(S.set.model)+'">')+rowS(t('Websuche verwenden'),sw('webSearch',S.set.webSearch));break;
+ case'types':h+=vTypes();break;
  case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
  case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="all">▶ '+t('Ganze Führung')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('Einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break;
@@ -609,6 +660,10 @@ function delCat(id,to){var c=cat(id);if(!c)return;var ids=[id].concat(subsOf(id,
  S.items.concat(S.recent,S.favs,S.hist).forEach(function(x){if(ids.indexOf(x.cat)>-1||ids.indexOf(x.sub)>-1){x.cat=to||null;x.sub=null}});
  Object.keys(S.learn.names).forEach(function(k){var l=S.learn.names[k];if(ids.indexOf(l.cat)>-1||ids.indexOf(l.sub)>-1){if(to)l.cat=to,l.sub=null;else delete S.learn.names[k]}});
  S.cats=S.cats.filter(function(x){return ids.indexOf(x.id)<0})}
+
+function vTypes(){var h='<p class="small mute">'+t('Ladentypen für Dinge ohne Eile. Ist ein passendes Geschäft in der Nähe, erscheint oben eine Zeile. Die Suche braucht Internet und folgt der Filialerkennung (Ein/Aus, Radius).')+'</p>';
+ S.types.forEach(function(x){h+='<div class="card"><span class="ic" style="cursor:default">'+esc(x.icon)+'</span><span class="nm">'+esc(tname(x))+(x.custom?' <span class="small mute">('+esc(x.kw||x.name)+')</span>':'')+'</span>'+(x.id==='sonst'?'':'<input type="checkbox" data-typ="'+x.id+'"'+(x.on!==false?' checked':'')+' style="width:1.4em;height:1.4em">')+(x.custom?'<button class="btn sq" data-a="typedel" data-id="'+x.id+'">✕</button>':'')+'</div>'});
+ return h+'<h3>'+t('Eigener Ladentyp')+'</h3><div class="seg"><input class="field" id="tn" placeholder="'+t('Name')+'" style="flex:1 1 7em"><input class="field" id="tk" placeholder="'+t('Suchwort im Ladennamen')+'" style="flex:1 1 7em"><button class="btn pri" data-a="typeadd">＋</button></div>'}
 
 /* ===== Einführung: Begrüssung und Führung ===== */
 var AREAS=[
@@ -683,7 +738,7 @@ function pushSoon(){if(!shareOn()||applying)return;clearTimeout(pushT);pushT=set
 function pushNow(cb){if(!shareOn())return;var it=liveItems(),j=JSON.stringify(it);if(j===lastJson){if(cb)cb();return}var t0=Date.now();
  fetch(shUrl(),{method:'PUT',body:JSON.stringify({items:it,t:t0,by:S.share.dev})}).then(function(r){if(!r.ok)throw r.status;lastJson=j;S.share.t=t0;shareMsg=t('Verbunden. Zuletzt gesendet {0}',new Date().toLocaleTimeString('de-CH'));if(cb)cb()}).catch(function(e){shareMsg=t('Senden fehlgeschlagen ({0}). Adresse und Regeln prüfen.',e)})}
 function remoteItems(d){var a=d&&d.items?(Array.isArray(d.items)?d.items:Object.keys(d.items).map(function(k){return d.items[k]})):[];
- return a.filter(Boolean).map(function(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:i.unit||'',fire:!!i.fire,cat:i.cat||null,sub:i.sub||null,why:i.why||''}})}
+ return a.filter(Boolean).map(function(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:i.unit||'',fire:!!i.fire,cat:i.cat||null,sub:i.sub||null,why:i.why||'',type:i.type||null,stores:i.stores||[],stext:i.stext||''}})}
 function pollNow(){if(!shareOn()||document.hidden)return;
  fetch(shUrl()).then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(d){
   if(!d){lastJson='';pushNow();return}
@@ -745,10 +800,10 @@ function act(a,el){var D=el.dataset,i,it;
   else{it=findItem(sh.id);if(it){it.cat=c;it.sub=s;if(c)learnCat(it.name,c,s)}}sh=null;break}
  case'gocats':sh=null;view='settings';sub='cats';break;
  case'shclose':if(el.classList.contains('sheet')&&event.target!==el)return;sh=null;break;
- case'add':{var r=addItem(fval('dn')||draft.n,fval('dq')||draft.q,fval('du')||draft.u,draft.cat,draft.sub,draft.why);if(!r)return;
+ case'add':{var ty=draft.type||(ltab==='more'?'sonst':null),r=addItem(fval('dn')||draft.n,fval('dq')||draft.q,fval('du')||draft.u,draft.cat,draft.sub,draft.why,{stores:draft.stores,type:ty,text:draft.stext});if(!r)return;if(draft.type)S.learn.types[norm(r.name)]=draft.type;if(r.type&&ltab!=='more')say(t('Zu «Weitere» hinzugefügt.'));
   if(draft.manual&&draft.cat)learnCat(r.name,draft.cat,draft.sub);
-  if(!r.cat&&S.learn.on!==false&&!r.tour)ask=r.id;
-  draft={n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false};tourEv('add');break}
+  if(!r.cat&&S.learn.on!==false&&!r.tour&&!r.type)ask=r.id;
+  draft=newDraft();tourEv('add');break}
  case'askcat':it=findItem(ask);if(it){it.cat=D.c;it.sub=null;learnCat(it.name,D.c,null);var al=fval('askal').trim();if(al)S.learn.alias[norm(it.name)]=al}ask=null;break;
  case'askskip':ask=null;break;
  case'edit':editId=D.id;break;
@@ -756,7 +811,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'del':S.items=S.items.filter(function(x){return x.id!==D.id});editId=null;break;
  case'fav':it=findItem(D.id);if(it){var k=S.favs.filter(function(f){return norm(f.name)===norm(it.name)})[0];if(k)S.favs=S.favs.filter(function(f){return f!==k});else S.favs.push({id:uid(),name:it.name,qty:it.qty,unit:it.unit,cat:it.cat,sub:it.sub})}break;
  case'check':checkItem(D.id);tourEv('check');break;
- case'back':it=S.recent.filter(function(x){return x.id===D.id})[0];if(it){S.recent=S.recent.filter(function(x){return x!==it});addItem(it.name,it.qty,it.unit,it.cat,it.sub)}break;
+ case'back':it=S.recent.filter(function(x){return x.id===D.id})[0];if(it){S.recent=S.recent.filter(function(x){return x!==it});addItem(it.name,it.qty,it.unit,it.cat,it.sub,'',{stores:it.stores,type:it.type,text:it.stext})}break;
  case'favadd':it=S.favs.filter(function(x){return x.id===D.id})[0];if(it){addItem(it.name,it.qty,it.unit,it.cat,it.sub);say(t('Zur Liste hinzugefügt.'))}break;
  case'favdel':S.favs=S.favs.filter(function(x){return x.id!==D.id});break;
  case'clearh':sh={t:'confirm',title:t('Verlauf leeren'),text:t('Den gesamten Verlauf löschen?'),ok:'doclearh'};break;
@@ -802,6 +857,18 @@ function act(a,el){var D=el.dataset,i,it;
 case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(j).catch(function(){});say(t('Sicherung kopiert. Falls nicht, den markierten Text selbst kopieren.'));return}
  case'bkload':{var tx2=fval('bk').trim(),r2;try{r2=JSON.parse(tx2)}catch(e){}if(!r2||!Array.isArray(r2.items)){say(t('Das ist keine gültige Sicherung.'));return}impData=r2;sh={t:'confirm',title:t('Sicherung laden'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung ersetzt. Fortfahren?'),ok:'doimport'};break}
  case'doimport':{var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
+ case'ltab':ltab=D.v;break;
+ case'other':showOther=!showOther;break;
+ case'typego':ltab='more';break;
+ case'typeno':S.dismiss.push(D.k);S.dismiss=S.dismiss.slice(-200);break;
+ case'typesug':draft.type=D.v;draft.stores=[];draft.typeSug=null;break;
+ case'shopsel':{var tg=D.id==='draft'?draft:findItem(D.id);if(tg)sh={t:'shopsel',id:D.id,sel:{stores:(tg.stores||[]).slice(),type:tg.type||null,text:(D.id==='draft'?tg.stext:tg.stext)||''}};break}
+ case'shtog':{sh.sel.text=fval('sst');var ix=sh.sel.stores.indexOf(D.v);if(ix>-1)sh.sel.stores.splice(ix,1);else sh.sel.stores.push(D.v);sh.sel.type=null;break}
+ case'shtyp':sh.sel.text=fval('sst');sh.sel.type=sh.sel.type===D.v?null:D.v;sh.sel.stores=[];break;
+ case'shclr':sh.sel={stores:[],type:null,text:''};break;
+ case'shok':{sh.sel.text=fval('sst').trim();var s2=sh.sel;if(sh.id==='draft'){draft.stores=s2.stores;draft.type=s2.type;draft.stext=s2.text}else{var t2=findItem(sh.id);if(t2){t2.stores=s2.stores;t2.type=s2.type||null;t2.stext=s2.text;if(s2.type)S.learn.types[norm(t2.name)]=s2.type}}sh=null;break}
+ case'typedel':S.types=S.types.filter(function(x){return x.id!==D.id});S.items.forEach(function(i){if(i.type===D.id)i.type='sonst'});break;
+ case'typeadd':{var tn=fval('tn').trim();if(!tn){say(t('Bitte einen Namen eingeben.'));return}S.types.splice(S.types.length-1,0,{id:'c'+uid(),icon:'🏷️',name:tn,on:true,custom:true,kw:fval('tk').trim()||tn});break}
  case'sharenew':shareNew();return;
  case'sharejoin':shareJoin(fval('shc').trim());return;
  case'sharestop':S.share.code='';shareMsg='';clearInterval(pollT);break;
@@ -810,6 +877,9 @@ case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=
  case'dealsave':{var d2={own:true};['chain','product','unit','from','to'].forEach(function(k){d2[k]=fval('dc_'+k)});['price','normal','qty'].forEach(function(k){d2[k]=num(fval('dc_'+k),0)});
   if(!d2.product||!(d2.price>0)){say(t('Produkt und Preis werden benötigt.'));return}d2.id=uid();S.deals.push(d2);sh=null;say(t('Aktion gespeichert.'));break}
  case'kiask':ki.q=fval('kiq');kiAsk(ki.q);return;
+ case'kicopy':ki.q=fval('kiq');copyText(kiPrompt(ki.q));say(ki.img?t('Frage kopiert. Das Foto hängst du in der Claude-App an.'):t('Frage kopiert.'));return;
+ case'kishare':ki.q=fval('kiq');kiShare(ki.q);return;
+ case'kipaste':{var pt=fval('kip').trim();if(!pt){say(t('Bitte zuerst die Antwort einfügen.'));return}ki.q=fval('kiq');kiTake(pt);break}
  case'kimore':ki.more=!ki.more;break;
  case'kiadd':addItem(ki.prods[+D.i],0,'Stk.');say(t('Zur Liste hinzugefügt.'));break;
  case'evnew':{var en=fval('evn').trim();if(!en){say(t('Bitte einen Namen eingeben.'));return}var e={id:uid(),name:en,date:fval('evd')||ld(),persons:'',people:[],rate:{},arch:false};S.ev.push(e);S.cev=e.id;break}
@@ -852,6 +922,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(t0.id==='evp'){var e1=ev();if(e1){e1.persons=t0.value;save()}return}
  if(D.ren){var c=cat(D.ren),v=t0.value.trim();if(c&&v){c.name=v;if(!c.custom)c.ren=true;save()}return}
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
+ if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
  if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
@@ -878,6 +949,7 @@ function pointerEnd(e){clearTimeout(lpT);
 document.addEventListener('pointerup',pointerEnd);document.addEventListener('pointercancel',function(){clearTimeout(lpT);if(sw0){sw0.el.style.transform='';sw0=null}dragId=null});
 document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('[data-fire]'))e.preventDefault()});
 window.addEventListener('online',runQueue);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect()});
 
 document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel')||Date.now()-wheelT<400)return;clearTimeout(w._t);
  w._t=setTimeout(function(){var o=w.querySelector('.o');if(!o)return;var i=Math.round(w.scrollTop/o.offsetHeight);
