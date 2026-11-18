@@ -345,7 +345,7 @@ function gpsDetect(manual){
    if(!f){if(manual||!cur)cur=null;stMsg+=' · '+t('keine im Radius von {0} m',S.set.radius)}
    else if(S.set.gps==='auto')setCur(f);
    else if(!declined[f.name])pend=f;
-   R()},function(m){stMsg=m;R()})},function(m){stMsg=m;R()})}
+   R();if(manual)say(f?t('Gefunden: {0}',f.name):stMsg)},function(m){stMsg=m;R();if(manual)say(m)})},function(m){stMsg=m;R();if(manual)say(m)})}
 function typeCheck(c){if(!navigator.onLine)return;
  var act=S.types.filter(function(x){return x.on!==false&&x.id!=='sonst'&&S.items.some(function(i){return i.type===x.id})});if(!act.length){nearT=[];return}
  var r=Math.max(25,S.set.radius),ll=r+','+c.latitude+','+c.longitude,parts=[];
@@ -367,7 +367,7 @@ function banner(){
  return''}
 function shopBar(){
  if(S.shop)return'';
- return'<div class="seg" style="margin-bottom:.5em"><button class="btn" id="shopbtn" data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq camb" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button></div>'}
+ return'<div class="seg" style="margin-bottom:.5em"><button class="btn" id="shopbtn" data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button><button class="btn sq camb" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button></div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
@@ -477,7 +477,9 @@ function ppu(d){var q=+d.qty||1,u=d.unit,p=d.price,pu=S.set.pu;
  if(u==='Stk.'||!/^(g|kg|ml|lt)$/.test(u))return money(p/q)+' '+t('pro Stück');
  var base=(u==='g'||u==='ml')?q/1000:q,s=u==='g'||u==='kg'?'kg':'lt',small=(base<1),f=pu==='100'?1:pu==='1000'?0:(small?1:0);
  return f?money(p/base/10)+' / 100 '+(s==='kg'?'g':'ml'):money(p/base)+' / '+s}
-function dealsFor(i){var n=norm(i.name);return allDeals().filter(function(d){var p=norm(d.product);return p&&(n.indexOf(p)>-1||p.indexOf(n)>-1)}).sort(function(a,b){return pct(b)-pct(a)})}
+function words(s){return norm(s).split(/[^a-zäöüéèàç0-9]+/).filter(function(w){return w.length>1})}
+function dealsFor(i){var iw=words(i.name);if(!iw.length)return[];return allDeals().filter(function(d){var dw=words(d.product);if(!dw.length)return false;
+ return dw.every(function(w){return iw.indexOf(w)>-1})||iw.every(function(w){return dw.indexOf(w)>-1})}).sort(function(a,b){return pct(b)-pct(a)})}
 function fst(i){var d=dealsFor(i)[0];if(!d)return'background:var(--red);border-color:var(--red)';var p=pct(d);return'background:'+(p>=30?'var(--grn)':p>=15?'#a8c13a':'var(--yel)')}
 function rhythm(p){var s=S.dealHist.filter(function(h){return norm(h.product)===norm(p)}).map(function(h){return h.from}).sort();if(s.length<3)return null;
  var g=[];for(var i=1;i<s.length;i++)g.push((new Date(s[i])-new Date(s[i-1]))/864e5);var a=Math.round(g.reduce(function(x,y){return x+y},0)/g.length);return{n:s.length,every:a,next:addDays(daysTo(s[s.length-1])+a)}}
@@ -486,7 +488,7 @@ function purgeDeals(){var keep=S.items.filter(function(i){return i.fire}).map(fu
   if(keep.some(function(k){return norm(d.product).indexOf(k)>-1||k.indexOf(norm(d.product))>-1}))S.dealHist.push({product:d.product,from:d.from,to:d.to,chain:d.chain});return false});
  S.dealHist=S.dealHist.slice(-200)}
 function alarm(){var lim=+S.set.alim;if(!lim||S.set.alim==='0')return'';var l=[];
- S.items.forEach(function(i){if(!i.fire)return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%)')});
+ S.items.forEach(function(i){if(!i.fire)return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
  return l.length?'<div class="ban"><span>🔥 '+esc(l.slice(0,lim).join(' · '))+'</span></div>':''}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
 var allDealsOpen=false;
@@ -748,9 +750,10 @@ function pollNow(){if(!shareOn()||document.hidden)return;
 function startShare(){clearInterval(pollT);if(shareOn()){pollNow();pollT=setInterval(pollNow,5000)}}
 document.addEventListener('visibilitychange',function(){if(!document.hidden)pollNow()});
 function newCode(){var s='',c='abcdefghjkmnpqrstuvwxyz23456789';for(var i=0;i<14;i++)s+=c.charAt(Math.floor(Math.random()*c.length));return s}
-function shareNew(){if(!/^https:\/\//.test(S.set.fbUrl||'')){say(t('Bitte zuerst die Datenbank-Adresse eintragen.'));return}
+function fbOk(){var u=S.set.fbUrl||'';if(!/^https:\/\/[^\/]+\.(firebasedatabase\.app|firebaseio\.com)\/?$/.test(u)){say(t('Das ist nicht die Datenbank-Adresse. Sie sieht so aus: https://…-default-rtdb.europe-west1.firebasedatabase.app'));return false}return true}
+function shareNew(){if(!fbOk())return;
  S.share={code:newCode(),t:0,dev:S.share.dev||uid()};lastJson='';save();pushNow(function(){startShare();R()});R()}
-function shareJoin(code){if(!/^https:\/\//.test(S.set.fbUrl||'')){say(t('Bitte zuerst die Datenbank-Adresse eintragen.'));return}
+function shareJoin(code){if(!fbOk())return;
  if(code.length<8){say(t('Der Code ist zu kurz.'));return}
  S.share={code:code.toLowerCase(),t:0,dev:S.share.dev||uid()};lastJson='';
  fetch(shUrl()).then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(d){
@@ -857,6 +860,7 @@ function act(a,el){var D=el.dataset,i,it;
 case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(j).catch(function(){});say(t('Sicherung kopiert. Falls nicht, den markierten Text selbst kopieren.'));return}
  case'bkload':{var tx2=fval('bk').trim(),r2;try{r2=JSON.parse(tx2)}catch(e){}if(!r2||!Array.isArray(r2.items)){say(t('Das ist keine gültige Sicherung.'));return}impData=r2;sh={t:'confirm',title:t('Sicherung laden'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung ersetzt. Fortfahren?'),ok:'doimport'};break}
  case'doimport':{var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
+ case'gpsrefresh':declined={};say(t('Suche Filiale …'));gpsDetect(true);return;
  case'ltab':ltab=D.v;break;
  case'other':showOther=!showOther;break;
  case'typego':ltab='more';break;
