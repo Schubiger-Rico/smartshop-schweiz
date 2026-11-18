@@ -593,7 +593,7 @@ function vSettings(){
  case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
  case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="all">▶ '+t('Ganze Führung')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('Einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break;
- case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
+ case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><h3>'+t('Sicherung')+'</h3><p class="small mute">'+t('Zum Umziehen auf ein anderes Gerät oder in die Home-Bildschirm-App: Sicherung kopieren, dort einfügen und laden.')+'</p><textarea class="field" id="bk" placeholder="'+t('Hier die Sicherung einfügen')+'" style="height:6em"></textarea><div class="seg" style="margin:.4em 0 1em"><button class="btn pri" data-a="bkcopy">'+t('Sicherung kopieren')+'</button><button class="btn" data-a="bkload">'+t('Sicherung laden')+'</button></div><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
  return h}
 function vCatsAdm(){var h='<p class="small mute">'+t('Ziehe am Griff oder nutze ▲▼. Standard-Kategorien lassen sich umbenennen und ausblenden, eigene löschen.')+'</p>';
  function row(c,sb){return'<div class="ordrow" data-ord="'+c.id+'" style="'+(sb?'margin-left:1.5em':'')+(c.hidden?';opacity:.5':'')+'"><span class="dh" data-drag="'+c.id+'" aria-label="'+t('Ziehen')+'">⠿</span><button class="ic" data-a="emoji" data-id="'+c.id+'" aria-label="'+t('Symbol')+'">'+esc(c.icon)+'</button><input class="field" data-ren="'+c.id+'" value="'+esc(cname(c))+'" style="flex:1;min-width:0"><button class="btn sq" data-a="up" data-id="'+c.id+'">▲</button><button class="btn sq" data-a="dn" data-id="'+c.id+'">▼</button>'
@@ -724,7 +724,7 @@ function R(){applyLook();var a=$('#app');if(!a)return;
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 
 /* ===== Aktionen (Klicks) ===== */
-var lp=false,lpT=null,swiped=false;
+var impData=null,lp=false,lpT=null,swiped=false;
 function fval(id){var e=$('#'+id);return e?e.value:''}
 function act(a,el){var D=el.dataset,i,it;
  switch(a){
@@ -799,6 +799,9 @@ function act(a,el){var D=el.dataset,i,it;
  case'dealclose':dealOpen=null;break;
  case'qty':{if(D.id==='draft')sh={t:'qty',id:'draft',q:draft.q,u:draft.u};else{var qi=findItem(D.id);if(qi)sh={t:'qty',id:qi.id,q:String(qi.qty),u:qi.unit}}break}
  case'qtyok':{var qq=Math.min(999,Math.max(0,num(fval('qm'),0))),uu=fixU(fval('um'));rememberUnit(uu);if(sh.id==='draft'){draft.q=String(qq);draft.u=uu}else{var q2=findItem(sh.id);if(q2){q2.qty=qq;q2.unit=uu}}sh=null;break}
+case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(j).catch(function(){});say(t('Sicherung kopiert. Falls nicht, den markierten Text selbst kopieren.'));return}
+ case'bkload':{var tx2=fval('bk').trim(),r2;try{r2=JSON.parse(tx2)}catch(e){}if(!r2||!Array.isArray(r2.items)){say(t('Das ist keine gültige Sicherung.'));return}impData=r2;sh={t:'confirm',title:t('Sicherung laden'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung ersetzt. Fortfahren?'),ok:'doimport'};break}
+ case'doimport':{var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
  case'sharenew':shareNew();return;
  case'sharejoin':shareJoin(fval('shc').trim());return;
  case'sharestop':S.share.code='';shareMsg='';clearInterval(pollT);break;
