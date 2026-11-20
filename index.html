@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1f8a70">
-<title>SEBU SmarterEinkaufsBerater</title>
+<meta name="theme-color" content="#39FF14">
+<title>sEBU smarter Einkaufs-Manager</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="SEBU">
+<meta name="apple-mobile-web-app-title" content="sEBU">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Quicksand:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Quicksand:wght@600;700&family=Baloo+2:wght@700;800&display=swap">
 <style>
-:root{--bg:#f2f5f3;--card:#fff;--ink:#14231e;--mute:#5d6e67;--line:#d9e1dd;--red:#c8453b;--yel:#c99a12;--grn:#2e9e57;--acc:#1f8a70;--onacc:#fff;--fs:18px;--rh:calc(var(--fs)*1.67);--lg:#bff0cc;--dg:#0d5a2e}
+:root{--bg:#f2f5f3;--card:#fff;--ink:#14231e;--mute:#5d6e67;--line:#d9e1dd;--red:#c8453b;--yel:#c99a12;--grn:#2e9e57;--acc:#39FF14;--accd:#0a5c00;--onacc:#fff;--fs:18px;--rh:calc(var(--fs)*1.67);--lg:#bff0cc;--dg:#0a5c00}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1815;--card:#1a2622;--ink:#e8f0ec;--mute:#93a59d;--line:#2c3b36;--red:#e5766d;--yel:#e3b93f;--grn:#5dc783}}
 :root[data-theme="dark"]{--bg:#0f1815;--card:#1a2622;--ink:#e8f0ec;--mute:#93a59d;--line:#2c3b36;--red:#e5766d;--yel:#e3b93f;--grn:#5dc783}
 *,*::before,*::after{box-sizing:border-box}
@@ -24,12 +24,12 @@ h1,h2,h3{font-family:Quicksand,"Trebuchet MS",sans-serif;font-weight:700;margin:
 h1{font-size:1.3em;line-height:1.1}h2{font-size:1.15em;margin:1.2em 0 .5em}h3{font-size:1em;margin:.8em 0 .3em}
 header{display:flex;align-items:center;justify-content:space-between;position:relative;margin-bottom:.6em;gap:.5em}
 button,input,select,textarea{font:inherit;color:inherit}
-.brand{font-size:1.5em;color:#6fdc8c;-webkit-text-stroke:.07em #0d5a2e;paint-order:stroke fill;font-weight:700;letter-spacing:.03em;font-family:Quicksand,sans-serif}
-.ttl{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:.5em}.sub{font:700 .8em Quicksand,sans-serif;color:var(--dg);display:inline}@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sub{color:#6fdc8c}}:root[data-theme=dark] .sub{color:#6fdc8c}
+.brand{font-size:1.6em;color:#39FF14;-webkit-text-stroke:.09em #0a5c00;paint-order:stroke fill;font-weight:800;font-style:italic;letter-spacing:.02em;font-family:"Baloo 2","Trebuchet MS",Quicksand,sans-serif}
+.ttl{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:.5em}.sub{font:italic 700 .85em "Baloo 2","Trebuchet MS",Quicksand,sans-serif;color:var(--dg);display:inline}@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .sub{color:#39FF14}}:root[data-theme=dark] .sub{color:#39FF14}
 .btn{min-height:var(--rh);min-width:var(--rh);padding:0 .8em;border:1px solid var(--line);background:var(--card);border-radius:.7em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.3em}
 .btn.sq{width:var(--rh);height:var(--rh);padding:0;flex:none}
-.btn.pri{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
-.btn.sel{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.btn.pri{background:var(--acc);color:var(--onacc);border-color:var(--accd)}
+.btn.sel{background:var(--acc);color:var(--onacc);border-color:var(--accd)}
 .btn[disabled]{opacity:.5;cursor:default}
 .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .field{height:var(--rh);padding:0 .6em;border:1px solid var(--line);background:var(--card);border-radius:.7em;min-width:0}
@@ -42,7 +42,7 @@ textarea.field{height:8em;padding:.6em;width:100%}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:.7em;padding:.1em .7em;min-height:calc(var(--rh)*.8);cursor:pointer;display:inline-flex;align-items:center;gap:.3em}
 header .stop{max-width:9em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:inline-block;line-height:var(--rh);flex:none;margin-left:auto;font-size:.85em;border-color:var(--red)}
 header .stop{}
-.chip.sel{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.chip.sel{background:var(--acc);color:var(--onacc);border-color:var(--accd)}
 .qu{flex:none;padding:0 .5em;min-width:calc(var(--rh)*1.7)}
 .q[data-a]{cursor:pointer;text-decoration:underline dotted;text-underline-offset:.2em}
 .wheels{position:relative;display:flex;gap:.5em;margin:.5em 0}
@@ -121,7 +121,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#1f8a70',mode:'normal',favAfter:'5',gps:'off',radius:25,quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:25,quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -282,7 +282,7 @@ function addItem(name,qty,unit,c,s,why,x){
  var d=S.items.filter(function(x){return norm(x.name)===norm(name)&&x.unit===unit})[0];
  if(d){d.qty=Math.round((d.qty+qty)*100)/100;say(t('Zusammengeführt: {0} ({1})',d.name,fmt(d)));return d}
  if(!c){var det=detect(name);if(det){c=det.cat;s=det.sub;why=det.why}}
- var it={id:uid(),name:name,qty:qty,unit:unit,fire:false,cat:c||null,sub:s||null,why:why||''};if(x){if(x.stores&&x.stores.length)it.stores=x.stores.slice();if(x.type)it.type=x.type;if(x.text)it.stext=x.text}S.items.push(it);return it}
+ var it={id:uid(),name:name,qty:qty,unit:unit,fire:S.set.dm==='auto',cat:c||null,sub:s||null,why:why||''};if(x){if(x.stores&&x.stores.length)it.stores=x.stores.slice();if(x.type)it.type=x.type;if(x.text)it.stext=x.text}S.items.push(it);return it}
 function autoFav(i){var f=S.favs.filter(function(x){return norm(x.name)===norm(i.name)})[0];
  if(f){f.qty=i.qty;f.unit=i.unit;f.cat=i.cat;f.sub=i.sub;return}
  if(S.set.favAfter==='off')return;
@@ -383,7 +383,7 @@ function askBar(){var i=ask&&findItem(ask);if(!i)return'';
 function card(i){
  if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
  return'<div class="card" data-sw="'+i.id+'" data-swk="i"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button><span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
-  +'<button class="btn sq fire '+(i.fire?'on':'off')+'" style="'+(i.fire?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>'
+  +(S.set.dm==='off'?'':'<button class="btn sq fire '+(i.fire?'on':'off')+'" style="'+(i.fire?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
   +'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>'
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
@@ -501,7 +501,7 @@ function purgeDeals(){var keep=S.items.filter(function(i){return i.fire}).map(fu
  S.deals=S.deals.filter(function(d){if(daysTo(d.to)>=0)return true;
   if(keep.some(function(k){return norm(d.product).indexOf(k)>-1||k.indexOf(norm(d.product))>-1}))S.dealHist.push({product:d.product,from:d.from,to:d.to,chain:d.chain});return false});
  S.dealHist=S.dealHist.slice(-200)}
-function alarm(){var lim=+S.set.alim;if(!lim||S.set.alim==='0')return'';var l=[];
+function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
  S.items.forEach(function(i){if(!i.fire)return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
  return l.length?'<div class="ban"><span>🔥 '+esc(l.slice(0,lim).join(' · '))+'</span></div>':''}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
@@ -613,7 +613,7 @@ function vTest(){var h='<h2>🧪 '+t('Test & Feedback')+'</h2><h3>'+t('Abo teste
 
 /* ===== Aussehen ===== */
 function lum(h){var m=/^#?(..)(..)(..)$/.exec(h);if(!m)return 0;return(parseInt(m[1],16)*.299+parseInt(m[2],16)*.587+parseInt(m[3],16)*.114)/255}
-function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty('--fs',s.fs+'px');r.style.setProperty('--acc',s.accent);r.style.setProperty('--onacc',lum(s.accent)>.6?'#000':'#fff');
+function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty('--fs',s.fs+'px');r.style.setProperty('--acc',s.accent);r.style.setProperty('--accd',dk(s.accent));r.style.setProperty('--onacc',lum(s.accent)>.6?'#000':'#fff');
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
@@ -630,7 +630,7 @@ function vSettings(){
  case'look':h+='<div class="row"><label for="fs">'+t('Textgrösse')+': <b id="fsv">'+S.set.fs+'</b> px</label></div><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'">'
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
-  +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
+  +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#39FF14','#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
   +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>';break;
  case'lang':h+='<div class="seg">'+Object.keys(LANGS).map(function(k){return'<button class="btn'+(S.set.lang===k?' sel':'')+'"'+(k==='de'?' data-a="lang" data-v="de"':' disabled')+'>'+LANGS[k]+(k==='de'?'':' · '+t('bald verfügbar'))+'</button>'}).join('')+'</div>';break;
  case'cats':h+=vCatsAdm();break;
@@ -653,7 +653,7 @@ function vSettings(){
   var os=Object.keys(S.learn.order);h+='<h3>'+t('Gelernte Reihenfolge je Laden')+' ('+os.length+')</h3>';
   os.forEach(function(k){h+='<div class="card"><span class="nm">'+esc(k)+'</span><button class="btn sq" data-a="lrndel" data-k="'+esc(k)+'" data-w="order">✕</button></div>'});
   h+='<div class="seg" style="margin-top:.6em"><button class="btn" data-a="lrnreset">'+t('Alles Gelernte zurücksetzen')+'</button></div>';break;
- case'price':h+=rowS(t('Preiseinheit'),selH('pu',[['auto',t('Automatisch')],['100','pro 100 g / 100 ml'],['1000','pro kg / lt']]))+rowS(t('Alarme pro Tag'),selH('alim',[['0',t('Aus')],['1','1'],['3','3'],['5','5']]));break;
+ case'price':h+=rowS(t('Aktionen'),selH('dm',[['auto',t('Automatisch')],['manual',t('Manuell')],['off',t('Aus')]]))+'<p class="small mute">'+t('Automatisch: neue Produkte werden beobachtet. Manuell: du tippst auf 🔥. Aus: kein 🔥-Knopf und keine Aktions-Hinweise.')+'</p>'+rowS(t('Preiseinheit'),selH('pu',[['auto',t('Automatisch')],['100','pro 100 g / 100 ml'],['1000','pro kg / lt']]))+rowS(t('Alarme pro Tag'),selH('alim',[['0',t('Aus')],['1','1'],['3','3'],['5','5']]));break;
  case'ai':h+='<p class="small mute">'+t('Für den Ratgeber trägst du deinen eigenen Anthropic-Schlüssel ein. Er bleibt auf diesem Gerät.')+'</p>'
   +rowS(t('API-Schlüssel'),'<input class="field" type="password" data-chg="apiKey" value="'+esc(S.set.apiKey)+'" placeholder="sk-ant-…" autocomplete="off">')
   +rowS(t('Modell'),'<input class="field" data-chg="model" value="'+esc(S.set.model)+'">')+rowS(t('Websuche verwenden'),sw('webSearch',S.set.webSearch));break;
@@ -681,6 +681,8 @@ function delCat(id,to){var c=cat(id);if(!c)return;var ids=[id].concat(subsOf(id,
 function vTypes(){var h='<p class="small mute">'+t('Ladentypen für Dinge ohne Eile. Ist ein passendes Geschäft in der Nähe, erscheint oben eine Zeile. Die Suche braucht Internet und folgt der Filialerkennung (Ein/Aus, Radius).')+'</p>';
  S.types.forEach(function(x){h+='<div class="card"><span class="ic" style="cursor:default">'+esc(x.icon)+'</span><span class="nm">'+esc(tname(x))+(x.custom?' <span class="small mute">('+esc(x.kw||x.name)+')</span>':'')+'</span>'+(x.id==='sonst'?'':'<input type="checkbox" data-typ="'+x.id+'"'+(x.on!==false?' checked':'')+' style="width:1.4em;height:1.4em">')+(x.custom?'<button class="btn sq" data-a="typedel" data-id="'+x.id+'">✕</button>':'')+'</div>'});
  return h+'<h3>'+t('Eigener Ladentyp')+'</h3><div class="seg"><input class="field" id="tn" placeholder="'+t('Name')+'" style="flex:1 1 7em"><input class="field" id="tk" placeholder="'+t('Suchwort im Ladennamen')+'" style="flex:1 1 7em"><button class="btn pri" data-a="typeadd">＋</button></div>'}
+
+function dk(h){var n=parseInt(String(h).slice(1),16)||0;function c(v){return Math.round(v*.4).toString(16).padStart(2,'0')}return'#'+c(n>>16)+c(n>>8&255)+c(n&255)}
 
 /* ===== Einführung: Begrüssung und Führung ===== */
 var AREAS=[
@@ -740,7 +742,7 @@ function tourGuard(e){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var 
  e.preventDefault();e.stopPropagation();say(t(OOPS[Math.min(oopsN,OOPS.length-1)===0&&oopsN===0?0:1+(oopsN%(OOPS.length-1))]));oopsN++}
 
 /* ===== Begrüssung beim ersten Start ===== */
-function vOnb(){var h='<div style="padding:1em 0"><div class="brand" style="font-size:2.2em">SEBU</div><div class="mute">SmarterEinkaufsBerater</div></div>',p=S.ob.ph;
+function vOnb(){var h='<div style="padding:1em 0"><div class="brand" style="font-size:2.2em">sEBU</div><div class="mute">smarter Einkaufs-Manager</div></div>',p=S.ob.ph;
  if(p==='name')return h+'<h2>'+t('Willkommen!')+'</h2><p>'+t('Wie darf ich dich nennen? Das ist freiwillig und dient nur für persönliche Texte.')+'</p><input class="field" id="onn" placeholder="'+t('Name')+'" value="'+esc(S.ob.name)+'" style="width:100%"><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onname">'+t('Weiter')+'</button><button class="btn" data-a="onname" data-skip="1">'+t('Überspringen')+'</button></div>';
  if(p==='size')return h+'<h2>'+t('Wie gross soll die Schrift sein?')+'</h2><p>'+t('Verschiebe den Regler, die Anzeige ändert sich sofort.')+'</p><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'"><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onsize">'+t('Weiter')+'</button></div>';
  if(p==='tour')return h+'<h2>'+t(S.ob.name?'{0}, möchtest du eine Führung durch die App?':'Möchtest du eine Führung durch die App?',S.ob.name)+'</h2><p class="mute">'+t('Du kannst sie jederzeit in den Einstellungen starten.')+'</p><div class="seg"><button class="btn pri" data-a="ontour" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="ontour" data-v="0">'+t('Nein, danke')+'</button></div>';
@@ -783,11 +785,11 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
  return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
-var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
-var MORE=[['shops','🏪','Läden'],['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
+var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['shops','🏪','Läden'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
+var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
-function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
-function head(){return'<header><div class="ttl"><div class="brand">SEBU</div><span class="sub">'+t('SmarterEinkaufsBerater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
+function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
+function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter Einkaufs-Manager')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
 function hlTour(){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=$(s.sel);if(e){e.classList.add('hl');if(e.scrollIntoView)e.scrollIntoView({block:'center'})}}
 function R(){applyLook();var a=$('#app');if(!a)return;
  if(!S.ob.done){a.innerHTML=vOnb();save();return}
@@ -978,7 +980,7 @@ document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!
   if(w.id==='wq')$('#qm').value=Math.min(99,Math.max(0,i));else{var u=allUnits()[Math.min(allUnits().length-1,Math.max(0,i))];$('#um').value=u}},120)},true);
 document.addEventListener('click',function(e){var o=e.target.closest&&e.target.closest('.wheel .o');if(o){var w=o.parentNode,i=Array.prototype.indexOf.call(w.querySelectorAll('.o'),o);wheelT=0;w.scrollTo({top:i*o.offsetHeight,behavior:'smooth'})}});
 /* ===== Start ===== */
-function init(){purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
+function init(){if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){});
  if(S.set.gps!=='off')gpsDetect();runQueue()}
 init();
