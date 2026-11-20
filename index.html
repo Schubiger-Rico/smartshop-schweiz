@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#39FF14">
-<title>sEBU smarter Einkaufs-Manager</title>
+<title>sEBU smarter Einkaufsberater</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -660,7 +660,7 @@ function vSettings(){
  case'types':h+=vTypes();break;
  case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
- case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="all">▶ '+t('Ganze Führung')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('Einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break;
+ case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="app">▶ '+t('Führung durch die App')+'</button><button class="btn pri" data-a="tour" data-v="set">▶ '+t('Führung durch die Einstellungen')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('App: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'':'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><h3>'+t('Einstellungen: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>':''}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break
  case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><h3>'+t('Sicherung')+'</h3><p class="small mute">'+t('Zum Umziehen auf ein anderes Gerät oder in die Home-Bildschirm-App: Sicherung kopieren, dort einfügen und laden.')+'</p><textarea class="field" id="bk" placeholder="'+t('Hier die Sicherung einfügen')+'" style="height:6em"></textarea><div class="seg" style="margin:.4em 0 1em"><button class="btn pri" data-a="bkcopy">'+t('Sicherung kopieren')+'</button><button class="btn" data-a="bkload">'+t('Sicherung laden')+'</button></div><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
  return h}
 function vCatsAdm(){var h='<p class="small mute">'+t('Ziehe am Griff oder nutze ▲▼. Standard-Kategorien lassen sich umbenennen und ausblenden, eigene löschen.')+'</p>';
@@ -685,64 +685,140 @@ function vTypes(){var h='<p class="small mute">'+t('Ladentypen für Dinge ohne E
 function dk(h){var n=parseInt(String(h).slice(1),16)||0;function c(v){return Math.round(v*.4).toString(16).padStart(2,'0')}return'#'+c(n>>16)+c(n>>8&255)+c(n&255)}
 
 /* ===== Einführung: Begrüssung und Führung ===== */
-var AREAS=[
-['Liste',[
- {v:'list',sel:'.add',x:'Schreibe hier ein Produkt hinein, zum Beispiel «Milch», und tippe auf ＋.',act:'add'},
- {v:'list',sel:'#catb',x:'Das Symbol zeigt die Kategorie. Sie wird automatisch erkannt. Tippe darauf, um sie zu ändern.'},
- {v:'list',sel:'#dq',x:'Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.'},
- {v:'list',sel:'.card .fire',x:'🔥 beobachtet Aktionen für dieses Produkt. Zwei Sekunden halten zeigt Details.'},
- {v:'list',sel:'.card [data-a=fav]',x:'☆ macht das Produkt zum Favoriten.'},
- {v:'list',sel:'.card [data-a=check]',x:'Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.',act:'check'}]],
-['Kategorien',[
- {v:'settings',sub:'cats',sel:'.ordrow .ic',x:'Tippe auf ein Symbol, um es zu ändern. Zur Auswahl stehen viele Emojis.'},
- {v:'settings',sub:'cats',sel:'[data-drag]',x:'Am Griff ziehst du eine Kategorie an eine andere Stelle. Alternativ ▲▼.'},
- {v:'settings',sub:'cats',sel:'[data-ren]',x:'Namen lassen sich direkt ändern, auch bei Standard-Kategorien.'},
- {v:'settings',sub:'cats',sel:'[data-a=mainadd]',x:'Hier legst du eigene Hauptkategorien an. Unterkategorien gibt es bei jeder Kategorie.'},
- {v:'settings',sub:'cats',sel:'.ordrow .btn:last-child',x:'Standard-Kategorien blendest du aus, eigene löschst du. Dann fragt die App, wohin die Produkte gehen.'}]],
-['Aktionen',[
- {v:'deals',sel:'[data-a=dealphoto]',x:'Fotografiere ein Aktionsschild. Die App liest es, du bestätigst, erst dann wird es gespeichert.'},
- {v:'deals',sel:'#app .card.blk',x:'So sieht eine Aktion aus: Preis, Ersparnis, Preis pro Einheit und Zeitraum. Beispieldaten sind markiert.'},
- {v:'deals',sel:'#app h2:nth-of-type(2)',x:'Alle Produkte mit 🔥 stehen in der Beobachtungsliste.'}]],
-['Favoriten und Verlauf',[
- {v:'favs',sel:'#app h2',x:'Favoriten holst du mit einem Tipp auf die Liste.'},
- {v:'favs',sel:'#app h2:nth-of-type(2)',x:'Im Verlauf steht alles, was du abgehakt hast. Antippen bearbeitet, nach links wischen löscht.'},
- {v:'favs',sel:'#app',x:'Favoriten entstehen auch automatisch. Wie oft, stellst du in den Einstellungen ein.'}]],
-['Filialen',[
- {v:'settings',sub:'gps',sel:'select[data-chg=gps]',x:'Hier schaltest du die Filialerkennung ein: Aus, Nachfragen oder Automatisch.'},
- {v:'settings',sub:'stores',sel:'#app .row',x:'Du bestimmst, welche Ketten erkannt werden, und kannst eigene Läden speichern.'},
- {v:'list',sel:'#shopbtn',x:'Mit «Einkauf starten» lernt die App deine Reihenfolge im Laden und sortiert die Liste künftig danach.'}]],
-['Ratgeber',[
- {v:'list',sel:'.camb',x:'📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.'},
- {v:'advice',sel:'#kiq',x:'Stelle deine Frage. Die Antwort ist kurz, mit «Mehr» siehst du Details und Quellen.'},
- {v:'settings',sub:'ai',sel:'#app .row',x:'Dafür trägst du hier deinen eigenen KI-Schlüssel ein.'}]],
-['Einstellungen',[
- {v:'settings',sub:'main',sel:'[data-tour=set-look]',x:'Darstellung: Textgrösse, Farben und Menü.'},
- {v:'settings',sub:'main',sel:'[data-tour=set-favs]',x:'Favoriten, Letzte Produkte und Komfort.'},
- {v:'settings',sub:'main',sel:'[data-tour=set-learn]',x:'Smart-Lernen: Du siehst, was die App gelernt hat, und kannst alles löschen.'},
- {v:'settings',sub:'main',sel:'[data-tour=set-price]',x:'Preiseinheiten und Alarme pro Tag.'},
- {v:'settings',sub:'main',sel:'[data-tour=set-plan]',x:'Hier probierst du die Abo-Stufen aus. Es ist nichts gesperrt.'},
- {v:'settings',sub:'main',sel:'[data-tour=set-data]',x:'Zurücksetzen und Löschen: zwei getrennte Knöpfe, jeweils mit Rückfrage.'}]]];
-var tour=null,OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!'];
-var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0;
-function tourSteps(w){if(w==='all')return[].concat.apply([],AREAS.map(function(a){return a[1]}));
- if(w==='app')return[].concat.apply([],AREAS.slice(0,6).map(function(a){return a[1]}));return AREAS[+w][1]}
-function tourStart(w,i){tour={w:w,steps:tourSteps(w),i:i||0};oopsN=0;
+var AREAS=[];
+function st(v,sel,x,m,o){var r={v:v,sel:sel,x:x};if(m)r.m=m;for(var k in(o||{}))r[k]=o[k];return r}
+function ss(sub,sel,x,m,o){var r=st('settings',sel,x,m,o);r.sub=sub;return r}
+function mn(v,x,m,more){return st('list','.menu [data-v='+v+']',x,m,{menu:1,more:more?1:0,ro:1})}
+/* App-Führung */
+AREAS.push(['Menü und Ansicht',[
+ st('list','.ttl','Oben steht der Titel. Bei laufendem Einkauf erscheint daneben der Stopp-Knopf.','Der Stopp-Knopf zeigt den Laden, in dem du gerade einkaufst. Ein Tipp beendet den Einkauf.',{ro:1}),
+ st('list','#hamb','Mit ☰ öffnest du das Menü. Alles, was die App kann, findest du dort.','In den Einstellungen unter «Darstellung» wählst du, ob das Menü minimal, normal oder gross ist.',{ro:1}),
+ mn('list','Einkaufsliste: Hier schreibst du auf, was du brauchst.','Das ist die Startseite. Alles andere ist Zugabe, nichts muss.'),
+ mn('favs','Favoriten: Was du oft kaufst, holst du mit einem Tipp auf die Liste.','Favoriten entstehen auch automatisch, wenn du etwas oft kaufst. Wie oft, stellst du ein. Darunter steht der Verlauf.'),
+ mn('shops','Läden: Produkte, die du einem bestimmten Laden zugeordnet hast.','So bleibt die Hauptliste ruhig. Produkte für Coop, Migros oder den Baumarkt erscheinen dort, und in der Liste, sobald du im passenden Laden bist.'),
+ mn('deals','Aktionen: aktuelle Angebote und deine Beobachtungsliste.','Das 🔥 bei einem Produkt beobachtet es. In den Einstellungen schaltest du das auf automatisch, manuell oder aus. Bei «aus» verschwindet der Menüpunkt.'),
+ mn('ideas','Ideen: Vorschläge und Rezepte, deren Zutaten du auf die Liste legst.','Du stellst die Personenzahl ein, die Mengen rechnen sich um.'),
+ mn('settings','Einstellungen: alles, was du anpassen kannst.','Dazu gibt es eine eigene Führung, in der du gleich alles einstellen kannst.'),
+ st('list','.menu [data-a=more]','Mehr: weitere Funktionen.','Dahinter stehen Ratgeber, Anlässe, Stammartikel, Premium-KI und Test.',{menu:1,ro:1}),
+ mn('advice','Ratgeber: Fotografiere ein Produkt oder Regal und frage, was passt.','Du brauchst dafür einen eigenen KI-Schlüssel, oder du kopierst die Frage von Hand.',1),
+ mn('events','Anlässe: Planung für Geburtstag, Grillabend oder Besuch.','Die App rechnet Mengen nach Personenzahl und legt die Zutaten auf die Liste.',1),
+ mn('stamm','Stammartikel: Dinge, die du regelmässig kaufst.','Die App schlägt sie vor, wenn sie wieder fällig sind.',1),
+ mn('kipro','Premium-KI: einfache Prognosen aus deinem Verlauf.','Zum Beispiel, wann du etwas wieder brauchst.',1),
+ mn('test','Test und Feedback: Abo-Stufen ausprobieren und Rückmeldung geben.','Es ist nichts gesperrt. Deine Rückmeldung kopierst du als Text.',1)]]);
+AREAS.push(['Liste',[
+ st('list','.add','Schreibe hier ein Produkt hinein, zum Beispiel «Milch», und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
+ st('list','#catb','Das Symbol zeigt die Kategorie. Sie wird automatisch erkannt. Tippe darauf, um sie zu ändern.','Eigene Kategorien legst du in den Einstellungen an.'),
+ st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.'),
+ st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».'),
+ st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.'),
+ st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.',{act:'check'})]]);
+AREAS.push(['Kategorien',[
+ st('settings','.ordrow .ic','Tippe auf ein Symbol, um es zu ändern. Zur Auswahl stehen viele Emojis.',0,{sub:'cats'}),
+ st('settings','[data-drag]','Am Griff ziehst du eine Kategorie an eine andere Stelle. Alternativ ▲▼.',0,{sub:'cats'}),
+ st('settings','[data-ren]','Namen lassen sich direkt ändern, auch bei Standard-Kategorien.',0,{sub:'cats'}),
+ st('settings','[data-a=mainadd]','Hier legst du eigene Hauptkategorien an. Unterkategorien gibt es bei jeder Kategorie.',0,{sub:'cats'}),
+ st('settings','.ordrow .btn:last-child','Standard-Kategorien blendest du aus, eigene löschst du. Dann fragt die App, wohin die Produkte gehen.',0,{sub:'cats'})]]);
+AREAS.push(['Aktionen',[
+ st('deals','[data-a=dealphoto]','Fotografiere ein Aktionsschild. Die App liest es, du bestätigst, erst dann wird es gespeichert.','Die Zahlen prüfst du selbst. Gespeichert wird nichts ohne deine Bestätigung.'),
+ st('deals','#app .card.blk','So sieht eine Aktion aus: Preis, Ersparnis, Preis pro Einheit und Zeitraum. Beispieldaten sind markiert.','Der Preis pro Einheit macht Packungen vergleichbar. Die Einheit stellst du in den Einstellungen ein.'),
+ st('deals','#app h2:nth-of-type(2)','Alle Produkte mit 🔥 stehen in der Beobachtungsliste.','Ein Produkt ohne Marke zeigt Aktionen für alle Marken. Mit Marke, zum Beispiel «Thomy Mayonnaise», nur für diese.')]]);
+AREAS.push(['Läden',[
+ st('shops','#app h2','Hier siehst du, was du für welchen Laden aufgeschrieben hast.','Der Laden, in dem du gerade bist, steht oben mit 📍.'),
+ st('list','[data-a=shopsel][data-id=draft]','Ein Produkt einem Laden zuordnen: Tippe auf 🏪, wenn du es aufschreibst.','Du kannst mehrere Läden wählen oder von Hand einen Namen schreiben, zum Beispiel für Kleider.')]]);
+AREAS.push(['Favoriten und Verlauf',[
+ st('favs','#app h2','Favoriten holst du mit einem Tipp auf die Liste.'),
+ st('favs','#app h2:nth-of-type(2)','Im Verlauf steht alles, was du abgehakt hast. Antippen bearbeitet, nach links wischen löscht.'),
+ st('favs','#app','Favoriten entstehen auch automatisch. Wie oft, stellst du in den Einstellungen ein.')]]);
+AREAS.push(['Filialen',[
+ st('settings','select[data-chg=gps]','Hier schaltest du die Filialerkennung ein: Aus, Nachfragen oder Automatisch.','Die Erkennung läuft nur beim Öffnen der App oder mit 🔄. Dein Standort wird nicht gespeichert.',{sub:'gps'}),
+ st('settings','#app .row','Du bestimmst, welche Ketten erkannt werden, und kannst eigene Läden speichern.',0,{sub:'stores'}),
+ st('list','#shopbtn','Mit «Einkauf starten» lernt die App deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.')]]);
+AREAS.push(['Ratgeber',[
+ st('list','.camb','📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.'),
+ st('advice','#kiq','Stelle deine Frage. Die Antwort ist kurz, mit «Mehr» siehst du Details und Quellen.'),
+ st('settings','#app .row','Dafür trägst du hier deinen eigenen KI-Schlüssel ein.',0,{sub:'ai'})]]);
+/* Einstellungen-Führung: jede Einstellung, direkt einstellbar */
+function SA(name,steps){AREAS.push([name,steps,1])}
+SA('Profil',[
+ ss('profil','row:Name','Dein Name ist freiwillig und dient nur für persönliche Texte.'),
+ ss('profil','row:Nutzung','Privat, Familie, Verein oder Geschäft. Das ist nur eine Notiz.')]);
+SA('Darstellung',[
+ ss('look','#fs','Textgrösse: Schiebe den Regler, die Anzeige ändert sich sofort.'),
+ ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
+ ss('look','row:Menü','Minimal, Normal oder Gross.','Bei «Minimal» sind die Menüknöpfe klein, bei «Gross» besonders gross.'),
+ ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.')]);
+SA('Sprache',[ss('lang','#app .seg','Zurzeit gibt es Deutsch. Weitere Sprachen folgen.')]);
+SA('Favoriten und Letzte Produkte',[
+ ss('favs','row:Automatisch Favorit nach','Nach wie vielen Käufen ein Produkt automatisch Favorit wird.'),
+ ss('favs','row:Letzte Produkte anzeigen','Wie viele letzte Produkte unter der Liste stehen.'),
+ ss('favs','row:Sortierung','Neueste oder älteste zuerst.'),
+ ss('favs','row:Kategorien unter der Liste anzeigen','Schaltet die Kategorien-Zeile unter der Liste ein oder aus.'),
+ ss('favs','row:Liste bei Filialwechsel öffnen','Öffnet die Liste von selbst, wenn du in einem neuen Laden bist.'),
+ ss('favs','row:Vibration','Kurzes Vibrieren bei Hinweisen.'),
+ ss('favs','row:Lautlos','Eine Web-App kann den Ton nicht erzwingen. Der Wert wird nur gemerkt.')]);
+SA('Filialerkennung',[
+ ss('gps','row:Filialerkennung','Aus, Nachfragen oder Automatisch.','Bei «Nachfragen» erscheint oben eine Zeile, die du bestätigst. Bei «Automatisch» wechselt die App selbst.'),
+ ss('gps','row:Radius','Wie nah du am Laden sein musst.'),
+ ss('gps','[data-a=gpsnow]','Mit diesem Knopf suchst du sofort.')]);
+SA('Filialen',[
+ ss('stores','#app .row','Setze oder entferne den Haken: So bestimmst du, welche Ketten erkannt werden.'),
+ ss('stores','#cn','Hier fügst du weitere Ketten hinzu, zum Beispiel Manor.'),
+ ss('stores','#mn','Eigener Laden: Stehe im Laden und tippe auf «Hier speichern».','Eigene Läden haben ebenfalls einen Haken zum Ein- und Ausschalten.')]);
+SA('Smart-Lernen',[
+ ss('learn','row:Smart-Lernen','Die App merkt sich Kategorien und eigene Wörter.'),
+ ss('learn','row:Sortierung nach Laden','Sortiert die Liste nach deiner gelernten Reihenfolge im Laden.'),
+ ss('learn','row:Einkauf automatisch starten','Startet den Einkauf, sobald die App den Laden erkennt.'),
+ ss('learn','[data-a=lrnreset]','Hier löschst du alles Gelernte wieder.')]);
+SA('Liste teilen',[
+ ss('share','row:Datenbank-Adresse','Für das Teilen brauchst du eine kostenlose Firebase-Datenbank. Hier trägst du deren Adresse ein.','Die Einrichtung dauert etwa 5 Minuten und steht unten auf der Seite. Geteilt wird nur die Einkaufsliste.'),
+ ss('share','#app .seg','Starte eine geteilte Liste, oder tritt mit einem Code bei.')]);
+SA('Ladentypen',[
+ ss('types','#app .card','Ladentypen wie Baumarkt oder Apotheke für Dinge ohne Eile. Mit Haken schaltest du sie ein oder aus.','Ist ein passendes Geschäft in der Nähe, erscheint oben eine Zeile.'),
+ ss('types','#tn','Eigener Ladentyp: Name und Suchwort im Ladennamen.')]);
+SA('Preise und Alarme',[
+ ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','Automatisch beobachtet neue Produkte von selbst. Manuell: du tippst auf 🔥. Aus: kein 🔥-Knopf und keine Hinweise.'),
+ ss('price','row:Preiseinheit','Preise pro 100 g, pro kg oder automatisch.'),
+ ss('price','row:Alarme pro Tag','Wie viele Aktions-Hinweise pro Tag erscheinen dürfen.')]);
+SA('KI',[
+ ss('ai','row:API-Schlüssel','Dein eigener Anthropic-Schlüssel für den Ratgeber. Er bleibt auf diesem Gerät.'),
+ ss('ai','row:Modell','Welches Modell antwortet.'),
+ ss('ai','row:Websuche verwenden','Erlaubt der KI, im Internet nachzuschauen.')]);
+SA('Abo',[ss('plan','#app h3','Hier probierst du die Abo-Stufen aus. Es ist nichts gesperrt.')]);
+SA('Daten und Datenschutz',[
+ ss('data','#bk','Sicherung: Hier fügst du eine Sicherung ein.','Damit ziehst du auf ein anderes Gerät oder in die Home-Bildschirm-App um.'),
+ ss('data','[data-a=bkcopy]','Mit diesem Knopf kopierst du die Sicherung.'),
+ ss('data','[data-a=resetset]','Zurücksetzen und Löschen sind zwei getrennte Knöpfe, beide mit Rückfrage.')]);
+var tour=null;
+var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
+var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
+var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
+function tourSteps(w){var A=AREAS;
+ if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
+ if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
+ if(w==='set'||w==='6')return[].concat.apply([],A.filter(function(a){return a[2]}).map(function(a){return a[1]}));
+ return A[+w][1]}
+function tourEl(sel){if(!sel)return null;if(sel.indexOf('row:')===0){var l=t(sel.slice(4)),rs=Array.prototype.slice.call(document.querySelectorAll('#app .row'));for(var i=0;i<rs.length;i++){var f=rs[i].firstElementChild;if(f&&f.textContent.trim().indexOf(l)===0)return rs[i]}return null}return $(sel)}
+function tourStart(w,i){tour={w:w,steps:tourSteps(w),i:i||0,more:false};oopsN=0;
  if(!S.items.length){S.items.push({id:'tour',name:t('Beispiel Milch'),qty:1,unit:'lt',fire:false,cat:'m1',sub:'m1s0',why:'',tour:true})}
  menu=false;sh=null;tourShow()}
-function tourShow(){if(!tour)return;var s=tour.steps[tour.i];if(!s){tourEnd(true);return}view=s.v;sub=s.sub||'main';sh=null;R();
- setTimeout(function(){var e=$(s.sel);if(e){e.classList.add('hl');e.scrollIntoView({block:'center'})}},30)}
+function tourShow(){if(!tour)return;var s=tour.steps[tour.i];if(!s){tourEnd(true);return}view=s.v;sub=s.sub||'main';sh=null;menu=!!s.menu;more=!!s.more;tour.more=false;oopsN=0;R();
+ setTimeout(function(){var e=tourEl(s.sel);if(e){e.classList.add('hl');e.scrollIntoView({block:'center'})}},30)}
 function tourNext(){if(!tour)return;tour.i++;tourShow()}
 function tourEv(n){if(tour&&tour.steps[tour.i]&&tour.steps[tour.i].act===n)setTimeout(tourNext,250)}
-function tourPause(){S.ob.t=tour?{w:tour.w,i:tour.i}:null;tour=null;clean();R();say(t('Pausiert. Du findest «Fortsetzen» in den Einstellungen unter «Einführung».'))}
+function tourPause(){S.ob.t=tour?{w:tour.w,i:tour.i}:null;tour=null;menu=false;more=false;clean();R();say(t('Pausiert. Du findest «Fortsetzen» in den Einstellungen unter «Einführung».'))}
 function clean(){S.items=S.items.filter(function(i){return !i.tour});$$('.hl').forEach(function(e){e.classList.remove('hl')})}
-function tourEnd(done){tour=null;S.ob.t=null;clean();view='list';sub='main';if(S.ob.offer==='set'){S.ob.done=false;S.ob.ph='settour';S.ob.offer=null}R();if(done)say('🏆 '+t(ENDS[Math.floor(Math.random()*ENDS.length)]))}
+function tourEnd(done){tour=null;menu=false;more=false;S.ob.t=null;clean();view='list';sub='main';if(S.ob.offer==='set'){S.ob.done=false;S.ob.ph='settour';S.ob.offer=null}R();if(done)say('🏆 '+t(ENDS[Math.floor(Math.random()*ENDS.length)]))}
 function tourCard(){if(!tour)return'';var s=tour.steps[tour.i];if(!s)return'';
- return'<div class="tc"><div class="card"><div class="small mute">'+t('Schritt {0} von {1}',tour.i+1,tour.steps.length)+'</div><p style="margin:.3em 0">'+t(s.x)+'</p><div class="seg">'+(s.act?'':'<button class="btn pri" data-a="tnext">'+t('Weiter')+'</button>')+(tour.i>0?'<button class="btn" data-a="tprev">'+t('Zurück')+'</button>':'')+'<button class="btn" data-a="tpause">'+t('Pause')+'</button><button class="btn" data-a="tstop">'+t('Beenden')+'</button></div></div></div>'}
-function tourGuard(e){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var el=e.target.closest&&e.target.closest('.hl,.tc');if(el)return;
- e.preventDefault();e.stopPropagation();say(t(OOPS[Math.min(oopsN,OOPS.length-1)===0&&oopsN===0?0:1+(oopsN%(OOPS.length-1))]));oopsN++}
+ return'<div class="tc"><div class="card"><div class="small mute">'+t('Schritt {0} von {1}',tour.i+1,tour.steps.length)+'</div><p style="margin:.3em 0">'+t(s.x)+'</p>'+(s.m&&tour.more?'<p class="small" style="margin:.3em 0">'+t(s.m)+'</p>':'')+'<div class="seg">'+(s.act?'':'<button class="btn pri" data-a="tnext">'+t('Weiter')+'</button>')+(s.m?'<button class="btn" data-a="tmore">'+t(tour.more?'Weniger':'Mehr')+'</button>':'')+(tour.i>0?'<button class="btn" data-a="tprev">'+t('Zurück')+'</button>':'')+'<button class="btn" data-a="tpause">'+t('Pause')+'</button><button class="btn" data-a="tstop">'+t('Beenden')+'</button></div></div></div>'}
+function tourGuard(e){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var tc=e.target.closest&&e.target.closest('.tc');if(tc)return;var el=e.target.closest&&e.target.closest('.hl');
+ if(el&&s.ro){e.preventDefault();e.stopPropagation();return}
+ if(el)return;
+ e.preventDefault();e.stopPropagation();
+ var L=oopsN>=1?OOPS2:OOPS,k;do{k=Math.floor(Math.random()*L.length)}while(k===lastOops&&L.length>1);lastOops=k;
+ say(t(L[k]));oopsN++}
 
 /* ===== Begrüssung beim ersten Start ===== */
-function vOnb(){var h='<div style="padding:1em 0"><div class="brand" style="font-size:2.2em">sEBU</div><div class="mute">smarter Einkaufs-Manager</div></div>',p=S.ob.ph;
+function vOnb(){var h='<div style="padding:1em 0"><div class="brand" style="font-size:2.2em">sEBU</div><div class="mute">smarter Einkaufsberater</div><div class="small mute" style="margin-top:.3em;font-style:italic">'+t('Alles kann, nichts muss.')+'</div></div>',p=S.ob.ph;
  if(p==='name')return h+'<h2>'+t('Willkommen!')+'</h2><p>'+t('Wie darf ich dich nennen? Das ist freiwillig und dient nur für persönliche Texte.')+'</p><input class="field" id="onn" placeholder="'+t('Name')+'" value="'+esc(S.ob.name)+'" style="width:100%"><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onname">'+t('Weiter')+'</button><button class="btn" data-a="onname" data-skip="1">'+t('Überspringen')+'</button></div>';
  if(p==='size')return h+'<h2>'+t('Wie gross soll die Schrift sein?')+'</h2><p>'+t('Verschiebe den Regler, die Anzeige ändert sich sofort.')+'</p><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'"><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onsize">'+t('Weiter')+'</button></div>';
  if(p==='tour')return h+'<h2>'+t(S.ob.name?'{0}, möchtest du eine Führung durch die App?':'Möchtest du eine Führung durch die App?',S.ob.name)+'</h2><p class="mute">'+t('Du kannst sie jederzeit in den Einstellungen starten.')+'</p><div class="seg"><button class="btn pri" data-a="ontour" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="ontour" data-v="0">'+t('Nein, danke')+'</button></div>';
@@ -789,8 +865,8 @@ var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['shops','�
 var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
-function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter Einkaufs-Manager')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
-function hlTour(){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=$(s.sel);if(e){e.classList.add('hl');if(e.scrollIntoView)e.scrollIntoView({block:'center'})}}
+function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter Einkaufsberater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
+function hlTour(){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=tourEl(s.sel);if(e){e.classList.add('hl');if(e.scrollIntoView)e.scrollIntoView({block:'center'})}}
 function R(){applyLook();var a=$('#app');if(!a)return;
  if(!S.ob.done){a.innerHTML=vOnb();save();return}
  var b='';switch(view){case'list':b=(S.ob.name?'<p class="mute small" style="margin:0 0 .4em">'+t('Hallo {0}',esc(S.ob.name))+'</p>':'')+vList();break;case'favs':b=vFavs();break;case'shops':b=vShops();break;case'deals':b=vDeals();break;case'ideas':b=vIdeas();break;case'settings':b=vSettings();break;
@@ -865,13 +941,14 @@ function act(a,el){var D=el.dataset,i,it;
  case'ob':S.ob.done=false;S.ob.ph='name';break;
  case'tour':if(D.v==='resume'&&S.ob.t)tourStart(S.ob.t.w,S.ob.t.i);else tourStart(D.v);return;
  case'tnext':tourNext();return;
+ case'tmore':if(tour)tour.more=!tour.more;break;
  case'tprev':if(tour&&tour.i>0){tour.i--;tourShow()}return;
  case'tpause':tourPause();return;
  case'tstop':tourEnd(false);return;
  case'onname':if(!D.skip)S.ob.name=fval('onn').trim();S.ob.ph='size';break;
  case'onsize':S.ob.ph='tour';break;
  case'ontour':if(D.v==='1'){S.ob.done=true;S.ob.offer='set';view='list';R();tourStart('app');return}S.ob.ph='settour';break;
- case'onset':S.ob.done=true;S.ob.offer=null;view='list';if(D.v==='1'){R();tourStart('6');return}break;
+ case'onset':S.ob.done=true;S.ob.offer=null;view='list';if(D.v==='1'){R();tourStart('set');return}break;
  case'dealphoto':{var f=document.createElement('input');f.type='file';f.accept='image/*';f.setAttribute('capture','environment');f.onchange=function(){if(f.files[0])resize(f.files[0],function(d){ki.img=d;kiDeal()})};f.click();return}
  case'dealclose':dealOpen=null;break;
  case'qty':{if(D.id==='draft')sh={t:'qty',id:'draft',q:draft.q,u:draft.u};else{var qi=findItem(D.id);if(qi)sh={t:'qty',id:qi.id,q:String(qi.qty),u:qi.unit}}break}
@@ -928,7 +1005,7 @@ document.addEventListener('click',function(e){
  if(fe){if(lp){lp=false;return}var i=findItem(fe.dataset.fire);if(i){i.fire=!i.fire;save();R();tourEv('fire')}return}
  var el=e.target.closest&&e.target.closest('[data-a]');
  if(!el){if(menu&&!e.target.closest('.menu')){menu=false;more=false;R()}return}
- if(menu&&!e.target.closest('.menu')&&el.dataset.a!=='menu'){menu=false;more=false}
+ if(menu&&!tour&&!e.target.closest('.menu')&&el.dataset.a!=='menu'){menu=false;more=false}
  act(el.dataset.a,el)});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='dn'){e.preventDefault();var b=$('[data-a=add]');if(b)act('add',b)}});
 document.addEventListener('input',function(e){var t0=e.target,id=t0.id;
