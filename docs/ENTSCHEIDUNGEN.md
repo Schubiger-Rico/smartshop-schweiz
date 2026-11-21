@@ -474,3 +474,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 5. Produktinfos abrufen und Produkte vergleichen.
 
 Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 teilweise (Ladenerkennung, gelernte Reihenfolge statt Ladenplan); 4 nicht möglich ohne Zusammenarbeit mit den Händlern (keine offenen Schnittstellen); 5 teilweise (KI-Ratgeber).
+
+### Notiz vom 21.11.2026 (abends): Hinweis «Test» (nur festgehalten, noch nicht gebaut)
+
+- Irgendwo soll sichtbar sein, dass sEBU eine Testversion ist (z. B. für Migros/Coop, die den Link bekommen).
+- Vorschlag: kleines Schild «TEST» neben dem Titel oben (dezent, z. B. gelb), Antippen zeigt «Testversion – noch in Entwicklung. Rückmeldungen willkommen.» Zusätzlich in der Begrüssung ein Satz. Abschaltbar in den Einstellungen (Abo/Test), damit es später einfach verschwindet.
