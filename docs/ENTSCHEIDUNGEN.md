@@ -497,3 +497,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Rezept Risotto:** Zutat heisst «Risotto», besser «Risottoreis».
 - CLAUDE.md-Slogan noch alt («sEBU der smarte Einkaufsberater»).
 - **Behoben am 21.11. (abends):** alle vier Punkte oben – Bereich «Filialen» startet nur noch seine Schritte; dunkler Hintergrund der Führung deckt den ganzen Bildschirm (`html.touring`); manifest nutzt `icon-180.png`, Name «sEBU smarter EinkaufsBerater»; Rezept «Risottoreis». CLAUDE.md-Slogan aktualisiert.
+
+### Notiz vom 21.11.2026 (abends): Rückgängig nach dem Löschen (nur festgehalten, noch nicht gebaut)
+
+- Nach dem Wegwischen (Löschen) eines Produkts erscheint kurz «↩ Rückgängig», ein Tipp holt es zurück (an gleicher Stelle, mit Menge, Laden, Kategorie).
+- Weitere Ideen (nicht gewählt, nur notiert): Liste als Text teilen (WhatsApp/SMS), Erinnerung an Sicherung, Produktinfos per Strichcode (Open Food Facts).
