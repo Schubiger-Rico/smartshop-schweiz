@@ -432,7 +432,7 @@ function viewBlock(){var v=S.set.view||'full',h='<div class="seg">'+[['simple','
  VEL.forEach(function(e){h+='<div class="row" style="flex-wrap:nowrap"><span style="flex:1">'+e[1]+' '+t(e[2])+'<br><span class="small mute">'+t(e[3])+'</span></span>'+sw('v_'+e[0],on(e[0]))+'</div>'});
  return h}
 function remBlock(){if(!on('remind'))return'';
- return'<h3 id="remh">🔔 '+t('Erinnerung')+'</h3>'+rowS(t('Über Kurzbefehl, ohne Teilen-Menü'),sw('remSc',!!S.set.remSc))
+ return'<h3 id="remh">🔔 '+t('Erinnerung')+'</h3>'+rowC(t('Über Kurzbefehl, ohne Teilen-Menü'),'remSc',!!S.set.remSc)
   +(S.set.remSc?rowS(t('Name des Kurzbefehls'),'<input class="field" data-chg="scName" value="'+esc(S.set.scName||'sEBU Erinnerung')+'">'):'')
   +'<p class="small mute">'+t(S.set.remSc?'Die App öffnet deinen Kurzbefehl direkt. Er braucht eine einmalige Einrichtung (Anleitung unten).':'Jetzt öffnet sich das Teilen-Menü. Tipp: Dort ganz nach rechts wischen, «Mehr» → «Bearbeiten» und «Erinnerungen» als Favorit nach vorne ziehen. Dann musst du nicht mehr suchen.')+'</p>'
   +'<details class="card" style="display:block"><summary><b>'+t('Anleitung: Kurzbefehl einrichten (einmalig, etwa 2 Minuten)')+'</b></summary><ol class="small" style="padding-left:1.3em">'
@@ -456,22 +456,23 @@ function bakData(){var d=JSON.parse(JSON.stringify(S));d.cache=[];return d}
 function snap(force){if(S.set.autoBak===false)return;var l=bakList();if(!force&&l[0]&&Date.now()-l[0].t<20*36e5)return;
  l.unshift({t:Date.now(),d:bakData()});l=l.slice(0,5);
  for(var n=l.length;n>0;n--){try{localStorage.setItem(BK,JSON.stringify(l.slice(0,n)));return}catch(e){}}}
-function bakUrl(c){return S.set.fbUrl.replace(/\/+$/,'')+'/backups/'+encodeURIComponent(c)+'.json'}
+function bakUrl(c){return S.set.fbUrl.replace(/\/+$/,'')+'/lists/bak-'+encodeURIComponent(c)+'.json'}
+function rowC(l,k,v){return'<div class="row" style="flex-wrap:nowrap"><span style="flex:1">'+l+'</span>'+sw(k,v)+'</div>'}
 function fbSet(){return /^https:\/\//.test(S.set.fbUrl||'')}
 function cloudBak(force,cb){if(!S.set.cloudBak||!fbSet()||!navigator.onLine){if(cb)cb(false);return}if(!force&&Date.now()-(S.set.bakT||0)<20*36e5)return;
  if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);
  var d=bakData();d.set.apiKey='';d.set.bakT=0;
- fetch(bakUrl(S.set.bakCode),{method:'PUT',body:JSON.stringify({t:Date.now(),j:JSON.stringify(d)})}).then(function(r){if(!r.ok)throw 0;S.set.bakT=Date.now();save();if(cb)cb(true)}).catch(function(){if(cb)cb(false)})}
+ fetch(bakUrl(S.set.bakCode),{method:'PUT',body:JSON.stringify({t:Date.now(),j:JSON.stringify(d)})}).then(function(r){if(!r.ok)throw r.status;S.set.bakT=Date.now();save();if(cb)cb(true)}).catch(function(e){if(cb)cb(false,e===401||e===403?t('Firebase verweigert den Zugriff. Prüfe die Regeln der Datenbank (Einrichtung unter «Liste teilen»).'):e===404?t('Datenbank nicht gefunden. Prüfe die Datenbank-Adresse unter «Liste teilen».'):typeof e==='number'?t('Fehler {0} von Firebase. Versuche es später nochmals.',e):t('Keine Verbindung. Prüfe das Internet und die Datenbank-Adresse.'))})}
 function fdt(x){var d=new Date(x);return d.toLocaleDateString('de-CH')+' '+d.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'})}
 function bakBlock(){var l=bakList(),h='<h3 id="bakh">'+t('Automatische Sicherung')+'</h3>'
-  +rowS(t('Zwischenkopien auf diesem Gerät'),sw('autoBak',S.set.autoBak!==false))
+  +rowC(t('Zwischenkopien auf diesem Gerät'),'autoBak',S.set.autoBak!==false)
   +'<p class="small mute">'+t('Einmal am Tag, die letzten 5. Hilft bei Fehlern oder versehentlichem Löschen, aber nicht, wenn das Handy verloren geht.')+'</p>';
  if(S.set.autoBak!==false)h+=l.length?l.map(function(b,i){return'<div class="row"><span class="small">'+fdt(b.t)+' · '+t('{0} Produkte',(b.d.items||[]).length)+'</span><button class="btn" data-a="bakrest" data-v="'+i+'">'+t('Wiederherstellen')+'</button></div>'}).join(''):'<p class="small mute">'+t('Noch keine Zwischenkopie. Die erste entsteht beim nächsten Öffnen.')+'</p>';
- h+=rowS(t('Sicherung in deiner Firebase-Datenbank'),sw('cloudBak',!!S.set.cloudBak));
+ h+=rowC(t('Sicherung in deiner Firebase-Datenbank'),'cloudBak',!!S.set.cloudBak);
  if(S.set.cloudBak){if(!fbSet())h+='<p class="small" style="color:var(--red)">'+t('Zuerst unter «Liste teilen» die Datenbank-Adresse eintragen.')+'</p>';
   else h+='<p class="small">'+t('Dein Wiederherstellen-Code')+': <b style="user-select:all">'+esc(S.set.bakCode||'–')+'</b><br><span class="mute">'+t('Gut aufbewahren, zum Beispiel als Notiz. Damit holst du alles auf ein neues Handy.')+'</span></p><p class="small mute">'+t('Letzte Sicherung')+': '+(S.set.bakT?fdt(S.set.bakT):t('noch keine'))+'</p><div class="seg"><button class="btn" data-a="bakcloud">'+t('Jetzt sichern')+'</button></div>'}
  h+='<p class="small mute">🔒 '+t('Datenschutz: Die Sicherung liegt in deiner eigenen Datenbank, nicht bei sEBU. Wer den Code kennt, kann sie lesen, darum nicht weitergeben. Der KI-Schlüssel wird nie mitgesichert.')+'</p>'
-  +'<p class="small mute">'+t('Wenn es nicht klappt: Prüfe Internet und Datenbank-Adresse. Die Regeln der Datenbank müssen «backups» erlauben (siehe Einrichtung unter «Liste teilen»).')+'</p>'
+  +'<p class="small mute">'+t('Wenn es nicht klappt: «Jetzt sichern» antippen, die Meldung sagt, woran es liegt. Meist ist es das Internet oder die Datenbank-Adresse unter «Liste teilen».')+'</p>'
   +'<h3>'+t('Sicherung mit Code holen')+'</h3><div class="seg"><input class="field" id="bkc" placeholder="'+t('Wiederherstellen-Code')+'" style="flex:1 1 8em" autocomplete="off"><button class="btn" data-a="bakget">'+t('Holen')+'</button></div>';
  return h}
 
@@ -929,7 +930,7 @@ SA('Daten und Datenschutz',[
  ss('data','#bk','Sicherung: Hier fügst du eine Sicherung ein.','Damit ziehst du auf ein anderes Gerät oder in die Home-Bildschirm-App um.'),
  ss('data','[data-a=bkcopy]','Mit diesem Knopf kopierst du die Sicherung.'),
  ss('data','row:Zwischenkopien auf diesem Gerät','Automatische Zwischenkopien: einmal am Tag, die letzten 5 bleiben auf diesem Gerät.','<b>Wofür geeignet:</b> Wenn aus Versehen etwas gelöscht wurde oder die App einen Fehler hatte.\n<b>Nicht geeignet:</b> bei Handyverlust oder Handywechsel, dafür die Sicherung in der Datenbank.\n<b>Wenn es nicht klappt:</b> Ist der Speicher voll, behält die App weniger Kopien.'),
- ss('data','row:Sicherung in deiner Firebase-Datenbank','Sicherung in deiner eigenen Firebase-Datenbank, einmal am Tag automatisch. Mit dem Code holst du alles auf ein neues Handy.','<b>Voraussetzung:</b> Datenbank-Adresse unter «Liste teilen».\n<b>Datenschutz:</b> Die Daten liegen in deiner Datenbank. Den Code nicht weitergeben. Der KI-Schlüssel wird nie mitgesichert.\n<b>Wenn es nicht klappt:</b> Internet prüfen, Datenbank-Adresse prüfen und die Regeln mit «backups» übernehmen (Einrichtung unter «Liste teilen»).'),
+ ss('data','row:Sicherung in deiner Firebase-Datenbank','Sicherung in deiner eigenen Firebase-Datenbank, einmal am Tag automatisch. Mit dem Code holst du alles auf ein neues Handy.','<b>Voraussetzung:</b> Datenbank-Adresse unter «Liste teilen».\n<b>Datenschutz:</b> Die Daten liegen in deiner Datenbank. Den Code nicht weitergeben. Der KI-Schlüssel wird nie mitgesichert.\n<b>Wenn es nicht klappt:</b> «Jetzt sichern» antippen, die Meldung sagt, woran es liegt. Meist ist es das Internet oder die Datenbank-Adresse.'),
  ss('data','[data-a=resetset]','Zurücksetzen und Löschen sind zwei getrennte Knöpfe, beide mit Rückfrage.')]);
 var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
@@ -1003,7 +1004,7 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
  if(on)h+='<div class="ban" style="display:block"><div>'+t('Dein Listen-Code')+':</div><div style="font-size:1.2em;font-weight:700;overflow-wrap:anywhere">'+esc(S.share.code)+'</div><div class="seg" style="margin-top:.4em"><button class="btn" data-a="sharecopy">'+t('Code kopieren')+'</button><button class="btn" data-a="sharestop">'+t('Teilen beenden')+'</button></div><p class="small mute" style="margin:.4em 0 0">'+t('Die andere Person gibt diesen Code bei sich ein.')+'</p></div>';
  else h+='<div class="seg"><button class="btn pri" data-a="sharenew">'+t('Neue geteilte Liste starten')+'</button></div><h3>'+t('Oder einer Liste beitreten')+'</h3><div class="seg"><input class="field" id="shc" placeholder="'+t('Listen-Code')+'" style="flex:1 1 9em"><button class="btn" data-a="sharejoin">'+t('Beitreten')+'</button></div>';
  if(shareMsg)h+='<p class="small">'+esc(shareMsg)+'</p>';
- h+='<details><summary>'+t('Einrichtung (einmalig, etwa 5 Minuten)')+'</summary><ol class="small"><li>'+t('Auf console.firebase.google.com mit einem Google-Konto ein Projekt erstellen (Google Analytics ausschalten).')+'</li><li>'+t('Links «Build» → «Realtime Database» → «Datenbank erstellen», Standort Europa, «Im Testmodus starten».')+'</li><li>'+t('Oben die Adresse kopieren (beginnt mit https://) und hier einfügen.')+'</li><li>'+t('Im Reiter «Regeln» diesen Text einfügen und veröffentlichen:')+' <code>{"rules":{"lists":{"$c":{".read":true,".write":true}},"backups":{"$c":{".read":true,".write":true}}}}</code></li></ol><p class="small mute">'+t('Wer den langen Code kennt, kann die Liste lesen und ändern. Für den Test reicht das.')+'</p></details>';
+ h+='<details><summary>'+t('Einrichtung (einmalig, etwa 5 Minuten)')+'</summary><ol class="small"><li>'+t('Auf console.firebase.google.com mit einem Google-Konto ein Projekt erstellen (Google Analytics ausschalten).')+'</li><li>'+t('Links «Build» → «Realtime Database» → «Datenbank erstellen», Standort Europa, «Im Testmodus starten».')+'</li><li>'+t('Oben die Adresse kopieren (beginnt mit https://) und hier einfügen.')+'</li><li>'+t('Im Reiter «Regeln» diesen Text einfügen und veröffentlichen:')+' <code>{"rules":{"lists":{"$c":{".read":true,".write":true}}}}</code></li></ol><p class="small mute">'+t('Wer den langen Code kennt, kann die Liste lesen und ändern. Für den Test reicht das.')+'</p></details>';
  return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
@@ -1126,7 +1127,7 @@ function act(a,el){var D=el.dataset,i,it;
 case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(j).catch(function(){});say(t('Sicherung kopiert. Falls nicht, den markierten Text selbst kopieren.'));return}
  case'bkload':{var tx2=fval('bk').trim(),r2;try{r2=JSON.parse(tx2)}catch(e){}if(!r2||!Array.isArray(r2.items)){say(t('Das ist keine gültige Sicherung.'));return}impData=r2;sh={t:'confirm',title:t('Sicherung laden'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung ersetzt. Fortfahren?'),ok:'doimport'};break}
  case'bakrest':{var bl=bakList()[+D.v];if(!bl)break;impData=bl.d;sh={t:'confirm',title:t('Zwischenkopie wiederherstellen'),text:t('Die Daten werden durch die Kopie vom {0} ersetzt. Fortfahren?',fdt(bl.t)),ok:'doimport'};break}
- case'bakcloud':cloudBak(true,function(ok){say(ok?t('Gesichert.'):t('Sicherung fehlgeschlagen. Prüfe Internet und Datenbank-Adresse.'));R()});return;
+ case'bakcloud':cloudBak(true,function(ok,m){say(ok?t('Gesichert.'):t('Sicherung fehlgeschlagen.')+' '+(m||t('Prüfe die Datenbank-Adresse unter «Liste teilen».')));R()});return;
  case'bakget':{var bc=fval('bkc').trim();if(!bc||!fbSet()){say(t('Code eingeben und unter «Liste teilen» die Datenbank-Adresse eintragen.'));return}
   fetch(bakUrl(bc)).then(function(r){return r.json()}).then(function(j){var d=null;try{d=JSON.parse(j.j)}catch(e){}if(!d||!Array.isArray(d.items)){say(t('Keine Sicherung zu diesem Code gefunden.'));return}impData=d;sh={t:'confirm',title:t('Sicherung holen'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung vom {0} ersetzt. Fortfahren?',fdt(j.t)),ok:'doimport'};R()}).catch(function(){say(t('Keine Verbindung. Prüfe das Internet.'))});return}
  case'doimport':{snap(true);var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
