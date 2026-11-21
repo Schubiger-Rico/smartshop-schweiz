@@ -21,7 +21,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 var(--fs)/1.35 "Atkinson Hyperlegible",system-ui,sans-serif;-webkit-text-size-adjust:100%}
 body{padding-top:env(safe-area-inset-top,0px)}
-#app{max-width:40em;margin:0 auto;padding:.75em .75em 6em;overflow-x:hidden}
+#app{max-width:40em;margin:0 auto;padding:.75em .75em 6em;overflow-x:hidden}html.touring #app{overflow:visible}
 h1,h2,h3{font-family:Quicksand,"Trebuchet MS",sans-serif;font-weight:700;margin:0}
 h1{font-size:1.3em;line-height:1.1}h2{font-size:1.15em;margin:1.2em 0 .5em}h3{font-size:1em;margin:.8em 0 .3em}
 header{display:flex;align-items:center;justify-content:space-between;position:relative;margin-bottom:.6em;gap:.5em}
@@ -664,7 +664,7 @@ function vKipro(){var h='<h2>✨ '+t('Premium-KI')+'</h2><p class="small mute">'
  Object.keys(g).forEach(function(k){var d=g[k].d.sort();if(d.length<3)return;var s=0;for(var i=1;i<d.length;i++)s+=d[i]-d[i-1];var a=s/(d.length-1)/864e5,due=Math.round((d[d.length-1]+a*864e5-Date.now())/864e5);
   if(a<1||due>7)return;o++;h+='<div class="card"><span class="nm">'+esc(g[k].n)+'</span><span class="q small">'+t('etwa alle {0} Tage',Math.round(a))+(due<=0?' · '+t('fällig'):' · '+t('in {0} Tagen',due))+'</span><button class="btn" data-a="stadd" data-n="'+esc(g[k].n)+'">＋</button></div>'});
  if(!o)h+='<div class="empty">'+t('Noch zu wenig Daten. Ab drei Käufen pro Produkt gibt es Prognosen.')+'</div>';return h}
-var REC=[['Spaghetti Bolognese',[['Spaghetti',100,'g'],['Hackfleisch',80,'g'],['Tomatensauce',100,'g'],['Zwiebeln',.5,'Stk.']]],['Rösti mit Spiegelei',[['Kartoffeln',200,'g'],['Eier',1,'Stk.'],['Butter',10,'g']]],['Gemüsesuppe',[['Rüebli',100,'g'],['Kartoffeln',100,'g'],['Lauch',.25,'Stk.'],['Bouillon',.5,'Stk.']]],['Risotto',[['Risotto',80,'g'],['Zwiebeln',.25,'Stk.'],['Parmesan',20,'g'],['Weisswein',.3,'dl']]],['Poulet mit Reis',[['Pouletbrust',150,'g'],['Reis',70,'g'],['Peperoni',.5,'Stk.']]],['Älplermagronen',[['Hörnli',100,'g'],['Kartoffeln',100,'g'],['Rahm',.5,'dl'],['Käse',40,'g']]],['Griechischer Salat',[['Tomaten',150,'g'],['Gurke',.25,'Stk.'],['Feta',50,'g'],['Oliven',30,'g']]],['Pfannkuchen',[['Mehl',60,'g'],['Milch',1.5,'dl'],['Eier',1,'Stk.']]]];
+var REC=[['Spaghetti Bolognese',[['Spaghetti',100,'g'],['Hackfleisch',80,'g'],['Tomatensauce',100,'g'],['Zwiebeln',.5,'Stk.']]],['Rösti mit Spiegelei',[['Kartoffeln',200,'g'],['Eier',1,'Stk.'],['Butter',10,'g']]],['Gemüsesuppe',[['Rüebli',100,'g'],['Kartoffeln',100,'g'],['Lauch',.25,'Stk.'],['Bouillon',.5,'Stk.']]],['Risotto',[['Risottoreis',80,'g'],['Zwiebeln',.25,'Stk.'],['Parmesan',20,'g'],['Weisswein',.3,'dl']]],['Poulet mit Reis',[['Pouletbrust',150,'g'],['Reis',70,'g'],['Peperoni',.5,'Stk.']]],['Älplermagronen',[['Hörnli',100,'g'],['Kartoffeln',100,'g'],['Rahm',.5,'dl'],['Käse',40,'g']]],['Griechischer Salat',[['Tomaten',150,'g'],['Gurke',.25,'Stk.'],['Feta',50,'g'],['Oliven',30,'g']]],['Pfannkuchen',[['Mehl',60,'g'],['Milch',1.5,'dl'],['Eier',1,'Stk.']]]];
 function vIdeas(){var e=ev(),p=S.set.persons||(e&&+e.persons)||4,h='<h2>💡 '+t('Ideen')+'</h2><div class="row"><label for="persons">'+t('Personen')+'</label><input class="field" id="persons" data-chg="persons" inputmode="numeric" value="'+p+'" style="width:5em"></div>';
  REC.forEach(function(r,i){h+='<div class="card blk"><b>'+esc(r[0])+'</b><br><span class="small">'+r[1].map(function(z){return esc(Math.round(z[1]*p*10)/10+' '+z[2]+' '+z[0])}).join(', ')+'</span><br><button class="btn" data-a="recipe" data-i="'+i+'" style="margin-top:.3em">＋ '+t('Zutaten auf die Liste')+'</button></div>'});return h}
 function vTest(){var h='<h2>🧪 '+t('Test & Feedback')+'</h2><h3>'+t('Abo testen')+'</h3><div class="seg">'+[['gratis','Gratis'],['smart','Smart'],['premium','Premium']].map(function(p){return'<button class="btn'+(S.set.plan===p[0]?' sel':'')+'" data-a="plan" data-v="'+p[0]+'">'+p[1]+'</button>'}).join('')+'</div><p class="small mute">'+t('Zum Testen ist nichts gesperrt. Die Auswahl hält nur fest, welche Funktionen später zu welchem Abo gehören sollen.')+'</p><h3>'+t('Rückmeldung')+'</h3><textarea class="field" id="fb" placeholder="'+t('Was gefällt, was fehlt, was stört?')+'"></textarea><div class="seg" style="margin-top:.4em"><button class="btn pri" data-a="fbsend">'+t('Text kopieren')+'</button></div>';return h}
@@ -869,7 +869,7 @@ function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'
 function tourSteps0(w){var A=AREAS;
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
- if(w==='set'||w==='6')return[].concat.apply([],A.filter(function(a){return a[2]}).map(function(a){return a[1]}));
+ if(w==='set')return[].concat.apply([],A.filter(function(a){return a[2]}).map(function(a){return a[1]}));
  return A[+w][1]}
 function tourEl(sel){if(!sel)return null;if(sel.indexOf('row:')===0){var l=t(sel.slice(4)),rs=Array.prototype.slice.call(document.querySelectorAll('#app .row'));for(var i=0;i<rs.length;i++){var f=rs[i].firstElementChild;if(f&&f.textContent.trim().indexOf(l)===0)return rs[i]}return null}return $(sel)}
 function tourStart(w,i){tour={w:w,steps:tourSteps(w),i:i||0,more:false};oopsN=0;
@@ -953,6 +953,7 @@ function R(){applyLook();var a=$('#app');if(!a)return;
  var b='';switch(view){case'list':b=(S.ob.name?'<p class="mute small" style="margin:0 0 .4em">'+t('Hallo {0}',esc(S.ob.name))+'</p>':'')+vList();break;case'favs':b=vFavs();break;case'shops':b=vShops();break;case'deals':b=vDeals();break;case'ideas':b=vIdeas();break;case'settings':b=vSettings();break;
   case'advice':b=vAdvice();break;case'events':b=vEvents();break;case'stamm':b=vStamm();break;case'kipro':b=vKipro();break;case'test':b=vTest();break;default:b=vList()}
  var tw=['ideas','events','stamm','kipro'].indexOf(view)>-1||(view==='settings'&&(sub==='plan'||sub==='lang'));if(tw)b=testBan()+b;else if(view==='deals')b=testBan(1)+b;
+ document.documentElement.classList.toggle('touring',!!tour);
  a.innerHTML=head()+b+sheetHtml()+tourCard();save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 

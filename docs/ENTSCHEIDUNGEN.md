@@ -496,3 +496,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Symbol im manifest.json:** noch das alte hellgrüne «SEBU»-Bild und alte Themenfarbe; passt nicht zum neuen neon-grünen Symbol (betrifft v. a. Android).
 - **Rezept Risotto:** Zutat heisst «Risotto», besser «Risottoreis».
 - CLAUDE.md-Slogan noch alt («sEBU der smarte Einkaufsberater»).
+- **Behoben am 21.11. (abends):** alle vier Punkte oben – Bereich «Filialen» startet nur noch seine Schritte; dunkler Hintergrund der Führung deckt den ganzen Bildschirm (`html.touring`); manifest nutzt `icon-180.png`, Name «sEBU smarter EinkaufsBerater»; Rezept «Risottoreis». CLAUDE.md-Slogan aktualisiert.
