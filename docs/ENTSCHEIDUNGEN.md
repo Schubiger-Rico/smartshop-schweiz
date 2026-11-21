@@ -448,7 +448,7 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 
 ### Notiz vom 21.11.2026 (abends): Erinnerung ein-/ausschaltbar (nur festgehalten, noch nicht gebaut)
 
-- Der Knopf «🔔 Erinnerung beim Wegfahren» soll ein- und ausschaltbar sein (Vorschlag: in der Sparte «Einkaufsliste» als weiterer Schalter, bei «Einfach» aus; evtl. 🧭 Navigation ebenso).
+- Der Knopf «🔔 Erinnerung beim Wegfahren» soll ein- und ausschaltbar sein (entschieden: in der Sparte «Einkaufsliste» als weiterer Schalter, bei «Einfach» aus; 🧭 Navigation bekommt ebenfalls einen eigenen Schalter, bei «Einfach» aus).
 - Rico fragte, ob er Google Maps selbst anwählen muss: Nein, 🧭 öffnet Google Maps direkt (App, falls installiert, sonst Safari). Bei 🔔 öffnet sich das Teilen-Menü, dort wählt man «Erinnerungen».
 - **Problem (21.11. abends):** Nach «Einkauf beenden» → 🔔 musste Rico im Teilen-Menü «Erinnerungen» suchen. Eine Web-App darf nicht direkt in Erinnerungen schreiben.
 - Lösungsideen: (a) einmalig einen iPhone-Kurzbefehl «sEBU Erinnerung» einrichten; die App ruft ihn direkt auf (`shortcuts://run-shortcut?name=…&input=text`), er legt die Erinnerung ohne Teilen-Menü an. (b) Hinweis «Erinnerungen» im Teilen-Menü als Favorit nach vorne schieben (Teilen-Menü → «Bearbeiten»). Entschieden: (a) als abschaltbare Option in den Einstellungen mit Schritt-für-Schritt-Anleitung vorsehen; (b) als Tipp in der Anleitung.
