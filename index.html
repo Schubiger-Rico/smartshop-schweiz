@@ -126,7 +126,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{}}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -396,9 +396,9 @@ function banner(){
  if(cur)return'<div class="ban"><span>📍 <b>'+esc(cur.name)+'</b>'+(cur.d!=null?' · '+cur.d+' m':'')+'</span><button class="btn sq" data-a="no" aria-label="'+t('Filiale verwerfen')+'">✕</button></div>'
   +(S.set.cats&&S.items.length?'<div class="ban"><span class="small">'+esc(catsLine())+'</span></div>':'');
  return''}
-function shopBar(){
- if(S.shop)return'';
- return'<div class="seg" style="margin-bottom:.5em"><button class="btn" id="shopbtn" data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button><button class="btn sq camb" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button></div>'}
+function shopBar(pv){
+ if(S.shop&&!pv)return'';var b=on('bar'),c=on('cam');if(!b&&!c)return'';var x=pv?'':' id="shopbtn"';
+ return'<div class="seg" style="margin-bottom:.5em">'+(b?'<button class="btn"'+x+' data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button>':'')+'</div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
@@ -411,24 +411,38 @@ function askBar(){var i=ask&&findItem(ask);if(!i)return'';
  return'<div class="ban" style="display:block"><div>'+t('Wohin gehört «{0}»?',esc(i.name))+'</div><div class="sug" style="margin:.4em 0">'+mains().map(function(c){return'<button class="chip" data-a="askcat" data-c="'+c.id+'">'+esc(c.icon)+' '+esc(cname(c))+'</button>'}).join('')+'</div><div class="seg"><input class="field" id="askal" placeholder="'+t('Meint das Gleiche wie … (optional)')+'" style="flex:1 1 8em"><button class="btn" data-a="askskip">'+t('Überspringen')+'</button></div></div>'}
 function card(i){
  if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
- return'<div class="card" data-sw="'+i.id+'" data-swk="i"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button><span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
+ return'<div class="card" data-sw="'+i.id+'" data-swk="i">'+(on('cat')?'<button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button>':'')+'<span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
   +(S.set.dm==='off'||(S.set.dm==='always'&&!dealsFor(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
-  +'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>'
+  +(on('fav')?'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>':'')
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
+/* Ansicht der Einkaufsliste: Einfach / Umfänglich / Manuell, jedes Element einzeln */
+var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
+function on(k){if(k==='fire')return S.set.dm!=='off';if(k==='catline')return !!S.set.cats;var o=S.set.show||{};return o[k]!==false}
+function setOn(k,v){if(k==='fire'){S.set.dm=v?(S.set.dmLast||'manual'):'off';if(!v&&S.set.dm!=='off')S.set.dmLast=S.set.dm;return}if(k==='catline'){S.set.cats=v;return}S.set.show=S.set.show||{};S.set.show[k]=v}
+function setView(m){S.set.view=m;if(m==='manual')return;var simple=m==='simple';
+ if(S.set.dm!=='off')S.set.dmLast=S.set.dm;VEL.forEach(function(e){setOn(e[0],simple?e[0]==='cat':true)})}
+function viewBlock(){var v=S.set.view||'full',h='<div class="seg">'+[['simple','Einfach'],['full','Umfänglich'],['manual','Manuell']].map(function(o){return'<button class="btn'+(v===o[0]?' pri':'')+'" data-a="viewmode" data-v="'+o[0]+'">'+t(o[1])+'</button>'}).join('')+'</div>'
+  +'<p class="small mute">'+t(v==='simple'?'Einfach: nur das Nötigste. Eingabefeld, Menge, ＋ und ✓. Gut für alle, die einfach eine Liste wollen.':v==='full'?'Umfänglich: alle Hilfen sind sichtbar. Gut, wenn du alles nutzen möchtest.':'Manuell: Du wählst unten selbst, was erscheint.')+' '+t('Wenn dir etwas fehlt, schalte es unten einzeln ein.')+'</p>';
+ var pi={id:'pv',name:t('Milch'),qty:1,unit:'lt',fire:true,cat:'m1',sub:'m1s0',why:''};
+ h+='<h3>'+t('Vorschau')+'</h3><div class="pv" style="pointer-events:none;border:1px dashed var(--line);border-radius:.7em;padding:.5em">'+shopBar(1)+addRow()+card(pi)+(on('recent')?'<h3 style="margin:.4em 0 0">'+t('Letzte Produkte')+'</h3>':'')+(on('catline')?'<p class="small mute" style="margin:.3em 0 0">'+t('Milchprodukte (1)')+'</p>':'')+'</div><h3>'+t('Einzeln wählen')+'</h3>';
+ VEL.forEach(function(e){h+='<div class="row" style="flex-wrap:nowrap"><span style="flex:1">'+e[1]+' '+t(e[2])+'<br><span class="small mute">'+t(e[3])+'</span></span>'+sw('v_'+e[0],on(e[0]))+'</div>'});
+ return h}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
 function curMatch(i){if(!hasShop(i))return true;if(!cur)return false;var c=cur.chain||cur.name;if(i.stores&&(i.stores.indexOf(c)>-1||i.stores.indexOf(cur.name)>-1))return true;var x=(i.stext||'').toLowerCase().trim();return !!x&&(cur.name.toLowerCase().indexOf(x)>-1||x.indexOf(cur.name.toLowerCase())>-1)}
 function shopLbl(){var tp=draft.type&&typeOf(draft.type);return tp?tp.icon:(draft.stores.length?'🏪'+draft.stores.length:'🏪')}
+function addRow(real){var has=draft.type||draft.stores.length||draft.stext,id=function(x){return real?' id="'+x+'"':''};
+ return'<div class="add">'+(on('cat')?'<button class="ic"'+id('catb')+' data-a="catpick" data-id="draft" aria-label="'+t('Kategorie')+'">'+esc(real?draftIcon():'🥛')+'</button>':'')
+  +'<input class="field nm"'+id('dn')+' placeholder="'+t('Produkt hinzufügen')+'" value="'+(real?esc(draft.n):'')+'" autocomplete="off" enterkeyhint="done"'+(real?'':' tabindex="-1"')+'>'
+  +'<button class="btn qu" data-a="qty" data-id="draft" aria-label="'+t('Menge und Einheit')+'">'+esc((draft.q||'0')+' '+draft.u)+'</button>'
+  +(on('shop')?'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'" style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</button>':'')
+  +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div>'}
 function vList(){
  var h=banner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
  if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
- h+='<div class="add"><button class="ic" id="catb" data-a="catpick" data-id="draft" aria-label="'+t('Kategorie')+'">'+esc(draftIcon())+'</button>'
-  +'<input class="field nm" id="dn" placeholder="'+t('Produkt hinzufügen')+'" value="'+esc(draft.n)+'" autocomplete="off" enterkeyhint="done">'
-  +'<button class="btn qu" data-a="qty" data-id="draft" aria-label="'+t('Menge und Einheit')+'">'+esc((draft.q||'0')+' '+draft.u)+'</button>'
-  +'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'" style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</button>'
-  +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div><div id="sug" class="sug">'+sugHtml()+'</div>';
+ h+=addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
  var mineI=sortedItems().filter(inTab);
  if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
  else h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
@@ -436,6 +450,7 @@ function vList(){
  if(ltab==='food'){var vis=mineI.filter(function(i){return curMatch(i)||i.today===ld()}),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
   if(nh)h+='<p class="small mute" style="margin:.3em 0 .6em">🏪 '+t('{0} Produkte warten auf ihren Laden.',nh)+' <button class="chip" data-a="nav" data-v="shops">'+t('Anzeigen')+'</button></p>'}
  else S.types.forEach(function(tp){var l=mineI.filter(function(i){return(typeOf(i.type)?i.type:'sonst')===tp.id});if(!l.length)return;h+='<h3>'+tp.icon+' '+esc(tname(tp))+'</h3>';l.forEach(function(i){h+=row(i)})});
+ if(!on('recent'))return h;
  h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2><span class="seg">'+selH('recN',[['10','10'],['20','20'],['50','50'],['100','100'],['all',t('Alle')]])+selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]])+'</span></div>';
  var rl=recList();
  if(!rl.length)h+='<div class="empty">'+t('Abgehakte Produkte erscheinen hier und lassen sich zurückholen.')+'</div>';
@@ -647,7 +662,7 @@ function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty(
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
-var SUBS=[['profil','👤','Profil'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
+var SUBS=[['profil','👤','Profil'],['liste','🧾','Einkaufsliste'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
 function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'" role="button" aria-label="'+c+'"></i>'}
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
@@ -657,6 +672,7 @@ function vSettings(){
  switch(sub){
  case'profil':h+=rowS(t('Name'),'<input class="field" data-chg="pname" value="'+esc(S.ob.name)+'" placeholder="'+t('freiwillig')+'">')+rowS(t('Nutzung'),'<select class="field" data-chg="ptype">'+['Privat','Familie','Verein','Geschäft'].map(function(o){return'<option'+(S.ob.type===o?' selected':'')+' value="'+o+'">'+t(o)+'</option>'}).join('')+'</select>');
   h+='<p class="small mute">'+t('Der Name dient nur für persönliche Texte in der App.')+'</p>';break;
+ case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock();break;
  case'look':h+='<div class="row"><label for="fs">'+t('Textgrösse')+': <b id="fsv">'+S.set.fs+'</b> px</label></div><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'">'
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
@@ -780,6 +796,9 @@ function SA(name,steps){AREAS.push([name,steps,1])}
 SA('Profil',[
  ss('profil','row:Name','Dein Name ist freiwillig und dient nur für persönliche Texte.'),
  ss('profil','row:Nutzung','Privat, Familie, Verein oder Geschäft. Das ist nur eine Notiz.')]);
+SA('Einkaufsliste',[
+ ss('liste','[data-a=viewmode]','Wie viel möchtest du sehen? Einfach, Umfänglich oder Manuell.','<b>Einfach:</b> nur Eingabefeld, Menge, ＋ und ✓. Für alle, die einfach eine Liste wollen.\n<b>Umfänglich:</b> alle Hilfen sind sichtbar.\n<b>Manuell:</b> du wählst selbst.\n<b>Wenn dir etwas fehlt:</b> Schalte es hier einzeln wieder ein, zum Beispiel ☆ für Favoriten.'),
+ ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.')]);
 SA('Darstellung',[
  ss('look','#fs','Textgrösse: Schiebe den Regler, die Anzeige ändert sich sofort.'),
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
@@ -830,7 +849,9 @@ var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
 var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
-function tourSteps(w){var A=AREAS;
+var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav'};
+function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':s.v==='list'?NEED[s.sel]:null;return !n||on(n)})}
+function tourSteps0(w){var A=AREAS;
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
  if(w==='set'||w==='6')return[].concat.apply([],A.filter(function(a){return a[2]}).map(function(a){return a[1]}));
@@ -859,6 +880,7 @@ function tourGuard(e){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var 
 function vOnb(){var p=S.ob.ph,h='<div style="padding:1em 0"><div class="brand" style="font-size:2.2em">sEBU</div><div class="sub" style="display:block;font-size:1.1em">smarter EinkaufsBerater</div>'+(p==='tour'?'':'<div class="small mute" style="margin-top:.3em;font-style:italic">'+t('Alles kann, nichts muss.')+'</div>')+'</div>';
  if(p==='name')return h+'<h2>'+t('Willkommen!')+'</h2><p>'+t('Wie darf ich dich nennen? Das ist freiwillig und dient nur für persönliche Texte.')+'</p><input class="field" id="onn" placeholder="'+t('Name')+'" value="'+esc(S.ob.name)+'" style="width:100%"><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onname">'+t('Weiter')+'</button><button class="btn" data-a="onname" data-skip="1">'+t('Überspringen')+'</button></div>';
  if(p==='size')return h+'<h2>'+t('Wie gross soll die Schrift sein?')+'</h2><p>'+t('Verschiebe den Regler, die Anzeige ändert sich sofort.')+'</p><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'"><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div><div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onsize">'+t('Weiter')+'</button></div>';
+ if(p==='view')return h+'<h2>'+t('Wie viel möchtest du sehen?')+'</h2><p>'+t('Wähle, wie ausführlich die Einkaufsliste sein soll. Du kannst es jederzeit in den Einstellungen unter «Einkaufsliste» ändern.')+'</p>'+viewBlock()+'<div class="seg" style="margin-top:.7em"><button class="btn pri" data-a="onview">'+t('Weiter')+'</button></div>';
  if(p==='tour')return h+'<h2>'+t(S.ob.name?'{0}, möchtest du eine Führung durch die App?':'Möchtest du eine Führung durch die App?',S.ob.name)+'</h2><div class="brand" style="font-size:1.35em;margin:.2em 0">'+t('Alles kann, nichts muss.')+'</div><p>'+t('Aber kurz und schmerzlos: In ein paar Minuten zeige ich dir alle Tricks. Ehrlich gesagt: Ohne Führung verpasst man vieles und denkt schnell, die App kann nichts. Dabei steckt sie voller Ideen, die du erst findest, wenn du weisst, wo sie sind. Danach kaufst du ein wie ein Profi – versprochen, ganz ohne Prüfung am Schluss. 😉')+'</p><p class="mute">'+t('Du kannst sie jederzeit in den Einstellungen starten.')+'</p><div class="seg"><button class="btn pri" data-a="ontour" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="ontour" data-v="0">'+t('Nein, danke')+'</button></div>';
  return h+'<h2>'+t('Und eine Führung durch die Einstellungen?')+'</h2><div class="seg"><button class="btn pri" data-a="onset" data-v="1">'+t('Ja, bitte')+'</button><button class="btn" data-a="onset" data-v="0">'+t('Nein, danke')+'</button></div>'}
 
@@ -902,7 +924,7 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
 var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['shops','🏪','Läden'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
 var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
-function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
+function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')&&!(n[0]==='favs'&&!on('fav'))}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
 function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter EinkaufsBerater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
 function hlTour(keep){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=tourEl(s.sel);if(e){e.classList.add('hl');if(!keep&&e.scrollIntoView){e.scrollIntoView({block:'start'});window.scrollBy(0,-60)}}tourPos(e)}
 /* Erklärfeld unter das leuchtende Feld setzen (passt es nicht, darüber; sonst unten mit Scrollen) */
@@ -926,6 +948,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'menu':menu=!menu;more=false;break;
  case'more':more=!more;break;
  case'nav':nav(D.v);return;
+ case'viewmode':setView(D.v);break;
  case'yes':if(pend)setCur(pend);break;
  case'pick':if(pick){var pf=pick[+D.v];S.learn.pick=S.learn.pick||{};S.learn.pick[pairKey(pick[0],pick[1])]=pf.name;setCur(pf)}break;
  case'pickno':if(pick){declined[pick[0].name]=1;declined[pick[1].name]=1;pick=null}break;
@@ -996,7 +1019,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'tpause':tourPause();return;
  case'tstop':tourEnd(false);return;
  case'onname':if(!D.skip)S.ob.name=fval('onn').trim();S.ob.ph='size';break;
- case'onsize':S.ob.ph='tour';break;
+ case'onsize':S.ob.ph='view';break;
+ case'onview':S.ob.ph='tour';break;
  case'ontour':if(D.v==='1'){S.ob.done=true;S.ob.offer='set';view='list';R();tourStart('app');return}S.ob.ph='settour';break;
  case'onset':S.ob.done=true;S.ob.offer=null;view='list';if(D.v==='1'){R();tourStart('set');return}break;
  case'dealphoto':{var f=document.createElement('input');f.type='file';f.accept='image/*';f.setAttribute('capture','environment');f.onchange=function(){if(f.files[0])resize(f.files[0],function(d){ki.img=d;kiDeal()})};f.click();return}
@@ -1074,6 +1098,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.mine!==undefined&&D.mine!==''&&!D.chain){var mm=S.mine[+D.mine];if(mm){mm.off=!t0.checked;save()}return}
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
  if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
+ if(D.chk&&D.chk.indexOf('v_')===0){setOn(D.chk.slice(2),t0.checked);S.set.view='manual';save();R();return}
  if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;

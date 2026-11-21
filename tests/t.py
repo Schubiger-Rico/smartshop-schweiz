@@ -5,7 +5,7 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.on('console',lambda m:errs.append(m.text) if m.type=='error' and 'net::' not in m.text else None)
     pg.goto('file://'+__import__('os').getcwd()+'/index.html');pg.wait_for_timeout(500)
-    pg.click('[data-a=onname][data-skip]');pg.click('[data-a=onsize]');pg.click('[data-a=ontour][data-v="0"]');pg.click('[data-a=onset][data-v="0"]')
+    pg.click('[data-a=onname][data-skip]');pg.click('[data-a=onsize]');pg.click('[data-a=onview]');pg.click('[data-a=ontour][data-v="0"]');pg.click('[data-a=onset][data-v="0"]')
     pg.fill('#dn','Rüebli');pg.click('[data-a=qty]');pg.fill('#qm','2');pg.click('[data-a=qtyok]');pg.click('[data-a=add]')
     pg.fill('#dn','Zopfmehl');pg.click('[data-a=add]')
     pg.fill('#dn','Xyzzy');pg.click('[data-a=add]')

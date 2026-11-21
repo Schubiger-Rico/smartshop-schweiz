@@ -437,3 +437,11 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - In den Einstellungen eine **eigene Sparte «Einkaufsliste»** dafür.
 - **Änderungen sind live sichtbar** (Vorschau der Liste direkt beim Umschalten).
 - Entschieden: Die Abfrage kommt auch bei der Begrüssung beim ersten Start, gleich nach der Schriftgrösse (mit Live-Vorschau der Liste).
+
+### Umgesetzt am 21.11. (abends): Ansicht Einfach / Umfänglich / Manuell
+
+- Neue Einstellungen-Sparte «🧾 Einkaufsliste» und neue Begrüssungs-Seite «Wie viel möchtest du sehen?» (nach der Schriftgrösse).
+- Einfach: nur Eingabefeld, Kategorie-Symbol, Menge, ＋ und ✓. Umfänglich: alles. Manuell: selbst wählen; jede einzelne Änderung schaltet auf «Manuell».
+- Einzeln schaltbar: Kategorie-Symbol, Favoriten (☆ und Menüpunkt), Aktionen 🔥, 🏪 bei der Eingabe, 🛒/📍/🔄, 📷, Letzte Produkte, Kategorien-Zeile.
+- Live-Vorschau direkt unter der Auswahl. Bestehende Nutzer: Umfänglich (keine Änderung).
+- Führungen überspringen Schritte zu ausgeblendeten Elementen.
