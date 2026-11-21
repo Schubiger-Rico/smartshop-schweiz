@@ -82,6 +82,7 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 .tc .tmb{border:2px solid var(--acc);font-weight:700;background:color-mix(in srgb,var(--acc) 14%,var(--card))}
 .tc .tm p{margin:.35em 0}
 .tc>.card>.seg{position:sticky;bottom:-.1em;background:var(--card);padding:.3em 0}
+.tb{background:#ffe066;color:#3a2e00;border:2px dashed #b38f00;border-radius:.8em;padding:.7em .9em;margin:.2em 0 .8em}.tbh{font-weight:800;font-size:1.3em;margin-bottom:.2em}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -435,6 +436,11 @@ function remBlock(){if(!on('remind'))return'';
   +'<details class="card" style="display:block"><summary><b>'+t('Anleitung: Kurzbefehl einrichten (einmalig, etwa 2 Minuten)')+'</b></summary><ol class="small" style="padding-left:1.3em">'
   +['Öffne die App «Kurzbefehle» und tippe oben rechts auf ＋.','Tippe oben auf den Namen und nenne den Kurzbefehl genau «{0}».','Tippe auf «Aktion hinzufügen», suche «Erinnerung» und wähle «Erinnerung hinzufügen».','Tippe auf das blaue Wort «Erinnerung» in der Aktion und wähle «Kurzbefehleingabe».','Falls du an einem Ort erinnert werden willst: Tippe in der Aktion auf den Pfeil und wähle beim Erinnern einen Ort, zum Beispiel «Beim Verlassen» deines Ladens. Nicht jede iOS-Version bietet das an.','Tippe auf «Fertig». Schalte oben «Über Kurzbefehl» ein.'].map(function(x){return'<li>'+t(x,esc(S.set.scName||'sEBU Erinnerung'))+'</li>'}).join('')
   +'</ol><p class="small"><b>'+t('Wenn es nicht klappt:')+'</b> '+t('Der Name muss genau gleich sein wie oben eingetragen, auch Gross- und Kleinschreibung. Oder schalte «Über Kurzbefehl» aus, dann kommt wieder das Teilen-Menü.')+'</p></details>'}
+/* Test-Hinweise in unfertigen Bereichen */
+var WIPQ=['Hier wird noch geschraubt – die Einkaufswagen stehen schon Schlange.','Diese Abteilung ist noch im Umbau. Bitte nicht über die Kartonschachteln stolpern.','Unser Entwickler und die KI sind dran. Die Milch ist schon kalt gestellt.','Gut Ding will Weile haben – wie ein richtiger Zopfteig.','Noch in Arbeit. Aktion: 100 % Geduld, 0 % Aufpreis.'],
+ DEALQ=['Wir hätten sogar schon den Rotstift gespitzt.','Dieser Platz ist frei – wie ein Parkplatz am Samstag um 10 Uhr: selten und sehr begehrt.','Unsere Nutzer haben die Taschen schon gepackt – leider noch leer.','Sonst kaufen die Leute am Ende noch zum vollen Preis. Undenkbar!','Und zwar dann, wenn die Kundschaft gerade vor dem Regal steht. Smart, oder?'],tbKey='',tbI=0;
+function testBan(deals){if(S.set.testBan===false)return'';var k=view+'/'+sub;if(k!==tbKey){tbKey=k;tbI=Math.floor(Math.random()*1000)}var L=deals?DEALQ:WIPQ;
+ return'<div class="tb"><div class="tbh">'+(deals?'🚧 '+t('Hier könnten Ihre Aktionen stehen!'):'🚧 '+t('TEST: Ist noch in Arbeit'))+'</div><div>'+t(L[tbI%L.length])+'</div></div>'}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
@@ -684,7 +690,7 @@ function vSettings(){
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#39FF14','#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
-  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>';break;
+  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
  case'lang':h+='<div class="seg">'+Object.keys(LANGS).map(function(k){return'<button class="btn'+(S.set.lang===k?' sel':'')+'"'+(k==='de'?' data-a="lang" data-v="de"':' disabled')+'>'+LANGS[k]+(k==='de'?'':' · '+t('bald verfügbar'))+'</button>'}).join('')+'</div>';break;
  case'cats':h+=vCatsAdm();break;
  case'favs':h+=rowS(t('Automatisch Favorit nach'),selH('favAfter',[['3','3 '+t('Käufen')],['5','5 '+t('Käufen')],['10','10 '+t('Käufen')],['off',t('Aus')]]))
@@ -811,7 +817,8 @@ SA('Darstellung',[
  ss('look','#fs','Textgrösse: Schiebe den Regler, die Anzeige ändert sich sofort.'),
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
  ss('look','row:Menü','Minimal, Normal oder Gross.','Bei «Minimal» sind die Menüknöpfe klein, bei «Gross» besonders gross.'),
- ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.')]);
+ ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.'),
+ ss('look','row:Test-Hinweise anzeigen','Gelbe «🚧 TEST»-Schilder in Bereichen, die noch nicht fertig sind.','Wofür geeignet: Eingeschaltet weisst du, wo noch gebaut wird. Ausgeschaltet ist die App ruhiger.\nWenn dich die Schilder stören: Schalte sie hier aus.')]);
 SA('Sprache',[ss('lang','#app .seg','Zurzeit gibt es Deutsch. Weitere Sprachen folgen.')]);
 SA('Favoriten und Letzte Produkte',[
  ss('favs','row:Automatisch Favorit nach','Nach wie vielen Käufen ein Produkt automatisch Favorit wird.'),
@@ -945,6 +952,7 @@ function R(){applyLook();var a=$('#app');if(!a)return;
  if(!S.ob.done){a.innerHTML=vOnb();save();return}
  var b='';switch(view){case'list':b=(S.ob.name?'<p class="mute small" style="margin:0 0 .4em">'+t('Hallo {0}',esc(S.ob.name))+'</p>':'')+vList();break;case'favs':b=vFavs();break;case'shops':b=vShops();break;case'deals':b=vDeals();break;case'ideas':b=vIdeas();break;case'settings':b=vSettings();break;
   case'advice':b=vAdvice();break;case'events':b=vEvents();break;case'stamm':b=vStamm();break;case'kipro':b=vKipro();break;case'test':b=vTest();break;default:b=vList()}
+ var tw=['ideas','events','stamm','kipro'].indexOf(view)>-1||(view==='settings'&&(sub==='plan'||sub==='lang'));if(tw)b=testBan()+b;else if(view==='deals')b=testBan(1)+b;
  a.innerHTML=head()+b+sheetHtml()+tourCard();save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 
