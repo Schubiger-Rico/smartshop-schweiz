@@ -395,3 +395,10 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Die Wahl wird für genau dieses Läden-Paar gemerkt (`S.learn.pick`); beim nächsten Mal wählt die App ohne Nachfrage. «Gelerntes löschen» setzt das zurück.
 - «Keiner» lehnt beide bis zum nächsten 🔄 ab. Ist man schon in einem der beiden Läden, wird nicht gefragt. Gilt auch bei Filialerkennung «Automatisch».
 - Test: `tests/t10.py`.
+
+### Notiz vom 21.11.2026 (abends): Führungen verbessern (nur festgehalten, noch nicht gebaut)
+
+- **Einstellungen-Führung, Schritt 24:** Die Erklärung liegt über dem Button (verdeckt ihn vermutlich) – Erklärung so platzieren, dass der Button frei bleibt.
+- **Knopf «Mehr»** auffälliger gestalten.
+- **Text unter «Mehr» strukturierter:** z. B. bei 25 / 50 / 100 / 250 m je einen eigenen Absatz, damit es übersichtlicher wird.
+- **App-Führung:** Zuerst die Eingabeseite genau erklären, Schritt für Schritt. Erst danach den Rest.
