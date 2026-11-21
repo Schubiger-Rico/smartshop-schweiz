@@ -488,3 +488,11 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Gelbes Schild «🚧 TEST: Ist noch in Arbeit» mit wechselndem Spruch in Ideen, Anlässe, Stammartikel, Premium-KI, Abo und Sprache.
 - Bei Aktionen «🚧 Hier könnten Ihre Aktionen stehen!» mit den fünf gewählten Sprüchen.
 - Abschaltbar unter Darstellung → «Test-Hinweise anzeigen». Das kleine «TEST»-Schild neben dem Titel ist nicht gebaut (durch die Menü-Hinweise ersetzt).
+
+### Durchsicht 21.11.2026 (abends): Auffälligkeiten (nur festgehalten)
+
+- **Fehler:** Einstellungen → Einführung → Bereich «Filialen» startet die ganze Einstellungen-Führung statt nur «Filialen» (alter Sonderfall `w==='6'` in `tourSteps`).
+- **Führung:** Der dunkle Hintergrund deckt bei kurzen Seiten den unteren Bildschirmteil nicht ab (grauer Streifen unten).
+- **Symbol im manifest.json:** noch das alte hellgrüne «SEBU»-Bild und alte Themenfarbe; passt nicht zum neuen neon-grünen Symbol (betrifft v. a. Android).
+- **Rezept Risotto:** Zutat heisst «Risotto», besser «Risottoreis».
+- CLAUDE.md-Slogan noch alt («sEBU der smarte Einkaufsberater»).
