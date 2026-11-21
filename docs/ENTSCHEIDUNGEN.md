@@ -445,3 +445,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Einzeln schaltbar: Kategorie-Symbol, Favoriten (☆ und Menüpunkt), Aktionen 🔥, 🏪 bei der Eingabe, 🛒/📍/🔄, 📷, Letzte Produkte, Kategorien-Zeile.
 - Live-Vorschau direkt unter der Auswahl. Bestehende Nutzer: Umfänglich (keine Änderung).
 - Führungen überspringen Schritte zu ausgeblendeten Elementen.
+
+### Notiz vom 21.11.2026 (abends): Erinnerung ein-/ausschaltbar (nur festgehalten, noch nicht gebaut)
+
+- Der Knopf «🔔 Erinnerung beim Wegfahren» soll ein- und ausschaltbar sein (Vorschlag: in der Sparte «Einkaufsliste» als weiterer Schalter, bei «Einfach» aus; evtl. 🧭 Navigation ebenso).
+- Rico fragte, ob er Google Maps selbst anwählen muss: Nein, 🧭 öffnet Google Maps direkt (App, falls installiert, sonst Safari). Bei 🔔 öffnet sich das Teilen-Menü, dort wählt man «Erinnerungen».
