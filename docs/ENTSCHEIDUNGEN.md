@@ -433,3 +433,7 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Vorschlag: Schalter in Einstellungen → «Favoriten und Letzte Produkte». Entschieden: Wenn aus, verschwindet auch der Menüpunkt «Favoriten» (wie bei Aktionen «aus»).
 - Weitere Symbole, auf die man verzichten könnte (Liste für Rico, noch nichts entschieden): 🏪 Laden bei der Eingabe, 📷 Ratgeber, 🛒 Einkauf starten / 📍 Laden wählen / 🔄, «Letzte Produkte» unter der Liste. Bereits abschaltbar: 🔥 (Aktionen «aus»), Kategorien-Zeile.
 - Idee: ein Schalter «Einfache Ansicht», der alle diese Symbole auf einmal ausblendet (einzeln wieder einschaltbar).
+- **Ergänzung (21.11. abends):** Statt einem einzelnen Schalter eine **Abfrage mit drei Stufen**: «Einfach» (nur das Nötigste), «Umfänglich» (alles sichtbar), «Manuell» (selbst einzeln wählen). Danach ist jedes Symbol/Element einzeln ein- und ausschaltbar.
+- In den Einstellungen eine **eigene Sparte «Einkaufsliste»** dafür.
+- **Änderungen sind live sichtbar** (Vorschau der Liste direkt beim Umschalten).
+- Offen: Ob die Abfrage auch bei der Begrüssung beim ersten Start kommt (Vorschlag: ja, nach der Schriftgrösse).
