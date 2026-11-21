@@ -14,7 +14,7 @@ Besitzer: Rico Schubiger (GitHub `Schubiger-Rico`), Schweiz, Deutsch. Er arbeite
 
 ## Dateien
 - `index.html` – die ganze App (HTML + CSS + ein JS in einer IIFE am Ende). **Quelle der Wahrheit, direkt hier ändern.**
-- `manifest.json`, `sw.js`, `icon-180.png` – PWA. Das Symbol ist neon-grünes «sEBU» auf dunklem Grund (apple-touch-icon).
+- `manifest.json`, `sw.js`, `icon-180.png` – PWA. `sw.js` lädt eigene Dateien immer frisch (no-cache), offline aus dem Speicher. Das Symbol ist neon-grünes «sEBU» auf dunklem Grund (apple-touch-icon).
 - `docs/ENTSCHEIDUNGEN.md` – alle Entscheide, Wünsche, offene Punkte (ausführlich, zuerst lesen!). `ROADMAP.md` – ältere Roadmap.
 - `tests/t*.py` – Playwright-Tests (Python). Aufruf im Repo-Hauptordner: `python3 tests/t.py` (sie öffnen `index.html` per file:// aus dem aktuellen Ordner; Chromium + playwright sind vorinstalliert). Jeder Test endet mit `[]` = keine JS-Fehler. t.py allgemein+Tour, t2 Teilen (zwei Handys, Firebase gemockt), t3 Ladentypen/Overpass gemockt, t4 Läden/Ketten/eigene Läden, t5 Aktionen-Modi, t6 App-Tour, t7 Einstellungs-Tour, t8 «← Liste»/«Immer», t9 Einkaufsende «Noch offen», t10 «Welcher Laden?», t11 Ansicht Einfach/Umfänglich/Manuell, t12 Test-Hinweise «🚧», t13 Rückgängig/Sicherung/Strichcode (Firebase und Open Food Facts gemockt).
 - Falls `playwright` fehlt: `pip install playwright`, dann Chromium-Pfad `/opt/pw-browsers/chromium` als `executable_path` übergeben (nicht `playwright install`).
