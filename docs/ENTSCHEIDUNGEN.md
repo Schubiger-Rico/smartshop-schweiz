@@ -430,4 +430,6 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 ### Notiz vom 21.11.2026 (abends): Favoriten ausschaltbar (nur festgehalten, noch nicht gebaut)
 
 - Für alle, die es möglichst unkompliziert wollen: Favoriten in der Liste ausschaltbar. Wenn aus, erscheint kein ☆-Symbol bei den Produkten.
-- Vorschlag: Schalter in Einstellungen → «Favoriten und Letzte Produkte». Offene Frage: Soll dann auch der Menüpunkt «Favoriten» verschwinden (wie bei Aktionen «aus»)?
+- Vorschlag: Schalter in Einstellungen → «Favoriten und Letzte Produkte». Entschieden: Wenn aus, verschwindet auch der Menüpunkt «Favoriten» (wie bei Aktionen «aus»).
+- Weitere Symbole, auf die man verzichten könnte (Liste für Rico, noch nichts entschieden): 🏪 Laden bei der Eingabe, 📷 Ratgeber, 🛒 Einkauf starten / 📍 Laden wählen / 🔄, «Letzte Produkte» unter der Liste. Bereits abschaltbar: 🔥 (Aktionen «aus»), Kategorien-Zeile.
+- Idee: ein Schalter «Einfache Ansicht», der alle diese Symbole auf einmal ausblendet (einzeln wieder einschaltbar).
