@@ -27,7 +27,7 @@ Besitzer: Rico Schubiger (GitHub `Schubiger-Rico`), Schweiz, Deutsch. Er arbeite
 - Ladenerkennung: GPS + Overpass/OpenStreetMap (`out bb tags`), Ketten-Liste `CHB` (46 Ketten inkl. Otto's, Landi, Manor, Jumbo, Apodro …), Radius `auto` (Ladengrösse aus OSM, GPS-Genauigkeit, nächster gewinnt, Gleichstand <15 m → Nachfrage «Welcher Laden?», Wahl wird gemerkt) oder 25/50/100/250 m; eigene Läden mit eigenem Radius.
 - Während eines Einkaufs (`S.shop`) keine Laden-Vorschläge (🔄 manuell geht). Einkaufsende zeigt «Noch offen» (Heute noch merken / Später / 🔔 Erinnerung beim Wegfahren per Teilen-Text / 🧭 Navigation = Google-Maps-Link).
 - Aktionen (🔥): Modi automatisch / manuell / immer / aus. Teilen über Firebase RTDB (optional). KI-Ratgeber über Anthropic-API (optional, Schlüssel nur lokal beim Nutzer).
-- Menü: Läden steht in der Hauptnavigation (wie Favoriten). Titel «sEBU», Untertitel «smarter Einkaufsberater» (kleines s), Schrift Baloo 2 kursiv, Neon-Grün `#39FF14` mit dunkelgrünem Rand `#0a5c00`. Slogan: «sEBU der smarte Einkaufsberater. Alles kann, nichts muss.»
+- Menü: Läden steht in der Hauptnavigation (wie Favoriten). Titel «sEBU», Untertitel «smarter EinkaufsBerater» (kleines s, grosses B, etwas grösser als früher), Schrift Baloo 2 kursiv, Neon-Grün `#39FF14` mit dunkelgrünem Rand `#0a5c00`. Slogan: «sEBU der smarte Einkaufsberater. Alles kann, nichts muss.»
 - iPhone-Homescreen-App hat eigenen Speicher (Backup/Restore über Text in den Einstellungen).
 - Die Umgebung hat evtl. kein Internet für pip/npm; Fonts (Baloo 2) sind nicht lokal installierbar.
 

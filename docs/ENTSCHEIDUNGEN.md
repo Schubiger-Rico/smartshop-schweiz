@@ -421,3 +421,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 
 - Untertitel mit grossem B: «smarter EinkaufsBerater» (vermutet, Bestätigung offen).
 - Grössenverhältnis: «sEBU» bleibt gleich gross, der Untertitel wird ein wenig grösser.
+
+### Umgesetzt am 21.11. (abends): Einführungstext und Titel
+
+- Begrüssung, Seite «Möchtest du eine Führung durch die App?»: Slogan «Alles kann, nichts muss.» als eigene Zeile in Titelfarbe, danach der Empfehlungstext (3. Fassung, «Aber kurz und schmerzlos: …»).
+- Untertitel überall «smarter EinkaufsBerater» (auch Seitentitel und manifest), Untertitel etwas grösser (.95em statt .85em), «sEBU» unverändert.
