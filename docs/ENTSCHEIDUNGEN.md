@@ -513,3 +513,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Rico will Idee 4: Produktinfos aus Open Food Facts (frei, gratis, ohne Händler). Strichcode mit der Kamera scannen (oder Nummer eingeben) → Name, Marke, Menge, Nährwerte/Nutri-Score, Zutaten; Produkt mit einem Tipp auf die Liste. Später vergleichen.
 - Hinweis: Nicht jedes Schweizer Produkt ist in der Datenbank; dann «nicht gefunden» und von Hand weiter. Abschaltbar wie alles.
+- Entschieden: Scan-Knopf über 📷 beim Eingabefeld mit Wahl «Strichcode» oder «Ratgeber». Ein- und ausschaltbar (Sparte «Einkaufsliste», bei «Einfach» aus) und in Führung/Einstellungen erklärt (Wofür geeignet / Wenn es nicht klappt: Licht, Abstand, Nummer von Hand eingeben).
