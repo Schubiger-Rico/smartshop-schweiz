@@ -402,3 +402,10 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - **Knopf «Mehr»** auffälliger gestalten.
 - **Text unter «Mehr» strukturierter:** z. B. bei 25 / 50 / 100 / 250 m je einen eigenen Absatz, damit es übersichtlicher wird.
 - **App-Führung:** Zuerst die Eingabeseite genau erklären, Schritt für Schritt. Erst danach den Rest.
+
+### Umgesetzt am 21.11. (abends): Führungen verbessert
+
+- Das Erklärfeld steht jetzt **unter** dem leuchtenden Feld (passt es nicht, darüber). Die Knöpfe bleiben auch bei langem Text sichtbar.
+- Knopf «ℹ️ Mehr ▾» ist auffälliger (Rahmen in Akzentfarbe, fett).
+- Text unter «Mehr» in Absätzen (`\n` im Text = neuer Absatz): Radius (25/50/100/250 m je eigene Zeile, «Welcher Laden?» erwähnt), Aktionen-Modi, Filialerkennung.
+- App-Führung beginnt mit **«Eingabeseite»** Schritt für Schritt (Feld, Kategorie, Menge, 🏪, ＋ ausprobieren, Produktzeile, 🔥, ☆, 🛒, 🔄, 📷, ✓, Letzte Produkte), danach der Rest. App-Führung hat jetzt 47 Schritte.

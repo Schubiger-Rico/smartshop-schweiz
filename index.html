@@ -79,6 +79,9 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 .grid .ic{cursor:pointer}
 .hl{position:relative;z-index:65;box-shadow:0 0 0 .25em var(--acc),0 0 0 100vmax #0009!important;border-radius:.7em}
 .tc{position:fixed;left:0;right:0;bottom:0;z-index:70;padding:.8em;display:flex;justify-content:center;pointer-events:none}
+.tc .tmb{border:2px solid var(--acc);font-weight:700;background:color-mix(in srgb,var(--acc) 14%,var(--card))}
+.tc .tm p{margin:.35em 0}
+.tc>.card>.seg{position:sticky;bottom:-.1em;background:var(--card);padding:.3em 0}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -717,6 +720,22 @@ function st(v,sel,x,m,o){var r={v:v,sel:sel,x:x};if(m)r.m=m;for(var k in(o||{}))
 function ss(sub,sel,x,m,o){var r=st('settings',sel,x,m,o);r.sub=sub;return r}
 function mn(v,x,m,more){return st('list','.menu [data-v='+v+']',x,m,{menu:1,more:more?1:0,ro:1})}
 /* App-Führung */
+AREAS.push(['Eingabeseite',[
+ st('list','#dn','Das ist die Eingabeseite. In dieses Feld schreibst du, was du brauchst, zum Beispiel «Milch».','Beim Tippen erscheinen darunter Vorschläge aus deinen bisherigen Produkten. Ein Tipp auf einen Vorschlag übernimmt ihn.',{ro:1}),
+ st('list','#catb','Links zeigt das Symbol die Kategorie. Die App erkennt sie beim Schreiben selbst. Antippen wählt sie von Hand.','Eigene Kategorien legst du in den Einstellungen an.',{ro:1}),
+ st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
+ st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
+ st('list','.add','Jetzt probierst du es: Schreibe «Milch» und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
+ st('list','.card[data-swk=i] .ic','Jedes Produkt auf der Liste hat links sein Kategorie-Symbol. Antippen ändert die Kategorie.',0,{ro:1}),
+ st('list','.card[data-swk=i] .nm','Tippe auf den Namen, um das Produkt zu bearbeiten: Name, Menge, Laden oder Löschen.',0,{ro:1}),
+ st('list','.card[data-swk=i] .q','Die Menge antippen ändert sie direkt.',0,{ro:1}),
+ st('list','.card [data-fire]','🔥 beobachtet das Produkt und meldet Aktionen.','Ob 🔥 automatisch, manuell, immer oder gar nicht erscheint, stellst du in den Einstellungen unter «Preise und Alarme» ein.',{ro:1}),
+ st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.',{ro:1}),
+ st('list','#shopbtn','🛒 «Einkauf starten»: Die App lernt deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.\nWenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.',{ro:1}),
+ st('list','[data-a=gpsrefresh]','🔄 sucht den Laden, in dem du gerade bist, neu.','Ohne Erkennung wählst du den Laden mit «📍 Laden wählen» von Hand.\nWenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist.',{ro:1}),
+ st('list','.camb','📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.',0,{ro:1}),
+ st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.',{act:'check'}),
+ st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Rechts wählst du, wie viele erscheinen und in welcher Reihenfolge.',{ro:1})]]);
 AREAS.push(['Menü und Ansicht',[
  st('list','.ttl','Oben steht der Titel. Bei laufendem Einkauf erscheint daneben der Stopp-Knopf.','Der Stopp-Knopf zeigt den Laden, in dem du gerade einkaufst. Ein Tipp beendet den Einkauf.',{ro:1}),
  st('list','#hamb','Mit ☰ öffnest du das Menü. Alles, was die App kann, findest du dort.','In den Einstellungen unter «Darstellung» wählst du, ob das Menü minimal, normal oder gross ist.',{ro:1}),
@@ -732,13 +751,6 @@ AREAS.push(['Menü und Ansicht',[
  mn('stamm','Stammartikel: Dinge, die du regelmässig kaufst.','Die App schlägt sie vor, wenn sie wieder fällig sind.',1),
  mn('kipro','Premium-KI: einfache Prognosen aus deinem Verlauf.','Zum Beispiel, wann du etwas wieder brauchst.',1),
  mn('test','Test und Feedback: Abo-Stufen ausprobieren und Rückmeldung geben.','Es ist nichts gesperrt. Deine Rückmeldung kopierst du als Text.',1)]]);
-AREAS.push(['Liste',[
- st('list','.add','Schreibe hier ein Produkt hinein, zum Beispiel «Milch», und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
- st('list','#catb','Das Symbol zeigt die Kategorie. Sie wird automatisch erkannt. Tippe darauf, um sie zu ändern.','Eigene Kategorien legst du in den Einstellungen an.'),
- st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.'),
- st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».'),
- st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.'),
- st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.',{act:'check'})]]);
 AREAS.push(['Kategorien',[
  st('settings','.ordrow .ic','Tippe auf ein Symbol, um es zu ändern. Zur Auswahl stehen viele Emojis.',0,{sub:'cats'}),
  st('settings','[data-drag]','Am Griff ziehst du eine Kategorie an eine andere Stelle. Alternativ ▲▼.',0,{sub:'cats'}),
@@ -759,10 +771,8 @@ AREAS.push(['Favoriten und Verlauf',[
  st('favs','#app','Favoriten entstehen auch automatisch. Wie oft, stellst du in den Einstellungen ein.')]]);
 AREAS.push(['Filialen',[
  st('settings','select[data-chg=gps]','Hier schaltest du die Filialerkennung ein: Aus, Nachfragen oder Automatisch.','Die Erkennung läuft nur beim Öffnen der App oder mit 🔄. Dein Standort wird nicht gespeichert. Während eines Einkaufs schlägt die App keinen anderen Laden vor, erst wenn du den Einkauf beendest. Wenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist, und tippe auf 🔄.',{sub:'gps'}),
- st('settings','#app .row','Du bestimmst, welche Ketten erkannt werden, und kannst eigene Läden speichern.',0,{sub:'stores'}),
- st('list','#shopbtn','Mit «Einkauf starten» lernt die App deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden. Wenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.')]]);
+ st('settings','#app .row','Du bestimmst, welche Ketten erkannt werden, und kannst eigene Läden speichern.',0,{sub:'stores'})]]);
 AREAS.push(['Ratgeber',[
- st('list','.camb','📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.'),
  st('advice','#kiq','Stelle deine Frage. Die Antwort ist kurz, mit «Mehr» siehst du Details und Quellen.'),
  st('settings','#app .row','Dafür trägst du hier deinen eigenen KI-Schlüssel ein.',0,{sub:'ai'})]]);
 /* Einstellungen-Führung: jede Einstellung, direkt einstellbar */
@@ -785,8 +795,8 @@ SA('Favoriten und Letzte Produkte',[
  ss('favs','row:Vibration','Kurzes Vibrieren bei Hinweisen.'),
  ss('favs','row:Lautlos','Eine Web-App kann den Ton nicht erzwingen. Der Wert wird nur gemerkt.')]);
 SA('Filialerkennung',[
- ss('gps','row:Filialerkennung','Aus, Nachfragen oder Automatisch.','Bei «Nachfragen» erscheint oben eine Zeile, die du bestätigst. Bei «Automatisch» wechselt die App selbst.'),
- ss('gps','row:Radius','Wie nah du am Laden sein musst. «Automatisch» passt sich an: kleine Läden genau, grosse grosszügig.','Wofür geeignet: 25 m für Dorfladen, Metzger oder Hofladen. 50 m für Einkaufsstrassen und den Parkplatz vor dem Laden. 100 m für Einkaufszentren mit grossem Parkplatz. 250 m nur bei schlechtem Empfang, hier ist die Verwechslung mit Läden nebenan am wahrscheinlichsten. Wenn der Laden nicht erkannt wird: Wähle einen grösseren Radius oder «Automatisch». Wenn der falsche Laden kommt: Wähle einen kleineren. Das liegt dann an der Einstellung und nicht an der App.'),
+ ss('gps','row:Filialerkennung','Aus, Nachfragen oder Automatisch.','<b>Aus:</b> keine Erkennung.\n<b>Nachfragen:</b> oben erscheint eine Zeile, die du bestätigst.\n<b>Automatisch:</b> die App wechselt selbst.'),
+ ss('gps','row:Radius','Wie nah du am Laden sein musst. «Automatisch» passt sich an: kleine Läden genau, grosse grosszügig.','<b>Wofür geeignet:</b>\n<b>25 m:</b> Dorfladen, Metzger oder Hofladen.\n<b>50 m:</b> Einkaufsstrassen und der Parkplatz vor dem Laden.\n<b>100 m:</b> Einkaufszentren mit grossem Parkplatz.\n<b>250 m:</b> nur bei schlechtem Empfang. Hier ist die Verwechslung mit Läden nebenan am wahrscheinlichsten.\nSind zwei Läden fast gleich nah, fragt die App «Welcher Laden?».\n<b>Wenn es nicht klappt:</b>\nLaden wird nicht erkannt: Wähle einen grösseren Radius oder «Automatisch».\nDer falsche Laden kommt: Wähle einen kleineren.\nDas liegt dann an der Einstellung und nicht an der App.'),
  ss('gps','[data-a=gpsnow]','Mit diesem Knopf suchst du sofort.')]);
 SA('Filialen',[
  ss('stores','#app .row','Setze oder entferne den Haken: So bestimmst du, welche Ketten erkannt werden.'),
@@ -804,7 +814,7 @@ SA('Ladentypen',[
  ss('types','#app .card','Ladentypen wie Baumarkt oder Apotheke für Dinge ohne Eile. Mit Haken schaltest du sie ein oder aus.','Ist ein passendes Geschäft in der Nähe, erscheint oben eine Zeile.'),
  ss('types','#tn','Eigener Ladentyp: Name und Suchwort im Ladennamen.')]);
 SA('Preise und Alarme',[
- ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','Automatisch beobachtet neue Produkte von selbst. Manuell: du tippst auf 🔥. Immer: alle Produkte werden beobachtet, 🔥 erscheint nur bei einer Aktion. Aus: kein 🔥-Knopf und keine Hinweise. Wenn du zu viele Hinweise bekommst: Wähle «Manuell» oder «Aus».'),
+ ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','<b>Automatisch:</b> beobachtet neue Produkte von selbst.\n<b>Manuell:</b> du tippst auf 🔥.\n<b>Immer:</b> alle Produkte werden beobachtet, 🔥 erscheint nur bei einer Aktion.\n<b>Aus:</b> kein 🔥-Knopf und keine Hinweise.\n<b>Wenn du zu viele Hinweise bekommst:</b> Wähle «Manuell» oder «Aus».'),
  ss('price','row:Preiseinheit','Preise pro 100 g, pro kg oder automatisch.'),
  ss('price','row:Alarme pro Tag','Wie viele Aktions-Hinweise pro Tag erscheinen dürfen.')]);
 SA('KI',[
@@ -830,14 +840,14 @@ function tourStart(w,i){tour={w:w,steps:tourSteps(w),i:i||0,more:false};oopsN=0;
  if(!S.items.length){S.items.push({id:'tour',name:t('Beispiel Milch'),qty:1,unit:'lt',fire:false,cat:'m1',sub:'m1s0',why:'',tour:true})}
  menu=false;sh=null;tourShow()}
 function tourShow(){if(!tour)return;var s=tour.steps[tour.i];if(!s){tourEnd(true);return}view=s.v;sub=s.sub||'main';sh=null;menu=!!s.menu;more=!!s.more;tour.more=false;oopsN=0;R();
- setTimeout(function(){var e=tourEl(s.sel);if(e){e.classList.add('hl');e.scrollIntoView({block:'center'})}},30)}
+ setTimeout(function(){hlTour()},30)}
 function tourNext(){if(!tour)return;tour.i++;tourShow()}
 function tourEv(n){if(tour&&tour.steps[tour.i]&&tour.steps[tour.i].act===n)setTimeout(tourNext,250)}
 function tourPause(){S.ob.t=tour?{w:tour.w,i:tour.i}:null;tour=null;menu=false;more=false;clean();R();say(t('Pausiert. Du findest «Fortsetzen» in den Einstellungen unter «Einführung».'))}
 function clean(){S.items=S.items.filter(function(i){return !i.tour});$$('.hl').forEach(function(e){e.classList.remove('hl')})}
 function tourEnd(done){tour=null;menu=false;more=false;S.ob.t=null;clean();view='list';sub='main';if(S.ob.offer==='set'){S.ob.done=false;S.ob.ph='settour';S.ob.offer=null}R();if(done)say('🏆 '+t(ENDS[Math.floor(Math.random()*ENDS.length)]))}
 function tourCard(){if(!tour)return'';var s=tour.steps[tour.i];if(!s)return'';
- return'<div class="tc"><div class="card"><div class="small mute">'+t('Schritt {0} von {1}',tour.i+1,tour.steps.length)+'</div><p style="margin:.3em 0">'+t(s.x)+'</p>'+(s.m&&tour.more?'<p class="small" style="margin:.3em 0">'+t(s.m)+'</p>':'')+'<div class="seg">'+(s.act?'':'<button class="btn pri" data-a="tnext">'+t('Weiter')+'</button>')+(s.m?'<button class="btn" data-a="tmore">'+t(tour.more?'Weniger':'Mehr')+'</button>':'')+(tour.i>0?'<button class="btn" data-a="tprev">'+t('Zurück')+'</button>':'')+'<button class="btn" data-a="tpause">'+t('Pause')+'</button><button class="btn" data-a="tstop">'+t('Beenden')+'</button></div></div></div>'}
+ return'<div class="tc"><div class="card"><div class="small mute">'+t('Schritt {0} von {1}',tour.i+1,tour.steps.length)+'</div><p style="margin:.3em 0">'+t(s.x)+'</p>'+(s.m&&tour.more?'<div class="small tm">'+t(s.m).split('\n').map(function(x){return'<p>'+x+'</p>'}).join('')+'</div>':'')+'<div class="seg">'+(s.act?'':'<button class="btn pri" data-a="tnext">'+t('Weiter')+'</button>')+(s.m?'<button class="btn tmb" data-a="tmore">'+(tour.more?'▴ '+t('Weniger'):'ℹ️ '+t('Mehr')+' ▾')+'</button>':'')+(tour.i>0?'<button class="btn" data-a="tprev">'+t('Zurück')+'</button>':'')+'<button class="btn" data-a="tpause">'+t('Pause')+'</button><button class="btn" data-a="tstop">'+t('Beenden')+'</button></div></div></div>'}
 function tourGuard(e){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var tc=e.target.closest&&e.target.closest('.tc');if(tc)return;var el=e.target.closest&&e.target.closest('.hl');
  if(el&&s.ro){e.preventDefault();e.stopPropagation();return}
  if(el)return;
@@ -894,12 +904,18 @@ var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','�
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
 function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter Einkaufsberater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></header>'}
-function hlTour(){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=tourEl(s.sel);if(e){e.classList.add('hl');if(e.scrollIntoView)e.scrollIntoView({block:'center'})}}
+function hlTour(keep){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=tourEl(s.sel);if(e){e.classList.add('hl');if(!keep&&e.scrollIntoView){e.scrollIntoView({block:'start'});window.scrollBy(0,-60)}}tourPos(e)}
+/* Erklärfeld unter das leuchtende Feld setzen (passt es nicht, darüber; sonst unten mit Scrollen) */
+function tourPos(e){var tc=$('.tc');if(!tc)return;var c=tc.firstElementChild,H=window.innerHeight;tc.style.top='';tc.style.bottom='';if(c){c.style.maxHeight='';c.style.overflowY=''}
+ if(!e||!c)return;var r=e.getBoundingClientRect(),h=tc.offsetHeight;
+ if(r.bottom+h<=H){tc.style.top=Math.max(0,r.bottom)+'px';tc.style.bottom='auto'}
+ else if(r.top-h>=0){tc.style.top=(r.top-h)+'px';tc.style.bottom='auto'}
+ else{var top=Math.max(0,Math.min(r.bottom,H-160));tc.style.top=top+'px';tc.style.bottom='auto';c.style.maxHeight=(H-top-20)+'px';c.style.overflowY='auto'}}
 function R(){applyLook();var a=$('#app');if(!a)return;
  if(!S.ob.done){a.innerHTML=vOnb();save();return}
  var b='';switch(view){case'list':b=(S.ob.name?'<p class="mute small" style="margin:0 0 .4em">'+t('Hallo {0}',esc(S.ob.name))+'</p>':'')+vList();break;case'favs':b=vFavs();break;case'shops':b=vShops();break;case'deals':b=vDeals();break;case'ideas':b=vIdeas();break;case'settings':b=vSettings();break;
   case'advice':b=vAdvice();break;case'events':b=vEvents();break;case'stamm':b=vStamm();break;case'kipro':b=vKipro();break;case'test':b=vTest();break;default:b=vList()}
- a.innerHTML=head()+b+sheetHtml()+tourCard();save();hlTour();wheelInit()}
+ a.innerHTML=head()+b+sheetHtml()+tourCard();save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 
 /* ===== Aktionen (Klicks) ===== */
@@ -975,7 +991,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'todayall':if(endHint){endHint.n.forEach(function(id){var i=findItem(id);if(i)i.today=ld()})}endHint=null;break;
  case'remind':{var rl=todayItems();if(!rl.length&&endHint)rl=endHint.n.map(findItem).filter(Boolean);if(!rl.length)break;var rn=shopNames(rl[0])[0],rh=hintOf(rn),rt=t('Noch holen')+': '+rl.map(function(i){return i.name}).join(', ')+' – '+rn+(rh?' ('+rh+')':'');
   if(navigator.share){navigator.share({title:'sEBU',text:rt}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(rt).then(function(){say(t('Text kopiert. Füge ihn in Erinnerungen ein.'))},function(){say(rt)})}else say(rt);return}
- case'tmore':if(tour)tour.more=!tour.more;break;
+ case'tmore':if(tour){tour.more=!tour.more;tour.keep=true}break;
  case'tprev':if(tour&&tour.i>0){tour.i--;tourShow()}return;
  case'tpause':tourPause();return;
  case'tstop':tourEnd(false);return;
