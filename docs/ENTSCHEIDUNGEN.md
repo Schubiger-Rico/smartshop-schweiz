@@ -452,3 +452,10 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Rico fragte, ob er Google Maps selbst anwählen muss: Nein, 🧭 öffnet Google Maps direkt (App, falls installiert, sonst Safari). Bei 🔔 öffnet sich das Teilen-Menü, dort wählt man «Erinnerungen».
 - **Problem (21.11. abends):** Nach «Einkauf beenden» → 🔔 musste Rico im Teilen-Menü «Erinnerungen» suchen. Eine Web-App darf nicht direkt in Erinnerungen schreiben.
 - Lösungsideen: (a) einmalig einen iPhone-Kurzbefehl «sEBU Erinnerung» einrichten; die App ruft ihn direkt auf (`shortcuts://run-shortcut?name=…&input=text`), er legt die Erinnerung ohne Teilen-Menü an. (b) Hinweis «Erinnerungen» im Teilen-Menü als Favorit nach vorne schieben (Teilen-Menü → «Bearbeiten»). Entschieden: (a) als abschaltbare Option in den Einstellungen mit Schritt-für-Schritt-Anleitung vorsehen; (b) als Tipp in der Anleitung.
+
+### Umgesetzt am 21.11. (abends): Schalter für 🔔/🧭 und Kurzbefehl
+
+- In «Einkaufsliste» neue Schalter «🧭 Navigation» und «🔔 Erinnerung beim Wegfahren» (bei «Einfach» aus).
+- Abschnitt «🔔 Erinnerung»: Option «Über Kurzbefehl, ohne Teilen-Menü», Name des Kurzbefehls (Standard «sEBU Erinnerung»), Anleitung zum Aufklappen, Tipp für das Teilen-Menü, «Wenn es nicht klappt».
+- Fehler behoben: Zwei Funktionen hiessen `navBtn`, dadurch war der 🧭-Knopf bei «Noch offen» und unter «Läden» kaputt. Der Google-Maps-Knopf heisst jetzt `mapBtn`.
+- Nicht geprüft: echter Kurzbefehl auf dem iPhone (Ort «Beim Verlassen» je nach iOS-Version).

@@ -18,7 +18,10 @@ with sync_playwright() as p:
     pg.click('[data-a=nav][data-v=settings]');pg.click('[data-a=sub][data-v=liste]')
     pg.click('[data-chk=v_fav]');pg.wait_for_timeout(100)
     print('after fav on: mode manual',pg.locator('[data-a=viewmode][data-v=manual].pri').count(),'pv fav',pg.locator('.pv [data-a=fav]').count())
+    print('simple: remind section hidden',pg.locator('#remh').count())
     pg.click('[data-a=viewmode][data-v=full]')
+    print('full: remind section',pg.locator('#remh').count(),'nav switch',pg.locator('[data-chk=v_nav]').is_checked())
+    pg.click('[data-chk=remSc]');pg.wait_for_timeout(100);print('shortcut name field',pg.locator('[data-chg=scName]').count())
     print('full: pv shop',pg.locator('.pv [data-a=shopsel]').count(),'fire',pg.locator('.pv [data-fire]').count())
     pg.click('[data-a=nav][data-v=list]');print('list full: fav',cnt(pg,'[data-a=fav]'),'cam',cnt(pg,'.camb'),'recent',pg.inner_text('#app').count('Letzte Produkte'))
     # tour in simple mode skips hidden steps

@@ -126,7 +126,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{}}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung'}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -319,8 +319,8 @@ function hintOf(n){var m=S.mine.filter(function(x){return x.name===n})[0];return
 function itemsTxt(l){return l.map(function(i){return i.name+' ('+shopNames(i).join(', ')+')'}).join(', ')}
 function openBanner(){var l=[];
  if(endHint){l=endHint.n.map(findItem).filter(Boolean);if(!l.length)endHint=null}
- if(l.length){var n=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Noch offen')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em"><button class="btn pri" data-a="todayall">'+t('Heute noch merken')+'</button><button class="btn" data-a="endno">'+t('Später')+'</button>'+navBtn(n)+'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button></div></div>'}
- l=todayItems();if(l.length){var n2=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Heute noch')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em">'+navBtn(n2)+'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button></div></div>'}
+ if(l.length){var n=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Noch offen')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em"><button class="btn pri" data-a="todayall">'+t('Heute noch merken')+'</button><button class="btn" data-a="endno">'+t('Später')+'</button>'+mapBtn(n)+(on('remind')?'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button>':'')+'</div></div>'}
+ l=todayItems();if(l.length){var n2=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Heute noch')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em">'+mapBtn(n2)+(on('remind')?'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button>':'')+'</div></div>'}
  return''}
 function storeOrder(st){if(!st)return null;var o=S.learn.order[st.name]||S.learn.order[st.chain];if(!o)return null;
  return Object.keys(o).sort(function(a,b){return o[a][0]/o[a][1]-o[b][0]/o[b][1]})}
@@ -337,7 +337,7 @@ function autoR(s){if(s.sz)return Math.max(25,Math.min(100,Math.round(s.sz*0.6+20
 function effR(s,c){if(S.set.radius!=='auto')return+S.set.radius||50;var base=s.r||autoR(s),acc=(c&&c.accuracy)||0;return Math.max(base,Math.min(Math.round(acc),100))}
 function navUrl(n){var m=S.mine.filter(function(x){return x.name===n})[0],c=!m&&S.cache.filter(function(x){return x.name===n||x.chain===n})[0],p=m||c;
  return p&&p.lat?'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lon:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(n)}
-function navBtn(n){return'<a class="btn navb" href="'+navUrl(n)+'" target="_blank" rel="noopener">🧭 '+t('Navigation')+'</a>'}
+function mapBtn(n){if(!on('nav'))return'';return'<a class="btn navb" href="'+navUrl(n)+'" target="_blank" rel="noopener">🧭 '+t('Navigation')+'</a>'}
 function dist(a,b,c,d){var r=Math.PI/180,x=(c-a)*r,y=(d-b)*r*Math.cos((a+c)/2*r);return Math.round(6371000*Math.sqrt(x*x+y*y))}
 function nk(x){return String(x||'').toLowerCase().replace(/[^a-z0-9äöüéèàç]/g,'')}
 function chainOfTags(g){var f=[nk(g.brand),nk(g.name),nk(g.operator)];var CH=allCh(),best=null,bl=0;for(var i=0;i<CH.length;i++){var k=nk(CH[i]);if(k&&k.length>bl&&f.some(function(x){return x.indexOf(k)>-1})){best=CH[i];bl=k.length}}return best}
@@ -417,7 +417,7 @@ function card(i){
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
 /* Ansicht der Einkaufsliste: Einfach / Umfänglich / Manuell, jedes Element einzeln */
-var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
+var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['nav','🧭','Navigation','Öffnet Google Maps mit dem Laden als Ziel, wenn noch etwas offen ist.'],['remind','🔔','Erinnerung beim Wegfahren','Erinnert dich an offene Produkte. Wie, stellst du weiter unten ein.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
 function on(k){if(k==='fire')return S.set.dm!=='off';if(k==='catline')return !!S.set.cats;var o=S.set.show||{};return o[k]!==false}
 function setOn(k,v){if(k==='fire'){S.set.dm=v?(S.set.dmLast||'manual'):'off';if(!v&&S.set.dm!=='off')S.set.dmLast=S.set.dm;return}if(k==='catline'){S.set.cats=v;return}S.set.show=S.set.show||{};S.set.show[k]=v}
 function setView(m){S.set.view=m;if(m==='manual')return;var simple=m==='simple';
@@ -428,6 +428,13 @@ function viewBlock(){var v=S.set.view||'full',h='<div class="seg">'+[['simple','
  h+='<h3>'+t('Vorschau')+'</h3><div class="pv" style="pointer-events:none;border:1px dashed var(--line);border-radius:.7em;padding:.5em">'+shopBar(1)+addRow()+card(pi)+(on('recent')?'<h3 style="margin:.4em 0 0">'+t('Letzte Produkte')+'</h3>':'')+(on('catline')?'<p class="small mute" style="margin:.3em 0 0">'+t('Milchprodukte (1)')+'</p>':'')+'</div><h3>'+t('Einzeln wählen')+'</h3>';
  VEL.forEach(function(e){h+='<div class="row" style="flex-wrap:nowrap"><span style="flex:1">'+e[1]+' '+t(e[2])+'<br><span class="small mute">'+t(e[3])+'</span></span>'+sw('v_'+e[0],on(e[0]))+'</div>'});
  return h}
+function remBlock(){if(!on('remind'))return'';
+ return'<h3 id="remh">🔔 '+t('Erinnerung')+'</h3>'+rowS(t('Über Kurzbefehl, ohne Teilen-Menü'),sw('remSc',!!S.set.remSc))
+  +(S.set.remSc?rowS(t('Name des Kurzbefehls'),'<input class="field" data-chg="scName" value="'+esc(S.set.scName||'sEBU Erinnerung')+'">'):'')
+  +'<p class="small mute">'+t(S.set.remSc?'Die App öffnet deinen Kurzbefehl direkt. Er braucht eine einmalige Einrichtung (Anleitung unten).':'Jetzt öffnet sich das Teilen-Menü. Tipp: Dort ganz nach rechts wischen, «Mehr» → «Bearbeiten» und «Erinnerungen» als Favorit nach vorne ziehen. Dann musst du nicht mehr suchen.')+'</p>'
+  +'<details class="card" style="display:block"><summary><b>'+t('Anleitung: Kurzbefehl einrichten (einmalig, etwa 2 Minuten)')+'</b></summary><ol class="small" style="padding-left:1.3em">'
+  +['Öffne die App «Kurzbefehle» und tippe oben rechts auf ＋.','Tippe oben auf den Namen und nenne den Kurzbefehl genau «{0}».','Tippe auf «Aktion hinzufügen», suche «Erinnerung» und wähle «Erinnerung hinzufügen».','Tippe auf das blaue Wort «Erinnerung» in der Aktion und wähle «Kurzbefehleingabe».','Falls du an einem Ort erinnert werden willst: Tippe in der Aktion auf den Pfeil und wähle beim Erinnern einen Ort, zum Beispiel «Beim Verlassen» deines Ladens. Nicht jede iOS-Version bietet das an.','Tippe auf «Fertig». Schalte oben «Über Kurzbefehl» ein.'].map(function(x){return'<li>'+t(x,esc(S.set.scName||'sEBU Erinnerung'))+'</li>'}).join('')
+  +'</ol><p class="small"><b>'+t('Wenn es nicht klappt:')+'</b> '+t('Der Name muss genau gleich sein wie oben eingetragen, auch Gross- und Kleinschreibung. Oder schalte «Über Kurzbefehl» aus, dann kommt wieder das Teilen-Menü.')+'</p></details>'}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
@@ -521,7 +528,7 @@ function vShops(){var g={},h='<h2>🏪 '+t('Läden')+'</h2>';
  function isCur(n){return !!cur&&(n===cur.name||n===cur.chain)}
  ks.sort(function(a,b){return(isCur(b)?1:0)-(isCur(a)?1:0)||a.localeCompare(b)});
  if(!ks.length)return h+'<div class="empty">'+t('Hier stehen Produkte, die du einem bestimmten Laden zugeordnet hast. Wähle bei der Eingabe 🏪.')+'</div>';
- ks.forEach(function(n){h+='<h3>'+(isCur(n)?'📍 ':'')+esc(n)+' ('+g[n].length+') '+navBtn(n)+'</h3>';g[n].forEach(function(i){h+=card(i)+(dealOpen===i.id?dealPanel(i):'')})});
+ ks.forEach(function(n){h+='<h3>'+(isCur(n)?'📍 ':'')+esc(n)+' ('+g[n].length+') '+mapBtn(n)+'</h3>';g[n].forEach(function(i){h+=card(i)+(dealOpen===i.id?dealPanel(i):'')})});
  return h}
 
 /* ===== Aktionen ===== */
@@ -672,7 +679,7 @@ function vSettings(){
  switch(sub){
  case'profil':h+=rowS(t('Name'),'<input class="field" data-chg="pname" value="'+esc(S.ob.name)+'" placeholder="'+t('freiwillig')+'">')+rowS(t('Nutzung'),'<select class="field" data-chg="ptype">'+['Privat','Familie','Verein','Geschäft'].map(function(o){return'<option'+(S.ob.type===o?' selected':'')+' value="'+o+'">'+t(o)+'</option>'}).join('')+'</select>');
   h+='<p class="small mute">'+t('Der Name dient nur für persönliche Texte in der App.')+'</p>';break;
- case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock();break;
+ case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock()+remBlock();break;
  case'look':h+='<div class="row"><label for="fs">'+t('Textgrösse')+': <b id="fsv">'+S.set.fs+'</b> px</label></div><input type="range" id="fs" data-chg="fs" min="10" max="40" value="'+S.set.fs+'">'
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
@@ -798,7 +805,8 @@ SA('Profil',[
  ss('profil','row:Nutzung','Privat, Familie, Verein oder Geschäft. Das ist nur eine Notiz.')]);
 SA('Einkaufsliste',[
  ss('liste','[data-a=viewmode]','Wie viel möchtest du sehen? Einfach, Umfänglich oder Manuell.','<b>Einfach:</b> nur Eingabefeld, Menge, ＋ und ✓. Für alle, die einfach eine Liste wollen.\n<b>Umfänglich:</b> alle Hilfen sind sichtbar.\n<b>Manuell:</b> du wählst selbst.\n<b>Wenn dir etwas fehlt:</b> Schalte es hier einzeln wieder ein, zum Beispiel ☆ für Favoriten.'),
- ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.')]);
+ ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.'),
+ ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
 SA('Darstellung',[
  ss('look','#fs','Textgrösse: Schiebe den Regler, die Anzeige ändert sich sofort.'),
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
@@ -849,8 +857,8 @@ var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
 var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
-var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav'};
-function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':s.v==='list'?NEED[s.sel]:null;return !n||on(n)})}
+var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#remh':'remind'};
+function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||on(n)})}
 function tourSteps0(w){var A=AREAS;
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
@@ -1013,6 +1021,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'endno':endHint=null;break;
  case'todayall':if(endHint){endHint.n.forEach(function(id){var i=findItem(id);if(i)i.today=ld()})}endHint=null;break;
  case'remind':{var rl=todayItems();if(!rl.length&&endHint)rl=endHint.n.map(findItem).filter(Boolean);if(!rl.length)break;var rn=shopNames(rl[0])[0],rh=hintOf(rn),rt=t('Noch holen')+': '+rl.map(function(i){return i.name}).join(', ')+' – '+rn+(rh?' ('+rh+')':'');
+  if(S.set.remSc){location.href='shortcuts://run-shortcut?name='+encodeURIComponent(S.set.scName||'sEBU Erinnerung')+'&input=text&text='+encodeURIComponent(rt);return}
   if(navigator.share){navigator.share({title:'sEBU',text:rt}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(rt).then(function(){say(t('Text kopiert. Füge ihn in Erinnerungen ein.'))},function(){say(rt)})}else say(rt);return}
  case'tmore':if(tour){tour.more=!tour.more;tour.keep=true}break;
  case'tprev':if(tour&&tour.i>0){tour.i--;tourShow()}return;
@@ -1099,7 +1108,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
  if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
  if(D.chk&&D.chk.indexOf('v_')===0){setOn(D.chk.slice(2),t0.checked);S.set.view='manual';save();R();return}
- if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();return}
+ if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='remSc')R();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
  if(k==='miner'||k==='minehint'){var m2=S.mine[+D.i];if(m2){if(k==='miner')m2.r=+v2;else m2.hint=v2.trim();save()}return}
