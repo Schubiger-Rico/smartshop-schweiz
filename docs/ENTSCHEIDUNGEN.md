@@ -514,3 +514,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Rico will Idee 4: Produktinfos aus Open Food Facts (frei, gratis, ohne Händler). Strichcode mit der Kamera scannen (oder Nummer eingeben) → Name, Marke, Menge, Nährwerte/Nutri-Score, Zutaten; Produkt mit einem Tipp auf die Liste. Später vergleichen.
 - Hinweis: Nicht jedes Schweizer Produkt ist in der Datenbank; dann «nicht gefunden» und von Hand weiter. Abschaltbar wie alles.
 - Entschieden: Scan-Knopf über 📷 beim Eingabefeld mit Wahl «Strichcode» oder «Ratgeber». Ein- und ausschaltbar (Sparte «Einkaufsliste», bei «Einfach» aus) und in Führung/Einstellungen erklärt (Wofür geeignet / Wenn es nicht klappt: Licht, Abstand, Nummer von Hand eingeben).
+
+### Umgesetzt am 21.11. (abends): Rückgängig, automatische Sicherung, Strichcode
+
+- «↩ Rückgängig» nach dem Löschen (Wischen oder «Löschen»), 4 Sekunden, Produkt kommt an die gleiche Stelle zurück.
+- Daten und Datenschutz → «Automatische Sicherung»: Zwischenkopien auf dem Gerät (täglich, letzte 5, wiederherstellbar) und Sicherung in der eigenen Firebase-Datenbank (täglich, Wiederherstellen-Code, ohne KI-Schlüssel), «Sicherung mit Code holen». Beides abschaltbar, mit Datenschutz-Hinweis und «Wenn es nicht klappt». Firebase-Regeln in der Einrichtung um «backups» ergänzt. «Alle Daten löschen» löscht auch die Zwischenkopien.
+- 🔎 Strichcode scannen (Sparte «Einkaufsliste», bei «Einfach» aus): 📷 → «Strichcode scannen» oder «Ratgeber fragen». Kamera, Foto oder Nummer von Hand; zeigt Name, Marke, Menge, Nutri-Score, Zutaten aus Open Food Facts; «＋ Auf die Liste». In Führungen erklärt.
+- Nicht echt geprüft: Kamera-Scan auf dem iPhone (Safari hat keinen eingebauten Strichcode-Leser, darum wird ein Scanner aus dem Internet nachgeladen), echte Firebase-Sicherung.

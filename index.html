@@ -83,6 +83,8 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 .tc .tm p{margin:.35em 0}
 .tc>.card>.seg{position:sticky;bottom:-.1em;background:var(--card);padding:.3em 0}
 .tb{background:#ffe066;color:#3a2e00;border:2px dashed #b38f00;border-radius:.8em;padding:.7em .9em;margin:.2em 0 .8em}.tbh{font-weight:800;font-size:1.3em;margin-bottom:.2em}
+.undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1em + env(safe-area-inset-bottom,0px));z-index:85;display:flex;gap:.6em;align-items:center;background:var(--ink);color:var(--bg);padding:.4em .5em .4em 1em;border-radius:.8em;box-shadow:0 .3em 1em #0005;max-width:92vw}
+.ns{display:inline-block;min-width:1.6em;text-align:center;font-weight:800;color:#fff;border-radius:.4em;padding:0 .3em}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -127,7 +129,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung'}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -398,8 +400,8 @@ function banner(){
   +(S.set.cats&&S.items.length?'<div class="ban"><span class="small">'+esc(catsLine())+'</span></div>':'');
  return''}
 function shopBar(pv){
- if(S.shop&&!pv)return'';var b=on('bar'),c=on('cam');if(!b&&!c)return'';var x=pv?'':' id="shopbtn"';
- return'<div class="seg" style="margin-bottom:.5em">'+(b?'<button class="btn"'+x+' data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t('Ratgeber')+'">📷</button>':'')+'</div>'}
+ if(S.shop&&!pv)return'';var b=on('bar'),c=on('cam')||on('scan');if(!b&&!c)return'';var x=pv?'':' id="shopbtn"';
+ return'<div class="seg" style="margin-bottom:.5em">'+(b?'<button class="btn"'+x+' data-a="shopstart">🛒 '+t('Einkauf starten')+'</button>'+(cur?'':'<button class="btn" data-a="storepick">📍 '+t('Laden wählen')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t(on('scan')&&!on('cam')?'Strichcode scannen':'Ratgeber')+'">📷</button>':'')+'</div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
@@ -418,7 +420,7 @@ function card(i){
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
 /* Ansicht der Einkaufsliste: Einfach / Umfänglich / Manuell, jedes Element einzeln */
-var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['nav','🧭','Navigation','Öffnet Google Maps mit dem Laden als Ziel, wenn noch etwas offen ist.'],['remind','🔔','Erinnerung beim Wegfahren','Erinnert dich an offene Produkte. Wie, stellst du weiter unten ein.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
+var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['scan','🔎','Strichcode scannen','Produktinfos wie Nutri-Score und Zutaten aus Open Food Facts (gratis). Nicht jedes Produkt ist erfasst.'],['nav','🧭','Navigation','Öffnet Google Maps mit dem Laden als Ziel, wenn noch etwas offen ist.'],['remind','🔔','Erinnerung beim Wegfahren','Erinnert dich an offene Produkte. Wie, stellst du weiter unten ein.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
 function on(k){if(k==='fire')return S.set.dm!=='off';if(k==='catline')return !!S.set.cats;var o=S.set.show||{};return o[k]!==false}
 function setOn(k,v){if(k==='fire'){S.set.dm=v?(S.set.dmLast||'manual'):'off';if(!v&&S.set.dm!=='off')S.set.dmLast=S.set.dm;return}if(k==='catline'){S.set.cats=v;return}S.set.show=S.set.show||{};S.set.show[k]=v}
 function setView(m){S.set.view=m;if(m==='manual')return;var simple=m==='simple';
@@ -441,6 +443,72 @@ var WIPQ=['Hier wird noch geschraubt – die Einkaufswagen stehen schon Schlange
  DEALQ=['Wir hätten sogar schon den Rotstift gespitzt.','Dieser Platz ist frei – wie ein Parkplatz am Samstag um 10 Uhr: selten und sehr begehrt.','Unsere Nutzer haben die Taschen schon gepackt – leider noch leer.','Sonst kaufen die Leute am Ende noch zum vollen Preis. Undenkbar!','Und zwar dann, wenn die Kundschaft gerade vor dem Regal steht. Smart, oder?'],tbKey='',tbI=0;
 function testBan(deals){if(S.set.testBan===false)return'';var k=view+'/'+sub;if(k!==tbKey){tbKey=k;tbI=Math.floor(Math.random()*1000)}var L=deals?DEALQ:WIPQ;
  return'<div class="tb"><div class="tbh">'+(deals?'🚧 '+t('Hier könnten Ihre Aktionen stehen!'):'🚧 '+t('TEST: Ist noch in Arbeit'))+'</div><div>'+t(L[tbI%L.length])+'</div></div>'}
+/* ===== Rückgängig nach dem Löschen (4 Sekunden) ===== */
+var undo=null,undoT=null;
+function delItem(id,k){var a=k==='h'?S.hist:S.items,i=-1;for(var j=0;j<a.length;j++)if(a[j].id===id){i=j;break}if(i<0)return;var it=a.splice(i,1)[0];
+ undo={it:it,i:i,k:k};clearTimeout(undoT);undoT=setTimeout(function(){undo=null;R()},4000)}
+function undoHtml(){return undo?'<div class="undo"><span>«'+esc(undo.it.name)+'» '+t('gelöscht')+'</span><button class="btn pri" data-a="undo">↩ '+t('Rückgängig')+'</button></div>':''}
+
+/* ===== Automatische Sicherung: Zwischenkopien auf dem Gerät + eigene Firebase-Datenbank ===== */
+var BK='sebu.bak';
+function bakList(){try{return JSON.parse(localStorage.getItem(BK))||[]}catch(e){return[]}}
+function bakData(){var d=JSON.parse(JSON.stringify(S));d.cache=[];return d}
+function snap(force){if(S.set.autoBak===false)return;var l=bakList();if(!force&&l[0]&&Date.now()-l[0].t<20*36e5)return;
+ l.unshift({t:Date.now(),d:bakData()});l=l.slice(0,5);
+ for(var n=l.length;n>0;n--){try{localStorage.setItem(BK,JSON.stringify(l.slice(0,n)));return}catch(e){}}}
+function bakUrl(c){return S.set.fbUrl.replace(/\/+$/,'')+'/backups/'+encodeURIComponent(c)+'.json'}
+function fbSet(){return /^https:\/\//.test(S.set.fbUrl||'')}
+function cloudBak(force,cb){if(!S.set.cloudBak||!fbSet()||!navigator.onLine){if(cb)cb(false);return}if(!force&&Date.now()-(S.set.bakT||0)<20*36e5)return;
+ if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);
+ var d=bakData();d.set.apiKey='';d.set.bakT=0;
+ fetch(bakUrl(S.set.bakCode),{method:'PUT',body:JSON.stringify({t:Date.now(),j:JSON.stringify(d)})}).then(function(r){if(!r.ok)throw 0;S.set.bakT=Date.now();save();if(cb)cb(true)}).catch(function(){if(cb)cb(false)})}
+function fdt(x){var d=new Date(x);return d.toLocaleDateString('de-CH')+' '+d.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'})}
+function bakBlock(){var l=bakList(),h='<h3 id="bakh">'+t('Automatische Sicherung')+'</h3>'
+  +rowS(t('Zwischenkopien auf diesem Gerät'),sw('autoBak',S.set.autoBak!==false))
+  +'<p class="small mute">'+t('Einmal am Tag, die letzten 5. Hilft bei Fehlern oder versehentlichem Löschen, aber nicht, wenn das Handy verloren geht.')+'</p>';
+ if(S.set.autoBak!==false)h+=l.length?l.map(function(b,i){return'<div class="row"><span class="small">'+fdt(b.t)+' · '+t('{0} Produkte',(b.d.items||[]).length)+'</span><button class="btn" data-a="bakrest" data-v="'+i+'">'+t('Wiederherstellen')+'</button></div>'}).join(''):'<p class="small mute">'+t('Noch keine Zwischenkopie. Die erste entsteht beim nächsten Öffnen.')+'</p>';
+ h+=rowS(t('Sicherung in deiner Firebase-Datenbank'),sw('cloudBak',!!S.set.cloudBak));
+ if(S.set.cloudBak){if(!fbSet())h+='<p class="small" style="color:var(--red)">'+t('Zuerst unter «Liste teilen» die Datenbank-Adresse eintragen.')+'</p>';
+  else h+='<p class="small">'+t('Dein Wiederherstellen-Code')+': <b style="user-select:all">'+esc(S.set.bakCode||'–')+'</b><br><span class="mute">'+t('Gut aufbewahren, zum Beispiel als Notiz. Damit holst du alles auf ein neues Handy.')+'</span></p><p class="small mute">'+t('Letzte Sicherung')+': '+(S.set.bakT?fdt(S.set.bakT):t('noch keine'))+'</p><div class="seg"><button class="btn" data-a="bakcloud">'+t('Jetzt sichern')+'</button></div>'}
+ h+='<p class="small mute">🔒 '+t('Datenschutz: Die Sicherung liegt in deiner eigenen Datenbank, nicht bei sEBU. Wer den Code kennt, kann sie lesen, darum nicht weitergeben. Der KI-Schlüssel wird nie mitgesichert.')+'</p>'
+  +'<p class="small mute">'+t('Wenn es nicht klappt: Prüfe Internet und Datenbank-Adresse. Die Regeln der Datenbank müssen «backups» erlauben (siehe Einrichtung unter «Liste teilen»).')+'</p>'
+  +'<h3>'+t('Sicherung mit Code holen')+'</h3><div class="seg"><input class="field" id="bkc" placeholder="'+t('Wiederherstellen-Code')+'" style="flex:1 1 8em" autocomplete="off"><button class="btn" data-a="bakget">'+t('Holen')+'</button></div>';
+ return h}
+
+/* ===== Strichcode scannen: Kamera + Open Food Facts ===== */
+var scan={st:null,loop:null,zx:null,busy:false};
+function scanStop(){if(scan.loop){clearInterval(scan.loop);scan.loop=null}if(scan.st){scan.st.getTracks().forEach(function(x){x.stop()});scan.st=null}}
+function scanMsg(m){var e=$('#scs');if(e)e.textContent=m}
+function loadZX(cb){if(window.ZXing){cb(true);return}var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';sc.onload=function(){cb(!!window.ZXing)};sc.onerror=function(){cb(false)};document.head.appendChild(sc)}
+function zxDecode(cv){var Z=window.ZXing;if(!Z)return null;if(!scan.zx){scan.zx=new Z.MultiFormatReader();var hm=new Map();hm.set(Z.DecodeHintType.POSSIBLE_FORMATS,[Z.BarcodeFormat.EAN_13,Z.BarcodeFormat.EAN_8,Z.BarcodeFormat.UPC_A,Z.BarcodeFormat.UPC_E]);hm.set(Z.DecodeHintType.TRY_HARDER,true);scan.zx.setHints(hm)}
+ try{return scan.zx.decode(new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(cv)))).getText()}catch(e){return null}}
+function decodeCanvas(cv,cb){if('BarcodeDetector' in window){try{new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']}).detect(cv).then(function(r){cb(r&&r[0]?r[0].rawValue:zxDecode(cv))},function(){cb(zxDecode(cv))});return}catch(e){}}cb(zxDecode(cv))}
+function scanStart(){if(scan.pend)return;if(scan.st||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){if(!scan.st)scanMsg(t('Kamera nicht verfügbar. Nimm ein Foto oder gib die Nummer von Hand ein.'));return}
+ if(!('BarcodeDetector' in window))loadZX(function(ok){if(!ok)scanMsg(t('Scanner konnte nicht geladen werden (Internet?). Gib die Nummer von Hand ein.'))});
+ scan.pend=true;navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}).then(function(st){scan.pend=false;if(!sh||sh.t!=='scan'||sh.res){st.getTracks().forEach(function(x){x.stop()});return}scan.st=st;scanAttach();scanMsg(t('Halte den Strichcode ruhig vor die Kamera.'));
+  var cv=document.createElement('canvas');scan.loop=setInterval(function(){var v=$('#scv');if(!v||scan.busy||!v.videoWidth)return;cv.width=v.videoWidth;cv.height=v.videoHeight;cv.getContext('2d').drawImage(v,0,0);scan.busy=true;decodeCanvas(cv,function(c){scan.busy=false;if(c&&scan.st)scanFound(c)})},350)},
+ function(){scan.pend=false;scanMsg(t('Kein Zugriff auf die Kamera. Erlaube die Kamera für Safari, nimm ein Foto oder gib die Nummer von Hand ein.'))})}
+function scanAttach(){var v=$('#scv');if(v&&scan.st&&v.srcObject!==scan.st){v.srcObject=scan.st;var p=v.play();if(p&&p.catch)p.catch(function(){})}}
+function scanFound(code){scanStop();if(navigator.vibrate&&S.set.vib)navigator.vibrate(80);offLook(code)}
+function offLook(code){code=String(code||'').replace(/\D/g,'');if(code.length<8){say(t('Bitte die ganze Nummer unter dem Strichcode eingeben.'));return}
+ if(!sh||sh.t!=='scan')sh={t:'scan'};sh.res={code:code,wait:true};R();
+ fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,product_name_de,brands,quantity,nutriscore_grade,ingredients_text_de,ingredients_text,image_front_small_url').then(function(r){return r.json()}).then(function(j){
+  if(!sh||sh.t!=='scan')return;var p=j&&j.status===1&&j.product;
+  sh.res=p&&(p.product_name_de||p.product_name)?{code:code,name:p.product_name_de||p.product_name,brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',ns:(p.nutriscore_grade||'').toUpperCase(),ing:p.ingredients_text_de||p.ingredients_text||'',img:p.image_front_small_url||''}:{code:code,none:true};R()})
+ .catch(function(){if(sh&&sh.t==='scan'){sh.res={code:code,none:true,off:true};R()}})}
+function nsColor(g){return{A:'#038141',B:'#85bb2f',C:'#e6a700',D:'#ee8100',E:'#e63e11'}[g]||'#888'}
+function shScan(){var r=sh.res,h='<h2>🔎 '+t('Strichcode scannen')+'</h2>';
+ if(!r)return h+'<video id="scv" playsinline muted autoplay style="width:100%;max-height:40vh;border-radius:.6em;background:#000;display:block"></video><p class="small mute" id="scs">'+t('Kamera wird gestartet …')+'</p>'
+  +'<div class="seg"><label class="btn">📸 '+t('Foto aufnehmen')+'<input type="file" accept="image/*" capture="environment" data-chg="scanimg" style="display:none"></label></div>'
+  +'<h3>'+t('Oder Nummer eingeben')+'</h3><div class="seg"><input class="field" id="scn" inputmode="numeric" placeholder="7610…" style="flex:1 1 8em" autocomplete="off"><button class="btn pri" data-a="scanlook">'+t('Suchen')+'</button></div>'
+  +'<div class="seg" style="margin-top:.6em"><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>';
+ if(r.wait)return h+'<p>'+t('Suche Produkt {0} …',esc(r.code))+'</p>';
+ if(r.none)return h+'<p><b>'+t(r.off?'Keine Verbindung zu Open Food Facts.':'Nicht gefunden.')+'</b> '+t('Nummer')+' '+esc(r.code)+'</p><p class="small mute">'+t(r.off?'Prüfe das Internet und versuche es nochmals.':'Nicht jedes Schweizer Produkt ist in der freien Datenbank erfasst. Du kannst es dort selbst ergänzen.')+'</p><div class="seg"><button class="btn pri" data-a="scanagain">'+t('Nochmals scannen')+'</button><button class="btn" data-a="scanhand">'+t('Von Hand eingeben')+'</button></div>';
+ return h+'<div class="row" style="align-items:flex-start;gap:.7em">'+(r.img?'<img src="'+esc(r.img)+'" alt="" style="width:4.5em;height:4.5em;object-fit:contain;border-radius:.4em;background:#fff">':'')+'<div style="flex:1"><b>'+esc(r.name)+'</b>'+(r.brand?'<br><span class="small">'+esc(r.brand)+'</span>':'')+(r.qty?'<br><span class="small mute">'+esc(r.qty)+'</span>':'')+(r.ns&&'ABCDE'.indexOf(r.ns)>-1?'<br><span class="small">Nutri-Score </span><span class="ns" style="background:'+nsColor(r.ns)+'">'+r.ns+'</span>':'')+'</div></div>'
+  +(r.ing?'<details class="small"><summary>'+t('Zutaten')+'</summary><p>'+esc(r.ing)+'</p></details>':'')
+  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="scanadd">＋ '+t('Auf die Liste')+'</button><button class="btn" data-a="scanagain">'+t('Nochmals scannen')+'</button></div>'
+  +'<p class="small mute">'+t('Quelle')+': <a href="https://world.openfoodfacts.org/product/'+esc(r.code)+'" target="_blank" rel="noopener">Open Food Facts</a> '+t('(freie Datenbank, Angaben ohne Gewähr)')+'</p>'}
+function shCamWhich(){return'<h2>📷 '+t('Was möchtest du?')+'</h2><div class="seg" style="flex-direction:column;align-items:stretch"><button class="btn pri" data-a="scanopen">🔎 '+t('Strichcode scannen')+'</button><button class="btn" data-a="camadv">📷 '+t('Ratgeber fragen')+'</button></div>'}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
@@ -514,7 +582,7 @@ function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><h3>'+t('Le
  +'</div><div class="seg" style="margin-top:.6em"><input class="field" id="sst" value="'+esc(s.text)+'" placeholder="'+t('Anderer Laden (optional, von Hand)')+'" style="flex:1"></div>'
  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="shok">OK</button><button class="btn" data-a="shclr">'+t('Zurücksetzen')+'</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
 function sheetHtml(){if(!sh)return'';var b='';
- switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break}
+ switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break;case'scan':b=shScan();break;case'camwhich':b=shCamWhich();break}
  return'<div class="sheet" data-a="shclose"><div>'+b+'</div></div>'}
 
 function shQty(){var us=allUnits(),h='<h2>'+t('Menge und Einheit')+'</h2><div class="wheels"><div class="wheel" id="wq"><div class="sp"></div>';
@@ -720,7 +788,7 @@ function vSettings(){
  case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
  case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="app">▶ '+t('Führung durch die App')+'</button><button class="btn pri" data-a="tour" data-v="set">▶ '+t('Führung durch die Einstellungen')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('App: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'':'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><h3>'+t('Einstellungen: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>':''}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break
- case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><h3>'+t('Sicherung')+'</h3><p class="small mute">'+t('Zum Umziehen auf ein anderes Gerät oder in die Home-Bildschirm-App: Sicherung kopieren, dort einfügen und laden.')+'</p><textarea class="field" id="bk" placeholder="'+t('Hier die Sicherung einfügen')+'" style="height:6em"></textarea><div class="seg" style="margin:.4em 0 1em"><button class="btn pri" data-a="bkcopy">'+t('Sicherung kopieren')+'</button><button class="btn" data-a="bkload">'+t('Sicherung laden')+'</button></div><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
+ case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><h3>'+t('Sicherung')+'</h3><p class="small mute">'+t('Zum Umziehen auf ein anderes Gerät oder in die Home-Bildschirm-App: Sicherung kopieren, dort einfügen und laden.')+'</p><textarea class="field" id="bk" placeholder="'+t('Hier die Sicherung einfügen')+'" style="height:6em"></textarea><div class="seg" style="margin:.4em 0 1em"><button class="btn pri" data-a="bkcopy">'+t('Sicherung kopieren')+'</button><button class="btn" data-a="bkload">'+t('Sicherung laden')+'</button></div>'+bakBlock()+'<h3>'+t('Zurücksetzen')+'</h3><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
  return h}
 function vCatsAdm(){var h='<p class="small mute">'+t('Ziehe am Griff oder nutze ▲▼. Standard-Kategorien lassen sich umbenennen und ausblenden, eigene löschen.')+'</p>';
  function row(c,sb){return'<div class="ordrow" data-ord="'+c.id+'" style="'+(sb?'margin-left:1.5em':'')+(c.hidden?';opacity:.5':'')+'"><span class="dh" data-drag="'+c.id+'" aria-label="'+t('Ziehen')+'">⠿</span><button class="ic" data-a="emoji" data-id="'+c.id+'" aria-label="'+t('Symbol')+'">'+esc(c.icon)+'</button><input class="field" data-ren="'+c.id+'" value="'+esc(cname(c))+'" style="flex:1;min-width:0"><button class="btn sq" data-a="up" data-id="'+c.id+'">▲</button><button class="btn sq" data-a="dn" data-id="'+c.id+'">▼</button>'
@@ -762,7 +830,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.',{ro:1}),
  st('list','#shopbtn','🛒 «Einkauf starten»: Die App lernt deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.\nWenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.',{ro:1}),
  st('list','[data-a=gpsrefresh]','🔄 sucht den Laden, in dem du gerade bist, neu.','Ohne Erkennung wählst du den Laden mit «📍 Laden wählen» von Hand.\nWenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist.',{ro:1}),
- st('list','.camb','📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.',0,{ro:1}),
+ st('list','.camb','📷 öffnet den Ratgeber oder den Strichcode-Scanner.','<b>Ratgeber:</b> Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.\n<b>Strichcode:</b> zeigt Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts. Mit einem Tipp kommt das Produkt auf die Liste.',{ro:1}),
  st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.',{act:'check'}),
  st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Rechts wählst du, wie viele erscheinen und in welcher Reihenfolge.',{ro:1})]]);
 AREAS.push(['Menü und Ansicht',[
@@ -812,6 +880,7 @@ SA('Profil',[
 SA('Einkaufsliste',[
  ss('liste','[data-a=viewmode]','Wie viel möchtest du sehen? Einfach, Umfänglich oder Manuell.','<b>Einfach:</b> nur Eingabefeld, Menge, ＋ und ✓. Für alle, die einfach eine Liste wollen.\n<b>Umfänglich:</b> alle Hilfen sind sichtbar.\n<b>Manuell:</b> du wählst selbst.\n<b>Wenn dir etwas fehlt:</b> Schalte es hier einzeln wieder ein, zum Beispiel ☆ für Favoriten.'),
  ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.'),
+ ss('liste','row:🔎 Strichcode scannen','🔎 Strichcode scannen: Produktinfos wie Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts.','<b>Wofür geeignet:</b> Produkte schnell erfassen und vergleichen.\n<b>So geht es:</b> 📷 antippen, «Strichcode scannen», Strichcode vor die Kamera halten.\n<b>Wenn es nicht klappt:</b> Mehr Licht, Strichcode ruhig und gerade halten, etwa 10 bis 15 cm Abstand. Oder «Foto aufnehmen» oder die Nummer unter dem Strichcode von Hand eingeben.\nKamera muss für Safari erlaubt sein. Nicht jedes Schweizer Produkt ist erfasst, dann kommt «Nicht gefunden».'),
  ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
 SA('Darstellung',[
  ss('look','#fs','Textgrösse: Schiebe den Regler, die Anzeige ändert sich sofort.'),
@@ -859,13 +928,15 @@ SA('Abo',[ss('plan','#app h3','Hier probierst du die Abo-Stufen aus. Es ist nich
 SA('Daten und Datenschutz',[
  ss('data','#bk','Sicherung: Hier fügst du eine Sicherung ein.','Damit ziehst du auf ein anderes Gerät oder in die Home-Bildschirm-App um.'),
  ss('data','[data-a=bkcopy]','Mit diesem Knopf kopierst du die Sicherung.'),
+ ss('data','row:Zwischenkopien auf diesem Gerät','Automatische Zwischenkopien: einmal am Tag, die letzten 5 bleiben auf diesem Gerät.','<b>Wofür geeignet:</b> Wenn aus Versehen etwas gelöscht wurde oder die App einen Fehler hatte.\n<b>Nicht geeignet:</b> bei Handyverlust oder Handywechsel, dafür die Sicherung in der Datenbank.\n<b>Wenn es nicht klappt:</b> Ist der Speicher voll, behält die App weniger Kopien.'),
+ ss('data','row:Sicherung in deiner Firebase-Datenbank','Sicherung in deiner eigenen Firebase-Datenbank, einmal am Tag automatisch. Mit dem Code holst du alles auf ein neues Handy.','<b>Voraussetzung:</b> Datenbank-Adresse unter «Liste teilen».\n<b>Datenschutz:</b> Die Daten liegen in deiner Datenbank. Den Code nicht weitergeben. Der KI-Schlüssel wird nie mitgesichert.\n<b>Wenn es nicht klappt:</b> Internet prüfen, Datenbank-Adresse prüfen und die Regeln mit «backups» übernehmen (Einrichtung unter «Liste teilen»).'),
  ss('data','[data-a=resetset]','Zurücksetzen und Löschen sind zwei getrennte Knöpfe, beide mit Rückfrage.')]);
 var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
 var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
 var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#remh':'remind'};
-function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||on(n)})}
+function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||(n==='cam'?on('cam')||on('scan'):on(n))})}
 function tourSteps0(w){var A=AREAS;
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
@@ -932,7 +1003,7 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
  if(on)h+='<div class="ban" style="display:block"><div>'+t('Dein Listen-Code')+':</div><div style="font-size:1.2em;font-weight:700;overflow-wrap:anywhere">'+esc(S.share.code)+'</div><div class="seg" style="margin-top:.4em"><button class="btn" data-a="sharecopy">'+t('Code kopieren')+'</button><button class="btn" data-a="sharestop">'+t('Teilen beenden')+'</button></div><p class="small mute" style="margin:.4em 0 0">'+t('Die andere Person gibt diesen Code bei sich ein.')+'</p></div>';
  else h+='<div class="seg"><button class="btn pri" data-a="sharenew">'+t('Neue geteilte Liste starten')+'</button></div><h3>'+t('Oder einer Liste beitreten')+'</h3><div class="seg"><input class="field" id="shc" placeholder="'+t('Listen-Code')+'" style="flex:1 1 9em"><button class="btn" data-a="sharejoin">'+t('Beitreten')+'</button></div>';
  if(shareMsg)h+='<p class="small">'+esc(shareMsg)+'</p>';
- h+='<details><summary>'+t('Einrichtung (einmalig, etwa 5 Minuten)')+'</summary><ol class="small"><li>'+t('Auf console.firebase.google.com mit einem Google-Konto ein Projekt erstellen (Google Analytics ausschalten).')+'</li><li>'+t('Links «Build» → «Realtime Database» → «Datenbank erstellen», Standort Europa, «Im Testmodus starten».')+'</li><li>'+t('Oben die Adresse kopieren (beginnt mit https://) und hier einfügen.')+'</li><li>'+t('Im Reiter «Regeln» diesen Text einfügen und veröffentlichen:')+' <code>{"rules":{"lists":{"$c":{".read":true,".write":true}}}}</code></li></ol><p class="small mute">'+t('Wer den langen Code kennt, kann die Liste lesen und ändern. Für den Test reicht das.')+'</p></details>';
+ h+='<details><summary>'+t('Einrichtung (einmalig, etwa 5 Minuten)')+'</summary><ol class="small"><li>'+t('Auf console.firebase.google.com mit einem Google-Konto ein Projekt erstellen (Google Analytics ausschalten).')+'</li><li>'+t('Links «Build» → «Realtime Database» → «Datenbank erstellen», Standort Europa, «Im Testmodus starten».')+'</li><li>'+t('Oben die Adresse kopieren (beginnt mit https://) und hier einfügen.')+'</li><li>'+t('Im Reiter «Regeln» diesen Text einfügen und veröffentlichen:')+' <code>{"rules":{"lists":{"$c":{".read":true,".write":true}},"backups":{"$c":{".read":true,".write":true}}}}</code></li></ol><p class="small mute">'+t('Wer den langen Code kennt, kann die Liste lesen und ändern. Für den Test reicht das.')+'</p></details>';
  return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
@@ -954,7 +1025,8 @@ function R(){applyLook();var a=$('#app');if(!a)return;
   case'advice':b=vAdvice();break;case'events':b=vEvents();break;case'stamm':b=vStamm();break;case'kipro':b=vKipro();break;case'test':b=vTest();break;default:b=vList()}
  var tw=['ideas','events','stamm','kipro'].indexOf(view)>-1||(view==='settings'&&(sub==='plan'||sub==='lang'));if(tw)b=testBan()+b;else if(view==='deals')b=testBan(1)+b;
  document.documentElement.classList.toggle('touring',!!tour);
- a.innerHTML=head()+b+sheetHtml()+tourCard();save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
+ a.innerHTML=head()+b+sheetHtml()+tourCard()+undoHtml();
+ if(sh&&sh.t==='scan'&&!sh.res){if(scan.st)scanAttach();else setTimeout(scanStart,0)}else if(scan.st)scanStop();save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 
 /* ===== Aktionen (Klicks) ===== */
@@ -976,7 +1048,12 @@ function act(a,el){var D=el.dataset,i,it;
  case'storeset':setCur({name:D.n,chain:D.c,d:D.d!=null?+D.d:null});sh=null;break;
  case'storeown':if(fval('stn').trim()){var n=fval('stn').trim();setCur({name:n,chain:n});sh=null}break;
  case'sug':draft.n=D.v;draft.manual=false;{var d=$('#dn');if(d){d.value=D.v;d.focus()}}updInput();return;
- case'cam':kiReset();view='advice';break;
+ case'cam':if(on('scan')&&on('cam'))sh={t:'camwhich'};else if(on('scan'))sh={t:'scan'};else{kiReset();view='advice'}break;
+ case'camadv':sh=null;kiReset();view='advice';break;
+ case'scanopen':case'scanagain':sh={t:'scan'};break;
+ case'scanlook':offLook(fval('scn'));return;
+ case'scanhand':sh=null;R();var dn0=$('#dn');if(dn0)dn0.focus();return;
+ case'scanadd':{var sr=sh&&sh.res;if(!sr||!sr.name)break;sh=null;draft.n=sr.name;var dn1=$('#dn');if(dn1)dn1.value=sr.name;act('add',{dataset:{}});return}
  case'catpick':sh={t:'cat',id:D.id};break;
  case'setcat':{var c=D.c||null,s=D.s||null;if(sh.id==='draft'){draft.cat=c;draft.sub=s;draft.manual=true;draft.why=''}
   else{it=findItem(sh.id);if(it){it.cat=c;it.sub=s;if(c)learnCat(it.name,c,s)}}sh=null;break}
@@ -990,7 +1067,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'askskip':ask=null;break;
  case'edit':editId=D.id;break;
  case'esave':it=findItem(D.id);if(it){var nn=fval('en').trim();if(nn)it.name=nn;}editId=null;break;
- case'del':S.items=S.items.filter(function(x){return x.id!==D.id});editId=null;break;
+ case'del':delItem(D.id,'i');editId=null;break;
+ case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
  case'fav':it=findItem(D.id);if(it){var k=S.favs.filter(function(f){return norm(f.name)===norm(it.name)})[0];if(k)S.favs=S.favs.filter(function(f){return f!==k});else S.favs.push({id:uid(),name:it.name,qty:it.qty,unit:it.unit,cat:it.cat,sub:it.sub})}break;
  case'check':checkItem(D.id);tourEv('check');break;
  case'back':it=S.recent.filter(function(x){return x.id===D.id})[0];if(it){S.recent=S.recent.filter(function(x){return x!==it});addItem(it.name,it.qty,it.unit,it.cat,it.sub,'',{stores:it.stores,type:it.type,text:it.stext})}break;
@@ -1023,7 +1101,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'resetset':sh={t:'confirm',title:t('Einstellungen zurücksetzen'),text:t('Alle Einstellungen auf Standard setzen? Deine Produkte bleiben erhalten.'),ok:'doresetset'};break;
  case'doresetset':S.set=setDef();sh=null;break;
  case'resetall':sh={t:'confirm',title:t('Alle Daten löschen'),text:t('Wirklich alles löschen? Das kann nicht rückgängig gemacht werden.'),ok:'doresetall',btn:t('Alles löschen')};break;
- case'doresetall':try{localStorage.removeItem(KEY)}catch(e){}S=DEF();sh=null;view='list';sub='main';break;
+ case'doresetall':try{localStorage.removeItem(KEY);localStorage.removeItem(BK)}catch(e){}S=DEF();sh=null;view='list';sub='main';break;
  case'ob':S.ob.done=false;S.ob.ph='name';break;
  case'tour':if(D.v==='resume'&&S.ob.t)tourStart(S.ob.t.w,S.ob.t.i);else tourStart(D.v);return;
  case'tnext':tourNext();return;
@@ -1047,7 +1125,11 @@ function act(a,el){var D=el.dataset,i,it;
  case'qtyok':{var qq=Math.min(999,Math.max(0,num(fval('qm'),0))),uu=fixU(fval('um'));rememberUnit(uu);if(sh.id==='draft'){draft.q=String(qq);draft.u=uu}else{var q2=findItem(sh.id);if(q2){q2.qty=qq;q2.unit=uu}}sh=null;break}
 case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(j).catch(function(){});say(t('Sicherung kopiert. Falls nicht, den markierten Text selbst kopieren.'));return}
  case'bkload':{var tx2=fval('bk').trim(),r2;try{r2=JSON.parse(tx2)}catch(e){}if(!r2||!Array.isArray(r2.items)){say(t('Das ist keine gültige Sicherung.'));return}impData=r2;sh={t:'confirm',title:t('Sicherung laden'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung ersetzt. Fortfahren?'),ok:'doimport'};break}
- case'doimport':{var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
+ case'bakrest':{var bl=bakList()[+D.v];if(!bl)break;impData=bl.d;sh={t:'confirm',title:t('Zwischenkopie wiederherstellen'),text:t('Die Daten werden durch die Kopie vom {0} ersetzt. Fortfahren?',fdt(bl.t)),ok:'doimport'};break}
+ case'bakcloud':cloudBak(true,function(ok){say(ok?t('Gesichert.'):t('Sicherung fehlgeschlagen. Prüfe Internet und Datenbank-Adresse.'));R()});return;
+ case'bakget':{var bc=fval('bkc').trim();if(!bc||!fbSet()){say(t('Code eingeben und unter «Liste teilen» die Datenbank-Adresse eintragen.'));return}
+  fetch(bakUrl(bc)).then(function(r){return r.json()}).then(function(j){var d=null;try{d=JSON.parse(j.j)}catch(e){}if(!d||!Array.isArray(d.items)){say(t('Keine Sicherung zu diesem Code gefunden.'));return}impData=d;sh={t:'confirm',title:t('Sicherung holen'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung vom {0} ersetzt. Fortfahren?',fdt(j.t)),ok:'doimport'};R()}).catch(function(){say(t('Keine Verbindung. Prüfe das Internet.'))});return}
+ case'doimport':{snap(true);var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
  case'gpsrefresh':declined={};say(t('Suche Filiale …'));gpsDetect(true);return;
  case'ltab':ltab=D.v;break;
  case'other':showOther=!showOther;break;
@@ -1109,6 +1191,8 @@ document.addEventListener('input',function(e){var t0=e.target,id=t0.id;
  else if(t0.dataset&&t0.dataset.chg==='accent'){S.set.accent=t0.value;applyLook();save()}});
 document.addEventListener('focusin',function(e){if(e.target.id==='dq'||e.target.id==='eq')try{e.target.select()}catch(x){}});
 document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},k=D.chg;
+ if(k==='scanimg'){var fl=t0.files&&t0.files[0];if(!fl)return;scanMsg(t('Foto wird gelesen …'));var im=new Image();im.onload=function(){var cv=document.createElement('canvas'),sc=Math.min(1,1600/Math.max(im.width,im.height));cv.width=im.width*sc;cv.height=im.height*sc;cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+  var go=function(){decodeCanvas(cv,function(c){if(c)scanFound(c);else scanMsg(t('Kein Strichcode erkannt. Versuche es näher und mit mehr Licht, oder gib die Nummer von Hand ein.'))})};if('BarcodeDetector' in window||window.ZXing)go();else loadZX(function(ok){if(ok)go();else scanMsg(t('Scanner konnte nicht geladen werden (Internet?). Gib die Nummer von Hand ein.'))})};im.src=URL.createObjectURL(fl);return}
  if(t0.id==='kiimg'&&t0.files[0]){ki.q=fval('kiq');resize(t0.files[0],function(d){ki.img=d;R()});return}
  if(t0.id==='kibar'&&t0.files[0]){barcode(t0.files[0]);return}
  if(t0.id==='evp'){var e1=ev();if(e1){e1.persons=t0.value;save()}return}
@@ -1117,7 +1201,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
  if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
  if(D.chk&&D.chk.indexOf('v_')===0){setOn(D.chk.slice(2),t0.checked);S.set.view='manual';save();R();return}
- if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='remSc')R();return}
+ if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='cloudBak'&&t0.checked){if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save();cloudBak(true)}if(kk==='remSc'||kk==='autoBak'||kk==='cloudBak')R();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
  if(k==='miner'||k==='minehint'){var m2=S.mine[+D.i];if(m2){if(k==='miner')m2.r=+v2;else m2.hint=v2.trim();save()}return}
@@ -1140,11 +1224,11 @@ function pointerEnd(e){clearTimeout(lpT);
  if(dragId){var u=document.elementFromPoint(e.clientX,e.clientY),o=u&&u.closest&&u.closest('[data-ord]');if(o&&o.dataset.ord!==dragId){reorderTo(dragId,o.dataset.ord);save();R()}dragId=null}
  if(sw0){var s=sw0;sw0=null;s.el.style.transform='';
   if(s.dx<-70){swiped=true;setTimeout(function(){swiped=false},400);
-   if(s.k==='i')S.items=S.items.filter(function(x){return x.id!==s.id});else S.hist=S.hist.filter(function(x){return x.id!==s.id});save();R()}}}
+   delItem(s.id,s.k==='i'?'i':'h');save();R()}}}
 document.addEventListener('pointerup',pointerEnd);document.addEventListener('pointercancel',function(){clearTimeout(lpT);if(sw0){sw0.el.style.transform='';sw0=null}dragId=null});
 document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('[data-fire]'))e.preventDefault()});
 window.addEventListener('online',runQueue);
-document.addEventListener('visibilitychange',function(){if(!document.hidden&&S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect()});
+document.addEventListener('visibilitychange',function(){if(document.hidden)return;if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
 
 document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel')||Date.now()-wheelT<400)return;clearTimeout(w._t);
  w._t=setTimeout(function(){var o=w.querySelector('.o');if(!o)return;var i=Math.round(w.scrollTop/o.offsetHeight);
@@ -1153,7 +1237,7 @@ document.addEventListener('click',function(e){var o=e.target.closest&&e.target.c
 /* ===== Start ===== */
 function init(){if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){});
- if(S.set.gps!=='off')gpsDetect();runQueue()}
+ if(S.set.gps!=='off')gpsDetect();runQueue();snap();cloudBak()}
 init();
 
 
