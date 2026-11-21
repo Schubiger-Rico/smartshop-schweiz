@@ -508,3 +508,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Rico wünscht automatische Sicherung. Grenze: Eine Web-App darf nicht unbemerkt Dateien speichern (auch nicht in iCloud).
 - Möglich: (a) automatische Sicherung in der eigenen Datenbank (Firebase, wie beim Teilen) mit Wiederherstellen-Code – schützt auch beim Handywechsel; (b) zusätzlich automatische Zwischenkopien auf dem Gerät (schützt vor Fehlern, nicht vor Handyverlust). Entschieden: (a) + (b), beides abschaltbar, mit Datenschutz-Hinweis.
+
+### Notiz vom 21.11.2026 (abends): Produktinfos per Strichcode (nur festgehalten, noch nicht gebaut)
+
+- Rico will Idee 4: Produktinfos aus Open Food Facts (frei, gratis, ohne Händler). Strichcode mit der Kamera scannen (oder Nummer eingeben) → Name, Marke, Menge, Nährwerte/Nutri-Score, Zutaten; Produkt mit einem Tipp auf die Liste. Später vergleichen.
+- Hinweis: Nicht jedes Schweizer Produkt ist in der Datenbank; dann «nicht gefunden» und von Hand weiter. Abschaltbar wie alles.
