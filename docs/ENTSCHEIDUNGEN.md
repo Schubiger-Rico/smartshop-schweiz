@@ -464,3 +464,13 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 
 - Kosten: Apple-Entwicklerkonto CHF 99 pro Jahr (immer, auch für TestFlight), Google Play einmalig ca. USD 25. Bauen braucht einen Mac (Xcode) oder einen Cloud-Dienst (z. B. Codemagic).
 - Weg: bestehende `index.html` mit Capacitor verpacken. Apple verlangt echte iPhone-Funktionen (sonst Ablehnung als «nur Webseite»), z. B. echte Erinnerung beim Wegfahren (Geofence), Mitteilungen, Ladenerkennung im Hintergrund.
+
+### Ricos Vision (festgehalten 21.11.2026)
+
+1. Produkte im Smartphone eingeben.
+2. Aktionen sehen, auch **wo** es welche gibt (welcher Laden).
+3. Beim Ladeneingang erkennt die App den Laden und zeigt die Reihenfolge für den **kürzesten Weg** durch den Laden.
+4. Idealerweise die Liste **direkt ins Scannergerät des Ladens übermitteln** (z. B. Migros Subito, Coop Passabene), damit man nur ein Gerät braucht.
+5. Produktinfos abrufen und Produkte vergleichen.
+
+Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 teilweise (Ladenerkennung, gelernte Reihenfolge statt Ladenplan); 4 nicht möglich ohne Zusammenarbeit mit den Händlern (keine offenen Schnittstellen); 5 teilweise (KI-Ratgeber).
