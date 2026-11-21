@@ -502,3 +502,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Nach dem Wegwischen (Löschen) eines Produkts erscheint kurz «↩ Rückgängig», ein Tipp holt es zurück (an gleicher Stelle, mit Menge, Laden, Kategorie).
 - Weitere Ideen (nicht gewählt, nur notiert): Liste als Text teilen (WhatsApp/SMS), Erinnerung an Sicherung, Produktinfos per Strichcode (Open Food Facts).
+- Rückgängig: Vorschlag 6 Sekunden sichtbar (noch nicht bestätigt).
+
+### Notiz vom 21.11.2026 (abends): Sicherung automatisch (nur festgehalten, noch nicht gebaut)
+
+- Rico wünscht automatische Sicherung. Grenze: Eine Web-App darf nicht unbemerkt Dateien speichern (auch nicht in iCloud).
+- Möglich: (a) automatische Sicherung in der eigenen Datenbank (Firebase, wie beim Teilen) mit Wiederherstellen-Code – schützt auch beim Handywechsel; (b) zusätzlich automatische Zwischenkopien auf dem Gerät (schützt vor Fehlern, nicht vor Handyverlust). Vorschlag: (a) + (b), abschaltbar, Datenschutz-Hinweis.
