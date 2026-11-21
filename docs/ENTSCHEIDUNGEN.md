@@ -459,3 +459,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Abschnitt «🔔 Erinnerung»: Option «Über Kurzbefehl, ohne Teilen-Menü», Name des Kurzbefehls (Standard «sEBU Erinnerung»), Anleitung zum Aufklappen, Tipp für das Teilen-Menü, «Wenn es nicht klappt».
 - Fehler behoben: Zwei Funktionen hiessen `navBtn`, dadurch war der 🧭-Knopf bei «Noch offen» und unter «Läden» kaputt. Der Google-Maps-Knopf heisst jetzt `mapBtn`.
 - Nicht geprüft: echter Kurzbefehl auf dem iPhone (Ort «Beim Verlassen» je nach iOS-Version).
+
+### Idee für später (21.11.2026): Richtige App im App Store (nur festgehalten, erst wenn die Web-App fertig ist)
+
+- Kosten: Apple-Entwicklerkonto CHF 99 pro Jahr (immer, auch für TestFlight), Google Play einmalig ca. USD 25. Bauen braucht einen Mac (Xcode) oder einen Cloud-Dienst (z. B. Codemagic).
+- Weg: bestehende `index.html` mit Capacitor verpacken. Apple verlangt echte iPhone-Funktionen (sonst Ablehnung als «nur Webseite»), z. B. echte Erinnerung beim Wegfahren (Geofence), Mitteilungen, Ladenerkennung im Hintergrund.
