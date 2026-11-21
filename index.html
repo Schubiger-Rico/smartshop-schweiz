@@ -385,7 +385,7 @@ function askBar(){var i=ask&&findItem(ask);if(!i)return'';
 function card(i){
  if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
  return'<div class="card" data-sw="'+i.id+'" data-swk="i"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button><span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
-  +(S.set.dm==='off'?'':'<button class="btn sq fire '+(i.fire?'on':'off')+'" style="'+(i.fire?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
+  +(S.set.dm==='off'||(S.set.dm==='always'&&!dealsFor(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
   +'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>'
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
@@ -499,12 +499,13 @@ function dealsFor(i){var iw=words(i.name);if(!iw.length)return[];return allDeals
 function fst(i){var d=dealsFor(i)[0];if(!d)return'background:var(--red);border-color:var(--red)';var p=pct(d);return'background:'+(p>=30?'var(--grn)':p>=15?'#a8c13a':'var(--yel)')}
 function rhythm(p){var s=S.dealHist.filter(function(h){return norm(h.product)===norm(p)}).map(function(h){return h.from}).sort();if(s.length<3)return null;
  var g=[];for(var i=1;i<s.length;i++)g.push((new Date(s[i])-new Date(s[i-1]))/864e5);var a=Math.round(g.reduce(function(x,y){return x+y},0)/g.length);return{n:s.length,every:a,next:addDays(daysTo(s[s.length-1])+a)}}
-function purgeDeals(){var keep=S.items.filter(function(i){return i.fire}).map(function(i){return norm(i.name)});
+function watched(i){return !!i.fire||S.set.dm==='always'}
+function purgeDeals(){var keep=S.items.filter(watched).map(function(i){return norm(i.name)});
  S.deals=S.deals.filter(function(d){if(daysTo(d.to)>=0)return true;
   if(keep.some(function(k){return norm(d.product).indexOf(k)>-1||k.indexOf(norm(d.product))>-1}))S.dealHist.push({product:d.product,from:d.from,to:d.to,chain:d.chain});return false});
  S.dealHist=S.dealHist.slice(-200)}
 function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
- S.items.forEach(function(i){if(!i.fire)return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
+ S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
  return l.length?'<div class="ban"><span>🔥 '+esc(l.slice(0,lim).join(' · '))+'</span></div>':''}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
 var allDealsOpen=false;
@@ -513,7 +514,7 @@ function vDeals(){var l=allDeals().sort(function(a,b){return pct(b)-pct(a)}),h='
  h+='<div class="seg" style="margin-bottom:.5em"><button class="btn pri" data-a="dealphoto">📷 '+t('Aktion per Foto')+'</button></div>';
  var n=allDealsOpen?l.length:10;l.slice(0,n).forEach(function(d){h+=dealRow(d)});
  if(l.length>10)h+='<button class="btn" data-a="dealsall">'+(allDealsOpen?t('Weniger'):t('Alle {0} anzeigen',l.length))+'</button>';
- var w=S.items.filter(function(i){return i.fire});h+='<h2>'+t('Beobachtungsliste')+'</h2>';
+ var w=S.items.filter(watched);h+='<h2>'+t('Beobachtungsliste')+'</h2>';
  if(!w.length)h+='<div class="empty">'+t('Tippe auf 🔥 bei einem Produkt, um es zu beobachten.')+'</div>';
  w.forEach(function(i){var d=dealsFor(i)[0];h+='<div class="card"><span class="ic" style="cursor:default">'+esc(iconOf(i))+'</span><span class="nm">'+esc(i.name)+'</span><span class="q small">'+(d?d.chain+' −'+pct(d)+'%':t('keine Aktion'))+'</span></div>'});
  return h}
@@ -624,8 +625,8 @@ function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
 function vSettings(){
- if(sub==='main'){var h='<h2>⚙️ '+t('Einstellungen')+'</h2>';SUBS.forEach(function(s){h+='<button class="btn" data-a="sub" data-v="'+s[0]+'" data-tour="set-'+s[0]+'" style="width:100%;justify-content:flex-start;margin-bottom:.4em">'+s[1]+' '+t(s[2])+'</button>'});return h}
- var title=SUBS.filter(function(s){return s[0]===sub})[0],h='<button class="btn" data-a="sub" data-v="main">← '+t('Zurück')+'</button><h2>'+t(title[2])+'</h2>';
+ if(sub==='main'){var h='<button class="btn" data-a="nav" data-v="list">← '+t('Liste')+'</button><h2>⚙️ '+t('Einstellungen')+'</h2>';SUBS.forEach(function(s){h+='<button class="btn" data-a="sub" data-v="'+s[0]+'" data-tour="set-'+s[0]+'" style="width:100%;justify-content:flex-start;margin-bottom:.4em">'+s[1]+' '+t(s[2])+'</button>'});return h}
+ var title=SUBS.filter(function(s){return s[0]===sub})[0],h='<div class="seg"><button class="btn" data-a="sub" data-v="main">← '+t('Zurück')+'</button><button class="btn" data-a="nav" data-v="list">← '+t('Liste')+'</button></div><h2>'+t(title[2])+'</h2>';
  switch(sub){
  case'profil':h+=rowS(t('Name'),'<input class="field" data-chg="pname" value="'+esc(S.ob.name)+'" placeholder="'+t('freiwillig')+'">')+rowS(t('Nutzung'),'<select class="field" data-chg="ptype">'+['Privat','Familie','Verein','Geschäft'].map(function(o){return'<option'+(S.ob.type===o?' selected':'')+' value="'+o+'">'+t(o)+'</option>'}).join('')+'</select>');
   h+='<p class="small mute">'+t('Der Name dient nur für persönliche Texte in der App.')+'</p>';break;
@@ -655,7 +656,7 @@ function vSettings(){
   var os=Object.keys(S.learn.order);h+='<h3>'+t('Gelernte Reihenfolge je Laden')+' ('+os.length+')</h3>';
   os.forEach(function(k){h+='<div class="card"><span class="nm">'+esc(k)+'</span><button class="btn sq" data-a="lrndel" data-k="'+esc(k)+'" data-w="order">✕</button></div>'});
   h+='<div class="seg" style="margin-top:.6em"><button class="btn" data-a="lrnreset">'+t('Alles Gelernte zurücksetzen')+'</button></div>';break;
- case'price':h+=rowS(t('Aktionen'),selH('dm',[['auto',t('Automatisch')],['manual',t('Manuell')],['off',t('Aus')]]))+'<p class="small mute">'+t('Automatisch: neue Produkte werden beobachtet. Manuell: du tippst auf 🔥. Aus: kein 🔥-Knopf und keine Aktions-Hinweise.')+'</p>'+rowS(t('Preiseinheit'),selH('pu',[['auto',t('Automatisch')],['100','pro 100 g / 100 ml'],['1000','pro kg / lt']]))+rowS(t('Alarme pro Tag'),selH('alim',[['0',t('Aus')],['1','1'],['3','3'],['5','5']]));break;
+ case'price':h+=rowS(t('Aktionen'),selH('dm',[['auto',t('Automatisch')],['manual',t('Manuell')],['always',t('Immer')],['off',t('Aus')]]))+'<p class="small mute">'+t('Automatisch: neue Produkte werden beobachtet. Manuell: du tippst auf 🔥. Immer: alle Produkte werden beobachtet, 🔥 erscheint nur, wenn es eine Aktion gibt. Aus: kein 🔥-Knopf und keine Aktions-Hinweise.')+'</p>'+rowS(t('Preiseinheit'),selH('pu',[['auto',t('Automatisch')],['100','pro 100 g / 100 ml'],['1000','pro kg / lt']]))+rowS(t('Alarme pro Tag'),selH('alim',[['0',t('Aus')],['1','1'],['3','3'],['5','5']]));break;
  case'ai':h+='<p class="small mute">'+t('Für den Ratgeber trägst du deinen eigenen Anthropic-Schlüssel ein. Er bleibt auf diesem Gerät.')+'</p>'
   +rowS(t('API-Schlüssel'),'<input class="field" type="password" data-chg="apiKey" value="'+esc(S.set.apiKey)+'" placeholder="sk-ant-…" autocomplete="off">')
   +rowS(t('Modell'),'<input class="field" data-chg="model" value="'+esc(S.set.model)+'">')+rowS(t('Websuche verwenden'),sw('webSearch',S.set.webSearch));break;
