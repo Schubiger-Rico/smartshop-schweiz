@@ -426,3 +426,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 
 - Begrüssung, Seite «Möchtest du eine Führung durch die App?»: Slogan «Alles kann, nichts muss.» als eigene Zeile in Titelfarbe, danach der Empfehlungstext (3. Fassung, «Aber kurz und schmerzlos: …»).
 - Untertitel überall «smarter EinkaufsBerater» (auch Seitentitel und manifest), Untertitel etwas grösser (.95em statt .85em), «sEBU» unverändert.
+
+### Notiz vom 21.11.2026 (abends): Favoriten ausschaltbar (nur festgehalten, noch nicht gebaut)
+
+- Für alle, die es möglichst unkompliziert wollen: Favoriten in der Liste ausschaltbar. Wenn aus, erscheint kein ☆-Symbol bei den Produkten.
+- Vorschlag: Schalter in Einstellungen → «Favoriten und Letzte Produkte». Offene Frage: Soll dann auch der Menüpunkt «Favoriten» verschwinden (wie bei Aktionen «aus»)?
