@@ -123,7 +123,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:25,quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:''}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -267,9 +267,9 @@ function say(m){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('
 /* ===== Laufzeitzustand ===== */
 var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,declined={},stMsg='',ask=null,tt0=0;
 function newDraft(){return{n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false,stores:[],type:null,stext:'',typeSug:null}}
-var draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
-var CHB=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg'];
-function allCh(){return CHB.concat(S.cchains||[])}
+var endHint=null,draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
+var CHB=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg',"Otto's",'Landi','Manor','Jumbo','Coop Pronto','Migrolino','Kiosk','Hornbach','Bauhaus','Obi','Do it + Garden','Coop Bau+Hobby','Ikea','Pfister','Micasa','Conforama','Interio','Interdiscount','MediaMarkt','Fust','Müller','Dm drogerie','Apodro','Amavita','Sun Store','TopPharm','Coop Vitality','Dosenbach','Ochsner','PKZ','Orell Füssli','Thalia','Ex Libris','Fressnapf','Qualipet','Decathlon','Sport XX','Intersport','Franz Carl Weber'];
+function allCh(){var o=CHB.slice(),seen={};o.forEach(function(x){seen[nk(x)]=1});(S.cchains||[]).forEach(function(c){if(!seen[nk(c)]){seen[nk(c)]=1;o.push(c)}});return o}
 function shopOpts(){var o=allCh().filter(chainOn);S.mine.forEach(function(m){if(m.off!==true&&o.indexOf(m.name)<0)o.push(m.name)});return o}
 function chainOn(c){return S.chains[c]!==false}
 function findItem(id){return S.items.filter(function(x){return x.id===id})[0]}
@@ -307,7 +307,18 @@ function shopEnd(quiet){var s=S.shop;if(!s)return;S.shop=null;
   [s.store,s.chain].forEach(function(k,j,a){if(!k||a.indexOf(k)<j)return;var o=S.learn.order[k]||{};
    s.seq.forEach(function(c,i){var r=i/(s.seq.length-1),e=o[c]||[0,0];o[c]=[e[0]+r,e[1]+1]});S.learn.order[k]=o});
   if(!quiet)say(t('Reihenfolge für {0} gelernt.',s.store))}
- else if(!quiet)say(t('Einkauf beendet.'))}
+ else if(!quiet)say(t('Einkauf beendet.'));
+ if(!quiet){var op=openElse(s);endHint=op.length?{n:op.map(function(i){return i.id})}:null}}
+function shopNames(i){var k=(i.stores||[]).slice();if(i.stext)k.push(i.stext);return k}
+function openElse(s){return S.items.filter(function(i){if(!hasShop(i))return false;var k=shopNames(i);return k.length&&k.indexOf(s.store)<0&&k.indexOf(s.chain)<0})}
+function todayItems(){return S.items.filter(function(i){return i.today===ld()&&hasShop(i)})}
+function hintOf(n){var m=S.mine.filter(function(x){return x.name===n})[0];return m&&m.hint?m.hint:''}
+function itemsTxt(l){return l.map(function(i){return i.name+' ('+shopNames(i).join(', ')+')'}).join(', ')}
+function openBanner(){var l=[];
+ if(endHint){l=endHint.n.map(findItem).filter(Boolean);if(!l.length)endHint=null}
+ if(l.length){var n=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Noch offen')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em"><button class="btn pri" data-a="todayall">'+t('Heute noch merken')+'</button><button class="btn" data-a="endno">'+t('Später')+'</button>'+navBtn(n)+'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button></div></div>'}
+ l=todayItems();if(l.length){var n2=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Heute noch')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em">'+navBtn(n2)+'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button></div></div>'}
+ return''}
 function storeOrder(st){if(!st)return null;var o=S.learn.order[st.name]||S.learn.order[st.chain];if(!o)return null;
  return Object.keys(o).sort(function(a,b){return o[a][0]/o[a][1]-o[b][0]/o[b][1]})}
 function catOrder(){var base=mains(true).map(function(c){return c.id}),o=(S.set.sortAuto&&cur)?storeOrder(cur):null;
@@ -317,20 +328,28 @@ function sortedItems(){var ord=catOrder();
  return S.items.slice().sort(function(a,b){var ia=ord.indexOf(a.cat),ib=ord.indexOf(b.cat);if(ia<0)ia=999;if(ib<0)ib=999;return ia!==ib?ia-ib:subIdx(a)-subIdx(b)})}
 
 /* ===== Filialerkennung (Block 9, Kapitel 2) ===== */
+function rad(){return S.set.radius==='auto'?100:(+S.set.radius||50)}
+var SMALLCH=['Kiosk','Volg','Denner','Migrolino','Coop Pronto','Spar','Apodro','Amavita','Sun Store','TopPharm'],BIGCH=['Manor','Jumbo','Hornbach','Bauhaus','Obi','Ikea','Landi','Interio','Pfister','Micasa','Conforama','Decathlon','Fressnapf','MediaMarkt','Interdiscount','Fust'];
+function autoR(s){if(s.sz)return Math.max(25,Math.min(100,Math.round(s.sz*0.6+20)));if(s.chain&&SMALLCH.indexOf(s.chain)>-1)return 35;if(s.chain&&BIGCH.indexOf(s.chain)>-1)return 80;return 50}
+function effR(s,c){if(S.set.radius!=='auto')return+S.set.radius||50;var base=s.r||autoR(s),acc=(c&&c.accuracy)||0;return Math.max(base,Math.min(Math.round(acc),100))}
+function navUrl(n){var m=S.mine.filter(function(x){return x.name===n})[0],c=!m&&S.cache.filter(function(x){return x.name===n||x.chain===n})[0],p=m||c;
+ return p&&p.lat?'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lon:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(n)}
+function navBtn(n){return'<a class="btn navb" href="'+navUrl(n)+'" target="_blank" rel="noopener">🧭 '+t('Navigation')+'</a>'}
 function dist(a,b,c,d){var r=Math.PI/180,x=(c-a)*r,y=(d-b)*r*Math.cos((a+c)/2*r);return Math.round(6371000*Math.sqrt(x*x+y*y))}
-function chainOfTags(g){var s=((g.brand||'')+' '+(g.name||'')+' '+(g.operator||'')).toLowerCase();var CH=allCh();for(var i=0;i<CH.length;i++)if(s.indexOf(CH[i].toLowerCase())>-1)return CH[i];return null}
+function nk(x){return String(x||'').toLowerCase().replace(/[^a-z0-9äöüéèàç]/g,'')}
+function chainOfTags(g){var f=[nk(g.brand),nk(g.name),nk(g.operator)];var CH=allCh(),best=null,bl=0;for(var i=0;i<CH.length;i++){var k=nk(CH[i]);if(k&&k.length>bl&&f.some(function(x){return x.indexOf(k)>-1})){best=CH[i];bl=k.length}}return best}
 function locate(ok,err){if(!navigator.geolocation){err(t('GPS nicht verfügbar'));return}
  navigator.geolocation.getCurrentPosition(function(p){ok(p.coords)},function(){err(t('Kein Zugriff auf den Standort'))},{timeout:10000,enableHighAccuracy:true})}
 function search(c,done,err){
- function fromCache(){var o=S.cache.map(function(s){return{chain:s.chain,name:s.name,lat:s.lat,lon:s.lon,d:dist(c.latitude,c.longitude,s.lat,s.lon)}}).filter(function(s){return s.d<=1000}).sort(function(a,b){return a.d-b.d});
+ function fromCache(){var o=S.cache.map(function(s){return{chain:s.chain,name:s.name,lat:s.lat,lon:s.lon,sz:s.sz||0,d:dist(c.latitude,c.longitude,s.lat,s.lon)}}).filter(function(s){return s.d<=1000}).sort(function(a,b){return a.d-b.d});
   if(o.length)done(o,true);else err(t('Filialdaten nicht erreichbar'))}
  if(!navigator.onLine){fromCache();return}
- var r=Math.max(1000,S.set.radius),q='[out:json][timeout:15];nwr["shop"~"supermarket|convenience|discount"](around:'+r+','+c.latitude+','+c.longitude+');out center tags;';
+ var r=Math.max(1000,rad()),q='[out:json][timeout:15];nwr["shop"~"supermarket|convenience|discount|variety_store|department_store|general|doityourself|hardware|garden_centre|farm|agrarian|furniture|electronics|computer|mobile_phone|chemist|clothes|shoes|books|stationery|toys|pet|sports|kiosk|interior_decoration"](around:'+r+','+c.latitude+','+c.longitude+');out bb tags;';
  fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)}).then(function(x){if(!x.ok)throw 0;return x.json()}).then(function(j){
-  var o=[];j.elements.forEach(function(e){var g=e.tags||{},ch=chainOfTags(g),la=e.lat||(e.center&&e.center.lat),lo=e.lon||(e.center&&e.center.lon);
-   if(ch&&la&&lo)o.push({chain:ch,name:g.name||ch,lat:la,lon:lo,d:dist(c.latitude,c.longitude,la,lo)})});
+  var o=[];j.elements.forEach(function(e){var g=e.tags||{},ch=chainOfTags(g),bd=e.bounds,la=e.lat||(e.center&&e.center.lat)||(bd&&(bd.minlat+bd.maxlat)/2),lo=e.lon||(e.center&&e.center.lon)||(bd&&(bd.minlon+bd.maxlon)/2),sz=bd?dist(bd.minlat,bd.minlon,bd.maxlat,bd.maxlon):0;
+   if(ch&&la&&lo)o.push({chain:ch,name:g.name||ch,lat:la,lon:lo,sz:sz||0,d:dist(c.latitude,c.longitude,la,lo)})});
   o.sort(function(a,b){return a.d-b.d});
-  o.forEach(function(s){if(!S.cache.some(function(x){return x.name===s.name&&Math.abs(x.lat-s.lat)<1e-4}))S.cache.push({chain:s.chain,name:s.name,lat:s.lat,lon:s.lon})});
+  o.forEach(function(s){if(!S.cache.some(function(x){return x.name===s.name&&Math.abs(x.lat-s.lat)<1e-4}))S.cache.push({chain:s.chain,name:s.name,lat:s.lat,lon:s.lon,sz:s.sz||0})});
   S.cache=S.cache.slice(-300);save();done(o,false)}).catch(fromCache)}
 function visits(){var v={};S.hist.forEach(function(h){if(h.store)v[h.store]=(v[h.store]||0)+1});return v}
 function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;
@@ -338,21 +357,22 @@ function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;
   if(S.set.shopAuto&&!S.shop)shopStart(f.name,f.chain||f.name)}}
 function gpsDetect(manual){
  if(S.set.gps==='off'&&!manual)return;
+ if(S.shop&&!manual)return;
  stMsg=t('Suche …');if(manual)R();
  locate(function(c){
   lastGps=Date.now();typeCheck(c);
-  var mine=S.mine.filter(function(m){return m.off!==true}).map(function(m){return{chain:t('Eigener Laden'),name:m.name,d:dist(c.latitude,c.longitude,m.lat,m.lon)}});
+  var mine=S.mine.filter(function(m){return m.off!==true}).map(function(m){return{chain:t('Eigener Laden'),name:m.name,r:m.r||25,d:dist(c.latitude,c.longitude,m.lat,m.lon)}});
   search(c,function(o,fc){near=o;
-   var vis=visits(),all=mine.concat(o.filter(function(s){return chainOn(s.chain)})).filter(function(s){return s.d<=S.set.radius});
-   all.sort(function(a,b){return(vis[b.name]||0)-(vis[a.name]||0)||a.d-b.d});
+   var vis=visits(),all=mine.concat(o.filter(function(s){return chainOn(s.chain)})).filter(function(s){return s.d<=effR(s,c)});
+   all.sort(function(a,b){return Math.abs(a.d-b.d)>15?a.d-b.d:((vis[b.name]||0)-(vis[a.name]||0)||a.d-b.d)});
    var f=all[0];stMsg=t('{0} Filialen im Umkreis',o.length)+(fc?' ('+t('gespeichert')+')':'');
-   if(!f){if(manual||!cur)cur=null;stMsg+=' · '+t('keine im Radius von {0} m',S.set.radius)}
+   if(!f){if(manual||!cur)cur=null;stMsg+=' · '+(S.set.radius==='auto'?t('keine in der Nähe'):t('keine im Radius von {0} m',S.set.radius))}
    else if(S.set.gps==='auto')setCur(f);
    else if(!declined[f.name])pend=f;
    R();if(manual)say(f?t('Gefunden: {0}',f.name):stMsg)},function(m){stMsg=m;R();if(manual)say(m)})},function(m){stMsg=m;R();if(manual)say(m)})}
 function typeCheck(c){if(!navigator.onLine)return;
  var act=S.types.filter(function(x){return x.on!==false&&x.id!=='sonst'&&S.items.some(function(i){return i.type===x.id})});if(!act.length){nearT=[];return}
- var r=Math.max(25,S.set.radius),ll=r+','+c.latitude+','+c.longitude,parts=[];
+ var r=Math.max(25,rad()),ll=r+','+c.latitude+','+c.longitude,parts=[];
  act.forEach(function(x){if(x.custom){var k=String(x.kw||x.name).replace(/["\\]/g,'');parts.push('nwr["name"~"'+k+'",i](around:'+ll+');')}else{var o=OSMT[x.id];if(o.shop)parts.push('nwr["shop"~"'+o.shop+'"](around:'+ll+');');if(o.amenity)parts.push('nwr["amenity"="'+o.amenity+'"](around:'+ll+');')}});
  var q='[out:json][timeout:15];('+parts.join('')+');out center tags;';
  fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)}).then(function(x){if(!x.ok)throw 0;return x.json()}).then(function(j){
@@ -395,7 +415,7 @@ function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
 function curMatch(i){if(!hasShop(i))return true;if(!cur)return false;var c=cur.chain||cur.name;if(i.stores&&(i.stores.indexOf(c)>-1||i.stores.indexOf(cur.name)>-1))return true;var x=(i.stext||'').toLowerCase().trim();return !!x&&(cur.name.toLowerCase().indexOf(x)>-1||x.indexOf(cur.name.toLowerCase())>-1)}
 function shopLbl(){var tp=draft.type&&typeOf(draft.type);return tp?tp.icon:(draft.stores.length?'🏪'+draft.stores.length:'🏪')}
 function vList(){
- var h=banner()+typBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
+ var h=banner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
  if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
  h+='<div class="add"><button class="ic" id="catb" data-a="catpick" data-id="draft" aria-label="'+t('Kategorie')+'">'+esc(draftIcon())+'</button>'
   +'<input class="field nm" id="dn" placeholder="'+t('Produkt hinzufügen')+'" value="'+esc(draft.n)+'" autocomplete="off" enterkeyhint="done">'
@@ -406,7 +426,7 @@ function vList(){
  if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
  else h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
  function row(i){return card(i)+(dealOpen===i.id?dealPanel(i):'')}
- if(ltab==='food'){var vis=mineI.filter(curMatch),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
+ if(ltab==='food'){var vis=mineI.filter(function(i){return curMatch(i)||i.today===ld()}),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
   if(nh)h+='<p class="small mute" style="margin:.3em 0 .6em">🏪 '+t('{0} Produkte warten auf ihren Laden.',nh)+' <button class="chip" data-a="nav" data-v="shops">'+t('Anzeigen')+'</button></p>'}
  else S.types.forEach(function(tp){var l=mineI.filter(function(i){return(typeOf(i.type)?i.type:'sonst')===tp.id});if(!l.length)return;h+='<h3>'+tp.icon+' '+esc(tname(tp))+'</h3>';l.forEach(function(i){h+=row(i)})});
  h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2><span class="seg">'+selH('recN',[['10','10'],['20','20'],['50','50'],['100','100'],['all',t('Alle')]])+selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]])+'</span></div>';
@@ -479,7 +499,7 @@ function vShops(){var g={},h='<h2>🏪 '+t('Läden')+'</h2>';
  function isCur(n){return !!cur&&(n===cur.name||n===cur.chain)}
  ks.sort(function(a,b){return(isCur(b)?1:0)-(isCur(a)?1:0)||a.localeCompare(b)});
  if(!ks.length)return h+'<div class="empty">'+t('Hier stehen Produkte, die du einem bestimmten Laden zugeordnet hast. Wähle bei der Eingabe 🏪.')+'</div>';
- ks.forEach(function(n){h+='<h3>'+(isCur(n)?'📍 ':'')+esc(n)+' ('+g[n].length+')</h3>';g[n].forEach(function(i){h+=card(i)+(dealOpen===i.id?dealPanel(i):'')})});
+ ks.forEach(function(n){h+='<h3>'+(isCur(n)?'📍 ':'')+esc(n)+' ('+g[n].length+') '+navBtn(n)+'</h3>';g[n].forEach(function(i){h+=card(i)+(dealOpen===i.id?dealPanel(i):'')})});
  return h}
 
 /* ===== Aktionen ===== */
@@ -642,11 +662,11 @@ function vSettings(){
   +rowS(t('Sortierung'),selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]]))
   +rowS(t('Kategorien unter der Liste anzeigen'),sw('cats',S.set.cats))+rowS(t('Liste bei Filialwechsel öffnen'),sw('openList',S.set.openList))
   +rowS(t('Vibration'),sw('vib',S.set.vib))+rowS(t('Lautlos'),sw('quiet',S.set.quiet))+'<p class="small mute">'+t('Lautlos kann eine Web-App nicht erzwingen. Der Wert wird nur gemerkt.')+'</p>';break;
- case'gps':h+=rowS(t('Filialerkennung'),selH('gps',[['off',t('Aus')],['ask',t('Nachfragen')],['auto',t('Automatisch')]]))+rowS(t('Radius'),selH('radius',[['25','25 m'],['50','50 m'],['100','100 m'],['250','250 m']]))
-  +'<div class="seg" style="margin-top:.5em"><button class="btn pri" data-a="gpsnow">📍 '+t('Jetzt suchen')+'</button></div><p class="small">'+esc(stMsg)+'</p><p class="small mute">'+t('Die Suche braucht Internet (OpenStreetMap). Standort wird nur dafür verwendet und nicht gespeichert.')+'</p>';break;
+ case'gps':h+=rowS(t('Filialerkennung'),selH('gps',[['off',t('Aus')],['ask',t('Nachfragen')],['auto',t('Automatisch')]]))+rowS(t('Radius'),selH('radius',[['auto',t('Automatisch (empfohlen)')],['25','25 m'],['50','50 m'],['100','100 m'],['250','250 m']]))
+  +'<div class="seg" style="margin-top:.5em"><button class="btn pri" data-a="gpsnow">📍 '+t('Jetzt suchen')+'</button></div><p class="small">'+esc(stMsg)+'</p><p class="small mute">'+t('Automatisch: kleine Läden genau, grosse grosszügig. Nicht erkannt? Wähle einen grösseren Radius. Falscher Laden? Wähle einen kleineren.')+'</p><p class="small mute">'+t('Die Suche braucht Internet (OpenStreetMap). Standort wird nur dafür verwendet und nicht gespeichert.')+'</p>';break;
  case'stores':h+=allCh().map(function(c){var cu=(S.cchains||[]).indexOf(c)>-1;return rowS(c,'<span class="seg"><input type="checkbox" data-chain="'+esc(c)+'"'+(chainOn(c)?' checked':'')+' style="width:1.4em;height:1.4em">'+(cu?'<button class="btn sq" data-a="chaindel" data-n="'+esc(c)+'">✕</button>':'')+'</span>')}).join('')
   +'<div class="seg" style="margin-top:.5em"><input class="field" id="cn" placeholder="'+t('Weiterer Laden (Kette)')+'" style="flex:1"><button class="btn pri" data-a="chainadd">＋</button></div>'
-  +'<h3>'+t('Eigene Läden')+'</h3>';S.mine.forEach(function(m,i){h+='<div class="card"><input type="checkbox" data-mine="'+i+'"'+(m.off===true?'':' checked')+' style="width:1.4em;height:1.4em"><span class="nm">'+esc(m.name)+'</span><button class="btn sq" data-a="minedel" data-i="'+i+'">✕</button></div>'});
+  +'<h3>'+t('Eigene Läden')+'</h3>';S.mine.forEach(function(m,i){h+='<div class="card"><input type="checkbox" data-mine="'+i+'"'+(m.off===true?'':' checked')+' style="width:1.4em;height:1.4em"><span class="nm">'+esc(m.name)+'</span><select class="field" data-chg="miner" data-i="'+i+'" style="height:calc(var(--rh)*.8)" aria-label="'+t('Radius')+'">'+[25,50,100].map(function(r){return'<option value="'+r+'"'+((m.r||25)===r?' selected':'')+'>'+r+' m</option>'}).join('')+'</select><input class="field" data-chg="minehint" data-i="'+i+'" value="'+esc(m.hint||'')+'" placeholder="'+t('Weg, z. B. geradeaus')+'" style="width:9em"><button class="btn sq" data-a="minedel" data-i="'+i+'">✕</button></div>'});
   h+='<div class="seg"><input class="field" id="mn" placeholder="'+t('Name des Ladens')+'" style="flex:1"><button class="btn pri" data-a="mineadd">'+t('Hier speichern')+'</button></div><p class="small mute">'+t('Gespeicherte Filialen für den Betrieb ohne Empfang')+': '+S.cache.length+'</p>';break;
  case'learn':h+=rowS(t('Smart-Lernen'),sw('learnon',S.learn.on!==false))+rowS(t('Sortierung nach Laden'),sw('sortAuto',S.set.sortAuto))+rowS(t('Einkauf automatisch starten'),sw('shopAuto',S.set.shopAuto));
   var ks=Object.keys(S.learn.names);h+='<h3>'+t('Gelernte Kategorien')+' ('+ks.length+')</h3>';
@@ -727,15 +747,16 @@ AREAS.push(['Aktionen',[
  st('deals','#app h2:nth-of-type(2)','Alle Produkte mit 🔥 stehen in der Beobachtungsliste.','Ein Produkt ohne Marke zeigt Aktionen für alle Marken. Mit Marke, zum Beispiel «Thomy Mayonnaise», nur für diese.')]]);
 AREAS.push(['Läden',[
  st('shops','#app h2','Hier siehst du, was du für welchen Laden aufgeschrieben hast.','Der Laden, in dem du gerade bist, steht oben mit 📍.'),
+ st('shops','.navb','🧭 öffnet Google Maps mit dem Laden als Ziel.','Das geht für Läden mit gespeichertem Standort genau. Ohne Standort sucht Maps nach dem Namen in der Nähe, das kann ungenau sein.'),
  st('list','[data-a=shopsel][data-id=draft]','Ein Produkt einem Laden zuordnen: Tippe auf 🏪, wenn du es aufschreibst.','Du kannst mehrere Läden wählen oder von Hand einen Namen schreiben, zum Beispiel für Kleider.')]]);
 AREAS.push(['Favoriten und Verlauf',[
  st('favs','#app h2','Favoriten holst du mit einem Tipp auf die Liste.'),
  st('favs','#app h2:nth-of-type(2)','Im Verlauf steht alles, was du abgehakt hast. Antippen bearbeitet, nach links wischen löscht.'),
  st('favs','#app','Favoriten entstehen auch automatisch. Wie oft, stellst du in den Einstellungen ein.')]]);
 AREAS.push(['Filialen',[
- st('settings','select[data-chg=gps]','Hier schaltest du die Filialerkennung ein: Aus, Nachfragen oder Automatisch.','Die Erkennung läuft nur beim Öffnen der App oder mit 🔄. Dein Standort wird nicht gespeichert.',{sub:'gps'}),
+ st('settings','select[data-chg=gps]','Hier schaltest du die Filialerkennung ein: Aus, Nachfragen oder Automatisch.','Die Erkennung läuft nur beim Öffnen der App oder mit 🔄. Dein Standort wird nicht gespeichert. Während eines Einkaufs schlägt die App keinen anderen Laden vor, erst wenn du den Einkauf beendest. Wenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist, und tippe auf 🔄.',{sub:'gps'}),
  st('settings','#app .row','Du bestimmst, welche Ketten erkannt werden, und kannst eigene Läden speichern.',0,{sub:'stores'}),
- st('list','#shopbtn','Mit «Einkauf starten» lernt die App deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.')]]);
+ st('list','#shopbtn','Mit «Einkauf starten» lernt die App deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden. Wenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.')]]);
 AREAS.push(['Ratgeber',[
  st('list','.camb','📷 öffnet den Ratgeber. Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.'),
  st('advice','#kiq','Stelle deine Frage. Die Antwort ist kurz, mit «Mehr» siehst du Details und Quellen.'),
@@ -761,14 +782,14 @@ SA('Favoriten und Letzte Produkte',[
  ss('favs','row:Lautlos','Eine Web-App kann den Ton nicht erzwingen. Der Wert wird nur gemerkt.')]);
 SA('Filialerkennung',[
  ss('gps','row:Filialerkennung','Aus, Nachfragen oder Automatisch.','Bei «Nachfragen» erscheint oben eine Zeile, die du bestätigst. Bei «Automatisch» wechselt die App selbst.'),
- ss('gps','row:Radius','Wie nah du am Laden sein musst.'),
+ ss('gps','row:Radius','Wie nah du am Laden sein musst. «Automatisch» passt sich an: kleine Läden genau, grosse grosszügig.','Wofür geeignet: 25 m für Dorfladen, Metzger oder Hofladen. 50 m für Einkaufsstrassen und den Parkplatz vor dem Laden. 100 m für Einkaufszentren mit grossem Parkplatz. 250 m nur bei schlechtem Empfang, hier ist die Verwechslung mit Läden nebenan am wahrscheinlichsten. Wenn der Laden nicht erkannt wird: Wähle einen grösseren Radius oder «Automatisch». Wenn der falsche Laden kommt: Wähle einen kleineren. Das liegt dann an der Einstellung und nicht an der App.'),
  ss('gps','[data-a=gpsnow]','Mit diesem Knopf suchst du sofort.')]);
 SA('Filialen',[
  ss('stores','#app .row','Setze oder entferne den Haken: So bestimmst du, welche Ketten erkannt werden.'),
  ss('stores','#cn','Hier fügst du weitere Ketten hinzu, zum Beispiel Manor.'),
- ss('stores','#mn','Eigener Laden: Stehe im Laden und tippe auf «Hier speichern».','Eigene Läden haben ebenfalls einen Haken zum Ein- und Ausschalten.')]);
+ ss('stores','#mn','Eigener Laden: Stehe im Laden und tippe auf «Hier speichern».','Eigene Läden haben einen Haken zum Ein- und Ausschalten, einen eigenen Radius (Standard 25 m) und ein Feld für den Weg, zum Beispiel «geradeaus». Der Weg erscheint in der Erinnerung beim Wegfahren.')]);
 SA('Smart-Lernen',[
- ss('learn','row:Smart-Lernen','Die App merkt sich Kategorien und eigene Wörter.'),
+ ss('learn','row:Smart-Lernen','Die App merkt sich Kategorien und eigene Wörter.','Wenn die App etwas falsch lernt: Korrigiere die Kategorie einmal, dann merkt sie sich die neue. Oder lösche alles Gelernte mit dem Knopf weiter unten.'),
  ss('learn','row:Sortierung nach Laden','Sortiert die Liste nach deiner gelernten Reihenfolge im Laden.'),
  ss('learn','row:Einkauf automatisch starten','Startet den Einkauf, sobald die App den Laden erkennt.'),
  ss('learn','[data-a=lrnreset]','Hier löschst du alles Gelernte wieder.')]);
@@ -779,7 +800,7 @@ SA('Ladentypen',[
  ss('types','#app .card','Ladentypen wie Baumarkt oder Apotheke für Dinge ohne Eile. Mit Haken schaltest du sie ein oder aus.','Ist ein passendes Geschäft in der Nähe, erscheint oben eine Zeile.'),
  ss('types','#tn','Eigener Ladentyp: Name und Suchwort im Ladennamen.')]);
 SA('Preise und Alarme',[
- ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','Automatisch beobachtet neue Produkte von selbst. Manuell: du tippst auf 🔥. Aus: kein 🔥-Knopf und keine Hinweise.'),
+ ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','Automatisch beobachtet neue Produkte von selbst. Manuell: du tippst auf 🔥. Immer: alle Produkte werden beobachtet, 🔥 erscheint nur bei einer Aktion. Aus: kein 🔥-Knopf und keine Hinweise. Wenn du zu viele Hinweise bekommst: Wähle «Manuell» oder «Aus».'),
  ss('price','row:Preiseinheit','Preise pro 100 g, pro kg oder automatisch.'),
  ss('price','row:Alarme pro Tag','Wie viele Aktions-Hinweise pro Tag erscheinen dürfen.')]);
 SA('KI',[
@@ -944,6 +965,10 @@ function act(a,el){var D=el.dataset,i,it;
  case'ob':S.ob.done=false;S.ob.ph='name';break;
  case'tour':if(D.v==='resume'&&S.ob.t)tourStart(S.ob.t.w,S.ob.t.i);else tourStart(D.v);return;
  case'tnext':tourNext();return;
+ case'endno':endHint=null;break;
+ case'todayall':if(endHint){endHint.n.forEach(function(id){var i=findItem(id);if(i)i.today=ld()})}endHint=null;break;
+ case'remind':{var rl=todayItems();if(!rl.length&&endHint)rl=endHint.n.map(findItem).filter(Boolean);if(!rl.length)break;var rn=shopNames(rl[0])[0],rh=hintOf(rn),rt=t('Noch holen')+': '+rl.map(function(i){return i.name}).join(', ')+' – '+rn+(rh?' ('+rh+')':'');
+  if(navigator.share){navigator.share({title:'sEBU',text:rt}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(rt).then(function(){say(t('Text kopiert. Füge ihn in Erinnerungen ein.'))},function(){say(rt)})}else say(rt);return}
  case'tmore':if(tour)tour.more=!tour.more;break;
  case'tprev':if(tour&&tour.i>0){tour.i--;tourShow()}return;
  case'tpause':tourPause();return;
@@ -1030,8 +1055,9 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
+ if(k==='miner'||k==='minehint'){var m2=S.mine[+D.i];if(m2){if(k==='miner')m2.r=+v2;else m2.hint=v2.trim();save()}return}
  if(k==='pname')S.ob.name=v2.trim();else if(k==='ptype')S.ob.type=v2;
- else if(k==='radius')S.set.radius=+v2;else if(k==='persons')S.set.persons=Math.max(1,+v2||4);
+ else if(k==='radius')S.set.radius=v2==='auto'?'auto':+v2;else if(k==='persons')S.set.persons=Math.max(1,+v2||4);
  else if(k==='apiKey'||k==='model'||k==='fbUrl')S.set[k]=v2.trim();
  else S.set[k]=v2;
  save();R();if(k==='gps'&&v2!=='off')gpsDetect()});
@@ -1060,7 +1086,7 @@ document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!
   if(w.id==='wq')$('#qm').value=Math.min(99,Math.max(0,i));else{var u=allUnits()[Math.min(allUnits().length-1,Math.max(0,i))];$('#um').value=u}},120)},true);
 document.addEventListener('click',function(e){var o=e.target.closest&&e.target.closest('.wheel .o');if(o){var w=o.parentNode,i=Array.prototype.indexOf.call(w.querySelectorAll('.o'),o);wheelT=0;w.scrollTo({top:i*o.offsetHeight,behavior:'smooth'})}});
 /* ===== Start ===== */
-function init(){if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
+function init(){if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){});
  if(S.set.gps!=='off')gpsDetect();runQueue()}
 init();
