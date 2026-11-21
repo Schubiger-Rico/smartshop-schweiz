@@ -413,4 +413,5 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 ### Notiz vom 21.11.2026 (abends): Einführung beim ersten Start empfehlen (nur festgehalten, noch nicht gebaut)
 
 - Beim ersten Öffnen, nach der Namenseingabe (bei der Frage «Möchtest du eine Führung durch die App?»), einen freundlichen bis witzigen Satz ergänzen: Die Führung ist sehr sinnvoll, damit man die App richtig nutzen kann.
-- Vorschlag: «Kurz und schmerzlos: In ein paar Minuten zeige ich dir alle Tricks. Danach kaufst du ein wie ein Profi – versprochen, ganz ohne Prüfung am Schluss. 😉»
+- Wichtig: Es soll auch klar werden, dass man ohne Führung leicht denkt, die App sei nicht gut – dabei ist oft nur eine Einstellung anders nötig.
+- Vorschlag (2. Fassung): «Kurz und schmerzlos: In ein paar Minuten zeige ich dir alle Tricks. Ehrlich gesagt: Ohne Führung verpasst man vieles und denkt schnell, die App kann nichts. Dabei steckt sie voller Ideen, die du erst findest, wenn du weisst, wo sie sind. Danach kaufst du ein wie ein Profi – versprochen, ganz ohne Prüfung am Schluss. 😉»
