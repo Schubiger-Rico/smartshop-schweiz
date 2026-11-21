@@ -436,4 +436,4 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - **Ergänzung (21.11. abends):** Statt einem einzelnen Schalter eine **Abfrage mit drei Stufen**: «Einfach» (nur das Nötigste), «Umfänglich» (alles sichtbar), «Manuell» (selbst einzeln wählen). Danach ist jedes Symbol/Element einzeln ein- und ausschaltbar.
 - In den Einstellungen eine **eigene Sparte «Einkaufsliste»** dafür.
 - **Änderungen sind live sichtbar** (Vorschau der Liste direkt beim Umschalten).
-- Offen: Ob die Abfrage auch bei der Begrüssung beim ersten Start kommt (Vorschlag: ja, nach der Schriftgrösse).
+- Entschieden: Die Abfrage kommt auch bei der Begrüssung beim ersten Start, gleich nach der Schriftgrösse (mit Live-Vorschau der Liste).
