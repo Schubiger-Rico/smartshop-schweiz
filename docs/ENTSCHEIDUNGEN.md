@@ -398,7 +398,7 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 
 ### Notiz vom 21.11.2026 (abends): Führungen verbessern (nur festgehalten, noch nicht gebaut)
 
-- **Einstellungen-Führung, Schritt 24:** Die Erklärung liegt über dem Button (verdeckt ihn vermutlich) – Erklärung so platzieren, dass der Button frei bleibt.
+- **Einstellungen-Führung, Schritt 24:** Das Erklärfeld verdeckt den Button (bestätigt) – Erklärfeld unter den Button setzen, damit er frei bleibt.
 - **Knopf «Mehr»** auffälliger gestalten.
 - **Text unter «Mehr» strukturierter:** z. B. bei 25 / 50 / 100 / 250 m je einen eigenen Absatz, damit es übersichtlicher wird.
 - **App-Führung:** Zuerst die Eingabeseite genau erklären, Schritt für Schritt. Erst danach den Rest.
