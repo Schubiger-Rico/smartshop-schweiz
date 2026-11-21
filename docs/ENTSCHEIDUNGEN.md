@@ -409,3 +409,8 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - Knopf «ℹ️ Mehr ▾» ist auffälliger (Rahmen in Akzentfarbe, fett).
 - Text unter «Mehr» in Absätzen (`\n` im Text = neuer Absatz): Radius (25/50/100/250 m je eigene Zeile, «Welcher Laden?» erwähnt), Aktionen-Modi, Filialerkennung.
 - App-Führung beginnt mit **«Eingabeseite»** Schritt für Schritt (Feld, Kategorie, Menge, 🏪, ＋ ausprobieren, Produktzeile, 🔥, ☆, 🛒, 🔄, 📷, ✓, Letzte Produkte), danach der Rest. App-Führung hat jetzt 47 Schritte.
+
+### Notiz vom 21.11.2026 (abends): Einführung beim ersten Start empfehlen (nur festgehalten, noch nicht gebaut)
+
+- Beim ersten Öffnen, nach der Namenseingabe (bei der Frage «Möchtest du eine Führung durch die App?»), einen freundlichen bis witzigen Satz ergänzen: Die Führung ist sehr sinnvoll, damit man die App richtig nutzen kann.
+- Vorschlag: «Kurz und schmerzlos: In ein paar Minuten zeige ich dir alle Tricks. Danach kaufst du ein wie ein Profi – versprochen, ganz ohne Prüfung am Schluss. 😉»
