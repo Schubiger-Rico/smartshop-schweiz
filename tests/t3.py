@@ -3,7 +3,7 @@ import os,json
 errs=[]
 def ov(route):
     q=route.request.post_data or ''
-    body={'elements':[{'type':'node','lat':47.0,'lon':8.0,'tags':{'shop':'doityourself','name':'Jumbo'}},{'type':'node','lat':47.0,'lon':8.0,'tags':{'shop':'supermarket','name':'Coop Test','brand':'Coop'}}]}
+    body={'elements':[{'type':'node','lat':47.0005,'lon':8.0,'tags':{'shop':'doityourself','name':'Jumbo'}},{'type':'node','lat':47.0,'lon':8.0,'tags':{'shop':'supermarket','name':'Coop Test','brand':'Coop'}}]}
     route.fulfill(status=200,body=json.dumps(body),content_type='application/json')
 with sync_playwright() as p:
     b=p.chromium.launch();c=b.new_context(viewport={'width':390,'height':800},geolocation={'latitude':47.0,'longitude':8.0},permissions=['geolocation'])

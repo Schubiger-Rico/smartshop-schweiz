@@ -388,4 +388,10 @@ Idee: Die App wählt den Radius selbst, je nach Laden (Dorfmetzger vs. Migros). 
 - «Noch offen» am Einkaufsende: Heute noch merken / Später, 🔔 Erinnerung beim Wegfahren (mit Weg-Hinweis je eigenem Laden), 🧭 Navigation (Google Maps) auch in Läden, ruhige «Heute noch»-Zeile beim Öffnen.
 - Erkennungsradius «Automatisch (empfohlen)» nach Ladengrösse und GPS-Genauigkeit; eigene Läden mit eigenem Radius (25/50/100); Einstellung 25/50/100/250 m.
 - Tour: «Wofür geeignet» und «Wenn es nicht klappt» bei Radius, Filialerkennung, Aktionen, Smart-Lernen; Radius-Erklärung unter «Mehr».
-- Nicht gebaut: Kopf-an-Kopf-Nachfrage bei zwei Läden. Der nächste gewinnt, bei unter 15 m Unterschied der häufiger besuchte.
+- ~~Nicht gebaut: Kopf-an-Kopf-Nachfrage bei zwei Läden.~~ → umgesetzt am 21.11. abends, siehe unten.
+### Umgesetzt am 21.11. (abends): «Welcher Laden?»
+
+- Liegen zwei Läden weniger als 15 m auseinander (beide im Radius), fragt die App «Welcher Laden? Zwei sind fast gleich nah.» mit beiden Namen und Abstand sowie «Keiner».
+- Die Wahl wird für genau dieses Läden-Paar gemerkt (`S.learn.pick`); beim nächsten Mal wählt die App ohne Nachfrage. «Gelerntes löschen» setzt das zurück.
+- «Keiner» lehnt beide bis zum nächsten 🔄 ab. Ist man schon in einem der beiden Läden, wird nicht gefragt. Gilt auch bei Filialerkennung «Automatisch».
+- Test: `tests/t10.py`.

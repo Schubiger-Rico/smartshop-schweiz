@@ -265,7 +265,7 @@ var toastT;
 function say(m){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){e.classList.remove('show')},2600)}
 
 /* ===== Laufzeitzustand ===== */
-var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,declined={},stMsg='',ask=null,tt0=0;
+var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,pick=null,declined={},stMsg='',ask=null,tt0=0;
 function newDraft(){return{n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false,stores:[],type:null,stext:'',typeSug:null}}
 var endHint=null,draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
 var CHB=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg',"Otto's",'Landi','Manor','Jumbo','Coop Pronto','Migrolino','Kiosk','Hornbach','Bauhaus','Obi','Do it + Garden','Coop Bau+Hobby','Ikea','Pfister','Micasa','Conforama','Interio','Interdiscount','MediaMarkt','Fust','Müller','Dm drogerie','Apodro','Amavita','Sun Store','TopPharm','Coop Vitality','Dosenbach','Ochsner','PKZ','Orell Füssli','Thalia','Ex Libris','Fressnapf','Qualipet','Decathlon','Sport XX','Intersport','Franz Carl Weber'];
@@ -352,7 +352,8 @@ function search(c,done,err){
   o.forEach(function(s){if(!S.cache.some(function(x){return x.name===s.name&&Math.abs(x.lat-s.lat)<1e-4}))S.cache.push({chain:s.chain,name:s.name,lat:s.lat,lon:s.lon,sz:s.sz||0})});
   S.cache=S.cache.slice(-300);save();done(o,false)}).catch(fromCache)}
 function visits(){var v={};S.hist.forEach(function(h){if(h.store)v[h.store]=(v[h.store]||0)+1});return v}
-function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;
+function pairKey(a,b){return[a.name,b.name].sort().join('|')}
+function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;pick=null;
  if(n){if(S.set.vib&&navigator.vibrate)navigator.vibrate(120);if(S.set.openList)view='list';
   if(S.set.shopAuto&&!S.shop)shopStart(f.name,f.chain||f.name)}}
 function gpsDetect(manual){
@@ -365,7 +366,9 @@ function gpsDetect(manual){
   search(c,function(o,fc){near=o;
    var vis=visits(),all=mine.concat(o.filter(function(s){return chainOn(s.chain)})).filter(function(s){return s.d<=effR(s,c)});
    all.sort(function(a,b){return Math.abs(a.d-b.d)>15?a.d-b.d:((vis[b.name]||0)-(vis[a.name]||0)||a.d-b.d)});
-   var f=all[0];stMsg=t('{0} Filialen im Umkreis',o.length)+(fc?' ('+t('gespeichert')+')':'');
+   var f=all[0],g=all[1];stMsg=t('{0} Filialen im Umkreis',o.length)+(fc?' ('+t('gespeichert')+')':'');pick=null;
+   if(f&&g&&g.name!==f.name&&Math.abs(f.d-g.d)<15){var lp=S.learn.pick&&S.learn.pick[pairKey(f,g)];
+    if(lp===g.name)f=g;else if(lp!==f.name&&!(cur&&(cur.name===f.name||cur.name===g.name))){if(declined[f.name])f=g;else if(!declined[g.name]){pick=[f,g];pend=null;R();if(manual)say(t('Welcher Laden?'));return}}}
    if(!f){if(manual||!cur)cur=null;stMsg+=' · '+(S.set.radius==='auto'?t('keine in der Nähe'):t('keine im Radius von {0} m',S.set.radius))}
    else if(S.set.gps==='auto')setCur(f);
    else if(!declined[f.name])pend=f;
@@ -385,6 +388,7 @@ function typBanner(){var h='';nearT.forEach(function(n){if(S.dismiss.indexOf(n.k
  h+='<div class="ban"><span>'+tp.icon+' '+t('{0} in der Nähe: {1} zu besorgen',esc(tname(tp)),c===1?t('1 Ding'):t('{0} Dinge',c))+'</span><span class="seg"><button class="btn pri" data-a="typego">'+t('Ansehen')+'</button><button class="btn sq" data-a="typeno" data-k="'+esc(n.key)+'" aria-label="'+t('Schliessen')+'">✕</button></span></div>'});return h}
 function catsLine(){var o={};S.items.forEach(function(i){var c=i.cat&&cat(i.cat);var k=c?cname(c):t('Übrige');o[k]=(o[k]||0)+1});return Object.keys(o).map(function(k){return k+' ('+o[k]+')'}).join(' · ')}
 function banner(){
+ if(pick)return'<div class="ban" id="pickban"><span>'+t('Welcher Laden? Zwei sind fast gleich nah.')+'<br><span class="small mute">'+t('Ich merke mir deine Wahl für diese zwei Läden.')+'</span></span><div class="seg">'+pick.map(function(x,i){return'<button class="btn pri" data-a="pick" data-v="'+i+'">'+esc(x.name)+' ('+x.d+' m)</button>'}).join('')+'<button class="btn" data-a="pickno">'+t('Keiner')+'</button></div></div>';
  if(pend)return'<div class="ban"><span>'+t('Du scheinst bei {0} zu sein ({1} m).','<b>'+esc(pend.name)+'</b>',pend.d)+'</span><div class="seg"><button class="btn pri" data-a="yes">'+t('Ja')+'</button><button class="btn" data-a="no">'+t('Nein')+'</button></div></div>';
  if(cur)return'<div class="ban"><span>📍 <b>'+esc(cur.name)+'</b>'+(cur.d!=null?' · '+cur.d+' m':'')+'</span><button class="btn sq" data-a="no" aria-label="'+t('Filiale verwerfen')+'">✕</button></div>'
   +(S.set.cats&&S.items.length?'<div class="ban"><span class="small">'+esc(catsLine())+'</span></div>':'');
@@ -907,6 +911,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'more':more=!more;break;
  case'nav':nav(D.v);return;
  case'yes':if(pend)setCur(pend);break;
+ case'pick':if(pick){var pf=pick[+D.v];S.learn.pick=S.learn.pick||{};S.learn.pick[pairKey(pick[0],pick[1])]=pf.name;setCur(pf)}break;
+ case'pickno':if(pick){declined[pick[0].name]=1;declined[pick[1].name]=1;pick=null}break;
  case'no':if(pend){declined[pend.name]=1;pend=null}else cur=null;break;
  case'shopstart':shopStart(cur?cur.name:t('Unbekannter Laden'),cur?cur.chain:'');say(t('Einkauf gestartet.'));break;
  case'shopend':shopEnd();break;
@@ -957,7 +963,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'minedel':S.mine.splice(+D.i,1);break;
  case'lrndel':delete S.learn[D.w][D.k];break;
  case'lrnreset':sh={t:'confirm',title:t('Gelerntes zurücksetzen'),text:t('Alle gelernten Kategorien, Wörter und Reihenfolgen löschen?'),ok:'dolrn'};break;
- case'dolrn':S.learn.names={};S.learn.alias={};S.learn.order={};sh=null;break;
+ case'dolrn':S.learn.names={};S.learn.pick={};S.learn.alias={};S.learn.order={};sh=null;break;
  case'resetset':sh={t:'confirm',title:t('Einstellungen zurücksetzen'),text:t('Alle Einstellungen auf Standard setzen? Deine Produkte bleiben erhalten.'),ok:'doresetset'};break;
  case'doresetset':S.set=setDef();sh=null;break;
  case'resetall':sh={t:'confirm',title:t('Alle Daten löschen'),text:t('Wirklich alles löschen? Das kann nicht rückgängig gemacht werden.'),ok:'doresetall',btn:t('Alles löschen')};break;
