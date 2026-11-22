@@ -523,3 +523,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Nicht echt geprüft: Kamera-Scan auf dem iPhone (Safari hat keinen eingebauten Strichcode-Leser, darum wird ein Scanner aus dem Internet nachgeladen), echte Firebase-Sicherung.
 - **Behoben am 22.11.:** Firebase-Sicherung schlug bei Rico fehl (Regeln kannten «backups» nicht). Sicherung liegt jetzt unter `lists/bak-<Code>`, die bestehenden Teilen-Regeln reichen, keine Änderung in Firebase nötig. Fehlermeldung nennt jetzt den Grund (Zugriff verweigert / Adresse falsch / kein Internet). Schalter-Zeilen umbrechen nicht mehr.
 - 22.11.: Firebase-Sicherung auf Ricos iPhone mit echter Datenbank erfolgreich getestet. Hinweis: Neue Versionen kommen wegen GitHub-Zwischenspeicher bis zu 10 Minuten verspätet an (Umgesetzt 22.11.: Service Worker fragt bei eigenen Dateien still immer beim Server nach (`cache:"no-cache"`, `updateViaCache:"none"`, Cache `sebu-v2`); offline weiter aus dem Speicher.)
+
+### Notiz vom 22.11.2026: Notfall-Produkt (nur festgehalten, noch nicht gebaut)
+
+- Bei der Eingabe ein Notfall-Knopf (z. B. ❗), damit ein Produkt als «dringend» markiert wird.
+- Dringende Produkte stehen **immer an erster Stelle** (vor jeder Sortierung, auch im Laden), fallen auf (rote Umrandung/Hintergrund) und haben **grössere Schrift**.
+- Ideen dazu (Vorschlag, noch offen): dringend auch nachträglich per Antippen umschaltbar; dringend erscheint unabhängig vom zugeordneten Laden in jeder Liste; Hinweis beim Einkaufsende, falls Dringendes offen bleibt; ein- und ausschaltbar in der Sparte «Einkaufsliste».
