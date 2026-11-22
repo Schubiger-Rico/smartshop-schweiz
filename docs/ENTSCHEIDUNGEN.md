@@ -548,3 +548,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Ergänzung: Deutlich mehr Gemüse und Früchte (z. B. Paprika, Gurke, Lauch, Zucchetti, Aubergine, Spinat, Salat, Pilze, Zwiebel, Knoblauch, Kürbis, Kiwi, Mango, Ananas, Melone, Kirschen, Pfirsich, Birne, Orange, Kokosnuss …).
 - Suchfeld in der Auswahl bleibt (Rico findet es gut).
 - **Automatisches Produkt-Symbol:** Steckt ein bekanntes Wort im Produktnamen, erscheint dessen Symbol, auch in zusammengesetzten Wörtern: «Paprikapulver» → 🫑, «Tomatensauce» → 🍅, «Erdbeerjoghurt» → 🍓. Von Hand änderbar, die App merkt sich die Wahl.
+
+### Notiz vom 22.11.2026: Farbe pro Kategorie (nur festgehalten, noch nicht gebaut)
+
+- Jede Kategorie kann eine eigene Farbe bekommen (Einstellungen → Kategorien, Farbpunkt antippen, Auswahl wie bei der Akzentfarbe).
+- Vorschlag Anzeige: farbiger Streifen links an der Produktkarte und farbiger Rahmen ums Kategorie-Symbol; Standardfarben für die 14 Hauptkategorien vorgegeben, abschaltbar («Kategorie-Farben anzeigen»).
