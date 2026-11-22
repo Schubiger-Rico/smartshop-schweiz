@@ -529,3 +529,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Bei der Eingabe ein Notfall-Knopf (z. B. ❗), damit ein Produkt als «dringend» markiert wird.
 - Dringende Produkte stehen **immer an erster Stelle** (vor jeder Sortierung, auch im Laden), fallen auf (rote Umrandung/Hintergrund) und haben **grössere Schrift**.
 - Ideen dazu (Vorschlag, noch offen): dringend auch nachträglich per Antippen umschaltbar; dringend erscheint unabhängig vom zugeordneten Laden in jeder Liste; Hinweis beim Einkaufsende, falls Dringendes offen bleibt; ein- und ausschaltbar in der Sparte «Einkaufsliste».
+
+### Umgesetzt am 22.11.: Notfall / dringend
+
+- ❗ bei der Eingabe (vor ＋), im Bearbeiten und als rotes ❗ auf der Karte (Antippen nimmt es weg).
+- Dringendes steht immer zuoberst, rot umrandet, grössere fette Schrift, in jedem Laden sichtbar.
+- Beim Einkaufsende roter Hinweis «❗ Dringend noch offen: …» mit «Verstanden».
+- Schalter in «Einkaufsliste» (bei «Einfach» aus), in App- und Einstellungen-Führung erklärt.

@@ -85,6 +85,7 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 .tb{background:#ffe066;color:#3a2e00;border:2px dashed #b38f00;border-radius:.8em;padding:.7em .9em;margin:.2em 0 .8em}.tbh{font-weight:800;font-size:1.3em;margin-bottom:.2em}
 .undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1em + env(safe-area-inset-bottom,0px));z-index:85;display:flex;gap:.6em;align-items:center;background:var(--ink);color:var(--bg);padding:.4em .5em .4em 1em;border-radius:.8em;box-shadow:0 .3em 1em #0005;max-width:92vw}
 .ns{display:inline-block;min-width:1.6em;text-align:center;font-weight:800;color:#fff;border-radius:.4em;padding:0 .3em}
+.card.urg{border:2px solid var(--red);background:color-mix(in srgb,var(--red) 13%,var(--card))}.card.urg .nm{font-size:1.25em;font-weight:800}.urgb.on{background:var(--red);border-color:var(--red);color:#fff}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -273,7 +274,7 @@ function say(m){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('
 /* ===== Laufzeitzustand ===== */
 var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,pick=null,declined={},stMsg='',ask=null,tt0=0;
 function newDraft(){return{n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:false,stores:[],type:null,stext:'',typeSug:null}}
-var endHint=null,draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
+var urgEnd=false,endHint=null,draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
 var CHB=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg',"Otto's",'Landi','Manor','Jumbo','Coop Pronto','Migrolino','Kiosk','Hornbach','Bauhaus','Obi','Do it + Garden','Coop Bau+Hobby','Ikea','Pfister','Micasa','Conforama','Interio','Interdiscount','MediaMarkt','Fust','Müller','Dm drogerie','Apodro','Amavita','Sun Store','TopPharm','Coop Vitality','Dosenbach','Ochsner','PKZ','Orell Füssli','Thalia','Ex Libris','Fressnapf','Qualipet','Decathlon','Sport XX','Intersport','Franz Carl Weber'];
 function allCh(){var o=CHB.slice(),seen={};o.forEach(function(x){seen[nk(x)]=1});(S.cchains||[]).forEach(function(c){if(!seen[nk(c)]){seen[nk(c)]=1;o.push(c)}});return o}
 function shopOpts(){var o=allCh().filter(chainOn);S.mine.forEach(function(m){if(m.off!==true&&o.indexOf(m.name)<0)o.push(m.name)});return o}
@@ -314,13 +315,16 @@ function shopEnd(quiet){var s=S.shop;if(!s)return;S.shop=null;
    s.seq.forEach(function(c,i){var r=i/(s.seq.length-1),e=o[c]||[0,0];o[c]=[e[0]+r,e[1]+1]});S.learn.order[k]=o});
   if(!quiet)say(t('Reihenfolge für {0} gelernt.',s.store))}
  else if(!quiet)say(t('Einkauf beendet.'));
- if(!quiet){var op=openElse(s);endHint=op.length?{n:op.map(function(i){return i.id})}:null}}
+ if(!quiet){var op=openElse(s);endHint=op.length?{n:op.map(function(i){return i.id})}:null;urgEnd=S.items.some(function(i){return i.urg})}}
 function shopNames(i){var k=(i.stores||[]).slice();if(i.stext)k.push(i.stext);return k}
 function openElse(s){return S.items.filter(function(i){if(!hasShop(i))return false;var k=shopNames(i);return k.length&&k.indexOf(s.store)<0&&k.indexOf(s.chain)<0})}
 function todayItems(){return S.items.filter(function(i){return i.today===ld()&&hasShop(i)})}
 function hintOf(n){var m=S.mine.filter(function(x){return x.name===n})[0];return m&&m.hint?m.hint:''}
 function itemsTxt(l){return l.map(function(i){return i.name+' ('+shopNames(i).join(', ')+')'}).join(', ')}
-function openBanner(){var l=[];
+function openBanner(){var l=[],u=urgEnd&&S.items.filter(function(i){return i.urg});if(u&&!u.length)urgEnd=false;
+ var uh=u&&u.length?'<div class="ban" style="display:block;border:2px solid var(--red)"><div style="font-size:1.15em"><b>❗ '+t('Dringend noch offen')+': '+esc(u.map(function(i){return i.name}).join(', '))+'</b></div><div class="seg" style="margin-top:.4em"><button class="btn" data-a="urgok">'+t('Verstanden')+'</button></div></div>':'';
+ return uh+openBanner0()}
+function openBanner0(){var l=[];
  if(endHint){l=endHint.n.map(findItem).filter(Boolean);if(!l.length)endHint=null}
  if(l.length){var n=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Noch offen')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em"><button class="btn pri" data-a="todayall">'+t('Heute noch merken')+'</button><button class="btn" data-a="endno">'+t('Später')+'</button>'+mapBtn(n)+(on('remind')?'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button>':'')+'</div></div>'}
  l=todayItems();if(l.length){var n2=shopNames(l[0])[0];return'<div class="ban" style="display:block"><div>'+t('Heute noch')+': <b>'+esc(itemsTxt(l))+'</b></div><div class="seg" style="margin-top:.4em">'+mapBtn(n2)+(on('remind')?'<button class="btn" data-a="remind">🔔 '+t('Erinnerung beim Wegfahren')+'</button>':'')+'</div></div>'}
@@ -331,7 +335,7 @@ function catOrder(){var base=mains(true).map(function(c){return c.id}),o=(S.set.
  if(!o)return base;return o.filter(function(id){return base.indexOf(id)>-1}).concat(base.filter(function(id){return o.indexOf(id)<0}))}
 function subIdx(x){var c=x.sub&&cat(x.sub);return c?c.sortOrder:-1}
 function sortedItems(){var ord=catOrder();
- return S.items.slice().sort(function(a,b){var ia=ord.indexOf(a.cat),ib=ord.indexOf(b.cat);if(ia<0)ia=999;if(ib<0)ib=999;return ia!==ib?ia-ib:subIdx(a)-subIdx(b)})}
+ return S.items.slice().sort(function(a,b){if(!!a.urg!==!!b.urg)return a.urg?-1:1;var ia=ord.indexOf(a.cat),ib=ord.indexOf(b.cat);if(ia<0)ia=999;if(ib<0)ib=999;return ia!==ib?ia-ib:subIdx(a)-subIdx(b)})}
 
 /* ===== Filialerkennung (Block 9, Kapitel 2) ===== */
 function rad(){return S.set.radius==='auto'?100:(+S.set.radius||50)}
@@ -413,14 +417,14 @@ function unitW(){var m=0;allUnits().forEach(function(u){if(u.length>m)m=u.length
 function askBar(){var i=ask&&findItem(ask);if(!i)return'';
  return'<div class="ban" style="display:block"><div>'+t('Wohin gehört «{0}»?',esc(i.name))+'</div><div class="sug" style="margin:.4em 0">'+mains().map(function(c){return'<button class="chip" data-a="askcat" data-c="'+c.id+'">'+esc(c.icon)+' '+esc(cname(c))+'</button>'}).join('')+'</div><div class="seg"><input class="field" id="askal" placeholder="'+t('Meint das Gleiche wie … (optional)')+'" style="flex:1 1 8em"><button class="btn" data-a="askskip">'+t('Überspringen')+'</button></div></div>'}
 function card(i){
- if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
- return'<div class="card" data-sw="'+i.id+'" data-swk="i">'+(on('cat')?'<button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button>':'')+'<span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
+ if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn sq urgb'+(i.urg?' on':'')+'" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Dringend')+'">❗</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
+ return'<div class="card'+(i.urg?' urg':'')+'" data-sw="'+i.id+'" data-swk="i">'+(i.urg?'<button class="btn sq urgb on" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Nicht mehr dringend')+'">❗</button>':'')+(on('cat')?'<button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button>':'')+'<span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
   +(S.set.dm==='off'||(S.set.dm==='always'&&!dealsFor(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
   +(on('fav')?'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>':'')
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
 /* Ansicht der Einkaufsliste: Einfach / Umfänglich / Manuell, jedes Element einzeln */
-var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['scan','🔎','Strichcode scannen','Produktinfos wie Nutri-Score und Zutaten aus Open Food Facts (gratis). Nicht jedes Produkt ist erfasst.'],['nav','🧭','Navigation','Öffnet Google Maps mit dem Laden als Ziel, wenn noch etwas offen ist.'],['remind','🔔','Erinnerung beim Wegfahren','Erinnert dich an offene Produkte. Wie, stellst du weiter unten ein.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
+var VEL=[['cat','🗂️','Kategorie-Symbol','Zeigt, wohin ein Produkt gehört, und sortiert die Liste.'],['fav','☆','Favoriten','Stern bei jedem Produkt und Menüpunkt «Favoriten».'],['fire','🔥','Aktionen','Beobachtet Produkte und meldet Aktionen. Feineinstellung unter «Preise und Alarme».'],['urg','❗','Notfall / dringend','Dringende Produkte stehen immer zuoberst, rot umrandet und grösser, in jedem Laden.'],['shop','🏪','Laden bei der Eingabe','Produkte einem Laden oder Ladentyp zuordnen.'],['bar','🛒','Einkauf, Laden wählen und 🔄','Knöpfe oben für Einkauf starten, Laden wählen und neu suchen.'],['cam','📷','Ratgeber','Knopf für Foto-Fragen an die KI.'],['scan','🔎','Strichcode scannen','Produktinfos wie Nutri-Score und Zutaten aus Open Food Facts (gratis). Nicht jedes Produkt ist erfasst.'],['nav','🧭','Navigation','Öffnet Google Maps mit dem Laden als Ziel, wenn noch etwas offen ist.'],['remind','🔔','Erinnerung beim Wegfahren','Erinnert dich an offene Produkte. Wie, stellst du weiter unten ein.'],['recent','🕘','Letzte Produkte','Abgehakte Produkte unter der Liste zum Zurückholen.'],['catline','📊','Kategorien-Zeile','Kurze Übersicht der Kategorien unter der Liste.']];
 function on(k){if(k==='fire')return S.set.dm!=='off';if(k==='catline')return !!S.set.cats;var o=S.set.show||{};return o[k]!==false}
 function setOn(k,v){if(k==='fire'){S.set.dm=v?(S.set.dmLast||'manual'):'off';if(!v&&S.set.dm!=='off')S.set.dmLast=S.set.dm;return}if(k==='catline'){S.set.cats=v;return}S.set.show=S.set.show||{};S.set.show[k]=v}
 function setView(m){S.set.view=m;if(m==='manual')return;var simple=m==='simple';
@@ -520,16 +524,17 @@ function addRow(real){var has=draft.type||draft.stores.length||draft.stext,id=fu
   +'<input class="field nm"'+id('dn')+' placeholder="'+t('Produkt hinzufügen')+'" value="'+(real?esc(draft.n):'')+'" autocomplete="off" enterkeyhint="done"'+(real?'':' tabindex="-1"')+'>'
   +'<button class="btn qu" data-a="qty" data-id="draft" aria-label="'+t('Menge und Einheit')+'">'+esc((draft.q||'0')+' '+draft.u)+'</button>'
   +(on('shop')?'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'" style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</button>':'')
+  +(on('urg')?'<button class="btn sq urgb'+(real&&draft.urg?' on':'')+'" data-a="urgtog" data-id="draft" aria-label="'+t('Dringend')+'">❗</button>':'')
   +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div>'}
 function vList(){
  var h=banner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
  if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
  h+=addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
- var mineI=sortedItems().filter(inTab);
+ var mineI=sortedItems().filter(function(i){return inTab(i)||(i.urg&&ltab==='food')});
  if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
  else h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
  function row(i){return card(i)+(dealOpen===i.id?dealPanel(i):'')}
- if(ltab==='food'){var vis=mineI.filter(function(i){return curMatch(i)||i.today===ld()}),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
+ if(ltab==='food'){var vis=mineI.filter(function(i){return i.urg||curMatch(i)||i.today===ld()}),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
   if(nh)h+='<p class="small mute" style="margin:.3em 0 .6em">🏪 '+t('{0} Produkte warten auf ihren Laden.',nh)+' <button class="chip" data-a="nav" data-v="shops">'+t('Anzeigen')+'</button></p>'}
  else S.types.forEach(function(tp){var l=mineI.filter(function(i){return(typeOf(i.type)?i.type:'sonst')===tp.id});if(!l.length)return;h+='<h3>'+tp.icon+' '+esc(tname(tp))+'</h3>';l.forEach(function(i){h+=row(i)})});
  if(!on('recent'))return h;
@@ -823,6 +828,7 @@ AREAS.push(['Eingabeseite',[
  st('list','#catb','Links zeigt das Symbol die Kategorie. Die App erkennt sie beim Schreiben selbst. Antippen wählt sie von Hand.','Eigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
+ st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
  st('list','.add','Jetzt probierst du es: Schreibe «Milch» und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
  st('list','.card[data-swk=i] .ic','Jedes Produkt auf der Liste hat links sein Kategorie-Symbol. Antippen ändert die Kategorie.',0,{ro:1}),
  st('list','.card[data-swk=i] .nm','Tippe auf den Namen, um das Produkt zu bearbeiten: Name, Menge, Laden oder Löschen.',0,{ro:1}),
@@ -881,6 +887,7 @@ SA('Profil',[
 SA('Einkaufsliste',[
  ss('liste','[data-a=viewmode]','Wie viel möchtest du sehen? Einfach, Umfänglich oder Manuell.','<b>Einfach:</b> nur Eingabefeld, Menge, ＋ und ✓. Für alle, die einfach eine Liste wollen.\n<b>Umfänglich:</b> alle Hilfen sind sichtbar.\n<b>Manuell:</b> du wählst selbst.\n<b>Wenn dir etwas fehlt:</b> Schalte es hier einzeln wieder ein, zum Beispiel ☆ für Favoriten.'),
  ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.'),
+ ss('liste','row:❗ Notfall / dringend','❗ Notfall: Dringende Produkte stehen immer zuoberst, rot umrandet und grösser.','<b>Wofür geeignet:</b> Medikamente, Windeln, Milch fürs Baby – alles, was heute sicher mit muss.\n<b>Wenn es nicht klappt:</b> Ist der ❗-Knopf nicht sichtbar, schalte ihn hier ein.'),
  ss('liste','row:🔎 Strichcode scannen','🔎 Strichcode scannen: Produktinfos wie Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts.','<b>Wofür geeignet:</b> Produkte schnell erfassen und vergleichen.\n<b>So geht es:</b> 📷 antippen, «Strichcode scannen», Strichcode vor die Kamera halten.\n<b>Wenn es nicht klappt:</b> Mehr Licht, Strichcode ruhig und gerade halten, etwa 10 bis 15 cm Abstand. Oder «Foto aufnehmen» oder die Nummer unter dem Strichcode von Hand eingeben.\nKamera muss für Safari erlaubt sein. Nicht jedes Schweizer Produkt ist erfasst, dann kommt «Nicht gefunden».'),
  ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
 SA('Darstellung',[
@@ -936,7 +943,7 @@ var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
 var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
-var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#remh':'remind'};
+var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#remh':'remind','[data-a=urgtog][data-id=draft]':'urg'};
 function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||(n==='cam'?on('cam')||on('scan'):on(n))})}
 function tourSteps0(w){var A=AREAS;
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
@@ -1061,6 +1068,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'gocats':sh=null;view='settings';sub='cats';break;
  case'shclose':if(el.classList.contains('sheet')&&event.target!==el)return;sh=null;break;
  case'add':{var ty=draft.type||(ltab==='more'?'sonst':null),r=addItem(fval('dn')||draft.n,fval('dq')||draft.q,fval('du')||draft.u,draft.cat,draft.sub,draft.why,{stores:draft.stores,type:ty,text:draft.stext});if(!r)return;if(draft.type)S.learn.types[norm(r.name)]=draft.type;if(r.type&&ltab!=='more')say(t('Zu «Weitere» hinzugefügt.'));
+  if(draft.urg)r.urg=true;
   if(draft.manual&&draft.cat)learnCat(r.name,draft.cat,draft.sub);
   if(!r.cat&&S.learn.on!==false&&!r.tour&&!r.type)ask=r.id;
   draft=newDraft();tourEv('add');break}
@@ -1069,6 +1077,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'edit':editId=D.id;break;
  case'esave':it=findItem(D.id);if(it){var nn=fval('en').trim();if(nn)it.name=nn;}editId=null;break;
  case'del':delItem(D.id,'i');editId=null;break;
+ case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
+ case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
  case'fav':it=findItem(D.id);if(it){var k=S.favs.filter(function(f){return norm(f.name)===norm(it.name)})[0];if(k)S.favs=S.favs.filter(function(f){return f!==k});else S.favs.push({id:uid(),name:it.name,qty:it.qty,unit:it.unit,cat:it.cat,sub:it.sub})}break;
  case'check':checkItem(D.id);tourEv('check');break;
