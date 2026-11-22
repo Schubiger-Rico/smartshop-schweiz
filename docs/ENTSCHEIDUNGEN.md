@@ -553,3 +553,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Jede Kategorie kann eine eigene Farbe bekommen (Einstellungen → Kategorien, Farbpunkt antippen, Auswahl wie bei der Akzentfarbe).
 - Vorschlag Anzeige: farbiger Streifen links an der Produktkarte und farbiger Rahmen ums Kategorie-Symbol; Standardfarben für die 14 Hauptkategorien vorgegeben, abschaltbar («Kategorie-Farben anzeigen»).
+- Ergänzung: Farben frei selbst wählbar (Farbpalette plus eigener Farbwähler), nicht nur Vorgaben. Anzeige als farbiger Streifen links an der Karte (Vorschlag, noch nicht bestätigt).
