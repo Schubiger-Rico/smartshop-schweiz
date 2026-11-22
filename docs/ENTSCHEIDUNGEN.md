@@ -554,3 +554,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Jede Kategorie kann eine eigene Farbe bekommen (Einstellungen → Kategorien, Farbpunkt antippen, Auswahl wie bei der Akzentfarbe).
 - Vorschlag Anzeige: farbiger Streifen links an der Produktkarte und farbiger Rahmen ums Kategorie-Symbol; Standardfarben für die 14 Hauptkategorien vorgegeben, abschaltbar («Kategorie-Farben anzeigen»).
 - Ergänzung: Farben frei selbst wählbar (Farbpalette plus eigener Farbwähler), nicht nur Vorgaben. Anzeige als farbiger Streifen links an der Karte (Vorschlag, noch nicht bestätigt).
+
+### Umgesetzt am 22.11.: Mehr Symbole, automatisches Produkt-Symbol, Kategorie-Farben
+
+- Symbol-Auswahl von ca. 90 auf über 200 Symbole in 16 Gruppen (Früchte, Gemüse, Brot & Backen, Milch & Eier, Fleisch & Fisch, Vorrat, Getränke, Drogerie, Baby, Haushalt, Tiere, Baumarkt & Garten, Büro & Schule, Apotheke, Kleider, Sonstiges), mit Suchwörtern.
+- Automatisches Produkt-Symbol aus dem Namen, auch in zusammengesetzten Wörtern (Paprikapulver → 🫑). Eigenes Symbol pro Produkt wählbar, wird gemerkt, «Wieder automatisch» möglich; «Gelerntes löschen» setzt zurück.
+- Kategorie-Farben: Standardfarben für die 14 Hauptkategorien, frei wählbar (Farbpunkt unter Kategorien), farbiger Streifen links an der Karte, Schalter «Kategorie-Farben» in «Einkaufsliste» (bei «Einfach» aus). In den Führungen erklärt.
