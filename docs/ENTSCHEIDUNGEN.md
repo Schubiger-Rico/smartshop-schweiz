@@ -536,3 +536,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Dringendes steht immer zuoberst, rot umrandet, grössere fette Schrift, in jedem Laden sichtbar.
 - Beim Einkaufsende roter Hinweis «❗ Dringend noch offen: …» mit «Verstanden».
 - Schalter in «Einkaufsliste» (bei «Einfach» aus), in App- und Einstellungen-Führung erklärt.
+
+### Arbeitsregel (seit 22.11.2026)
+
+- Alle neuen Funktionen und Einstellungen kommen automatisch in die Wegleitung (Führung durch App bzw. Einstellungen), mit «Wofür geeignet» und «Wenn es nicht klappt». Nachgetragen: «↩ Rückgängig» in der App-Führung (Schritt ✓).

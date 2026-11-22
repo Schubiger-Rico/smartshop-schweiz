@@ -8,6 +8,7 @@ Besitzer: Rico Schubiger (GitHub `Schubiger-Rico`), Schweiz, Deutsch. Er arbeite
 - **Nur eine Frage auf einmal**, mit einem Vorschlag daneben. Kurz antworten, keine langen Listen.
 - **Wünsche zuerst nur festhalten** (in `docs/ENTSCHEIDUNGEN.md` unter «Gewünscht, noch nicht gebaut»). **Bauen erst**, wenn Rico ausdrücklich sagt: «umsetzen», «erstelle», «setze alles um». Bei Fehlern sagt er «bitte beheben», dann sofort beheben.
 - App-Prinzip: **«Alles kann, nichts muss.»** Nichts ist aufdringlich, jede Automatik ist erklärbar und abschaltbar. Die App hilft, sie entscheidet nicht.
+- **Jede neue Funktion und Einstellung automatisch in die Wegleitung aufnehmen** (App-Führung und/oder Einstellungen-Führung, Arrays `AREAS`/`SA`, ggf. `NEED`), ohne dass Rico es extra sagen muss.
 - Wegleitung/Tour: Bei Einstellungen immer erklären, wofür welcher Wert geeignet ist und «Wenn es nicht klappt, probiere …», damit niemand denkt, die App sei schlecht, wenn nur die Einstellung nicht passt.
 - Nach jeder Änderung: Tests laufen lassen (siehe unten), dann auf `main` committen und pushen. GitHub Pages ist nach etwa einer Minute live. Rico sagen, was geändert wurde (1–3 Sätze) und was er tun muss (meist nichts; bei Symbolwechsel iPhone-Homescreen-Symbol neu hinzufügen).
 - Nie Geheimnisse (API-Schlüssel) ins Repo schreiben.
