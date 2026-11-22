@@ -540,3 +540,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Arbeitsregel (seit 22.11.2026)
 
 - Alle neuen Funktionen und Einstellungen kommen automatisch in die Wegleitung (Führung durch App bzw. Einstellungen), mit «Wofür geeignet» und «Wenn es nicht klappt». Nachgetragen: «↩ Rückgängig» in der App-Führung (Schritt ✓).
+
+### Notiz vom 22.11.2026: Mehr Symbole (nur festgehalten, noch nicht gebaut)
+
+- Emoji-Auswahl für Kategorien und Produkte erweitern (heute ca. 90 in 5 Gruppen: Essen, Getränke, Haushalt, Tiere, Sonstiges).
+- Neu/mehr: Obst & Gemüse, Brot & Backwaren, Fleisch & Fisch, Milchprodukte, Süsses & Snacks, Getränke, Drogerie & Hygiene, Baby, Haushalt & Putzen, Tiere, Baumarkt & Garten, Büro & Schule, Apotheke, Kleider, Freizeit. Mit Suchwörtern (Schweizerdeutsch inkl., z. B. «rüebli», «gipfeli»).
