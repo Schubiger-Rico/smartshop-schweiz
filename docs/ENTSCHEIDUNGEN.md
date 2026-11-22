@@ -545,3 +545,6 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Emoji-Auswahl für Kategorien und Produkte erweitern (heute ca. 90 in 5 Gruppen: Essen, Getränke, Haushalt, Tiere, Sonstiges).
 - Neu/mehr: Obst & Gemüse, Brot & Backwaren, Fleisch & Fisch, Milchprodukte, Süsses & Snacks, Getränke, Drogerie & Hygiene, Baby, Haushalt & Putzen, Tiere, Baumarkt & Garten, Büro & Schule, Apotheke, Kleider, Freizeit. Mit Suchwörtern (Schweizerdeutsch inkl., z. B. «rüebli», «gipfeli»).
+- Ergänzung: Deutlich mehr Gemüse und Früchte (z. B. Paprika, Gurke, Lauch, Zucchetti, Aubergine, Spinat, Salat, Pilze, Zwiebel, Knoblauch, Kürbis, Kiwi, Mango, Ananas, Melone, Kirschen, Pfirsich, Birne, Orange, Kokosnuss …).
+- Suchfeld in der Auswahl bleibt (Rico findet es gut).
+- **Automatisches Produkt-Symbol:** Steckt ein bekanntes Wort im Produktnamen, erscheint dessen Symbol, auch in zusammengesetzten Wörtern: «Paprikapulver» → 🫑, «Tomatensauce» → 🍅, «Erdbeerjoghurt» → 🍓. Von Hand änderbar, die App merkt sich die Wahl.
