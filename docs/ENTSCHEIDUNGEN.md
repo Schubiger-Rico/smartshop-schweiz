@@ -629,3 +629,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Kategorie-Auswahl (beim Produkt) so übersichtlich wie die Liste unter Einstellungen → Kategorien: untereinander, eine Hauptkategorie pro Zeile mit grossem Symbol, Unterkategorien eingerückt darunter (aufklappbar). Grösser, gut lesbar.
 - Mehr vordefinierte Kategorien und Unterkategorien. **Asia fehlt komplett** (neu z. B. «Internationale Küche»: Asia, Mexiko/Tex-Mex, Italien, Orient, Indien).
 - Orientierung an einer gängigen Einteilung: Rubriken der Onlineshops von Migros/Coop (Früchte & Gemüse, Brot & Backwaren, Milchprodukte & Eier, Fleisch & Fisch, Vorräte, Süsses & Salziges, Getränke, Tiefkühl, Fertiggerichte, Internationale Küche, Bio/Vegi/Vegan, Drogerie & Kosmetik, Haushalt, Baby, Tiere …); offizieller Standard wäre GS1 GPC (für den Alltag zu fein). Bestehende eigene Anpassungen dürfen nicht verloren gehen.
+- **Ergänzung: Automatische Kategorie noch besser** (weniger suchen):
+  - Viel mehr Stichwörter (heute ca. 400), inkl. Asia (Sojasauce, Kokosmilch, Reisnudeln, Currypaste, Tofu …), Bio/Vegan, Fertiggerichte, Schweizer Marken und Eigenmarken (Rivella, Ovomaltine, Aromat, Cailler, Zweifel …).
+  - Bei zusammengesetzten Wörtern zählt für die Kategorie das **Grundwort am Ende** (Erdbeer**joghurt** → Joghurt, Paprika**pulver** → Gewürze), beim Symbol bleibt das erste Wort (🍓, 🫑).
+  - Einzahl/Mehrzahl und Tippfehler toleranter; Rückfall über das erkannte Symbol (🫑 → Gemüse).
+  - Gescannte Produkte: Kategorie aus Open Food Facts übernehmen.
+  - Bleibt: Korrekturen werden gelernt und haben Vorrang.
