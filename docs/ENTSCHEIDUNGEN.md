@@ -604,3 +604,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Alle kleinen Knöpfe nur mit Symbol, auch 🛒 und 📍 (Text wieder einschaltbar: Darstellung → «Knöpfe mit Text»).
 - 2 Sekunden auf einem Knopf bleiben zeigt, wofür er ist; der Knopf wird dabei nicht ausgelöst. Abschaltbar: Darstellung → «Erklärung beim Gedrückthalten». 🔥 behält sein eigenes langes Drücken (Aktionen).
 - In App- und Einstellungen-Führung erklärt.
+
+### Notiz vom 23.11.2026: 🎤 vor das Eingabefeld (nur festgehalten, noch nicht gebaut)
+
+- 🎤 aus der Kopfzeile nehmen und direkt vor «Produkt hinzufügen» setzen (in der Eingabezeile).
