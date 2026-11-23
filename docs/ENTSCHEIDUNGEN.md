@@ -591,3 +591,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 23.11.2026: ＋ doppelt hoch (nur festgehalten, noch nicht gebaut)
 
 - Wenn das Eingabefeld eine eigene Zeile hat: ＋ rechts in doppelter Höhe, von der Zeile «Produkt hinzufügen» bis zur Knopfzeile darunter (grosser, gut treffbarer Knopf).
+- **Umgesetzt am 23.11.:** ＋ doppelt hoch rechts neben Eingabefeld und Knopfzeile (Grid, `--n` = Anzahl kleiner Knöpfe), Kopfzeile wieder sicher einzeilig.
