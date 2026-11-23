@@ -568,3 +568,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - **Umgesetzt am 23.11.:** Darstellung → «Zeilenhöhe: Kompakt / Normal», Standard Kompakt (Zeile ca. 30 % niedriger, kleinere Knöpfe). In der Einstellungen-Führung erklärt.
 - 23.11.: «Kompakt» nochmals enger (Zeile ca. 40 % niedriger als «Normal»), da Rico zu wenig Unterschied sah.
+
+### Notiz vom 23.11.2026: Oberer Bereich aufräumen (nur festgehalten, noch nicht gebaut)
+
+- Produktliste gefällt Rico. Oben wirkt es chaotisch.
+- Knöpfe kürzer: «🛒 Start» statt «Einkauf starten», «📍 Laden» statt «Laden wählen».
+- Vorschlag: alle vier Knöpfe in **einer** ruhigen Zeile (🛒 Start · 📍 Laden · 🔄 · 📷); darunter das Eingabefeld über die ganze Breite, die kleinen Knöpfe (Kategorie, Menge, 🏪, ❗, ＋) in einer Zeile darunter, wenn der Platz nicht reicht.
+- Offen von vorher: Öle (Rapsöl, Olivenöl, Sonnenblumenöl …) als Symbol ergänzen (Rapsöl zeigte 🍅).
