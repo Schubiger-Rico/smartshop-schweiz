@@ -616,3 +616,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Neu: Knopf «−», dazwischen gross die aktuelle Grösse (z. B. «22 px»), Knopf «+». Gilt in der Begrüssung und unter Darstellung; Vorschau-Zeile ändert sich sofort. Regler evtl. zusätzlich behalten.
 - **Umgesetzt am 23.11.:** Schriftgrösse nur noch mit «−», Anzeige «xx px», «+» (Begrüssung und Darstellung), Schieberegler entfernt; Führung angepasst.
 - 23.11.: «−»/«+» grösser (1,3-fache Knopfhöhe) und grün umrandet wie die Eingabe-Knöpfe.
+
+### Notiz vom 23.11.2026: Spracheingabe verbessern (nur festgehalten, noch nicht gebaut)
+
+- Rico sprach «Brot und 1 Stk und 1 kg stopp» → nur «Brot» kam heraus (Mengen ohne Produkt werden verworfen).
+- Verbessern: Menge auch **nach** dem Produkt verstehen («Brot 1 Stück», «Mehl ein Kilo»); Teil nur mit Menge an das vorherige Produkt hängen («Brot und 1 Stück» → Brot 1 Stk.); Füllwörter wie «stopp», «fertig», «bitte», «noch» ignorieren; in der Bestätigung Menge/Produkt antippen und korrigieren können. Hinweis-Beispiel im Sheet zeigen.
+- Später evtl.: Befehle («Milch abhaken», «Einkauf starten»).
