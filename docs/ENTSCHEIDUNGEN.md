@@ -575,3 +575,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Knöpfe kürzer: «🛒 Start» statt «Einkauf starten», «📍 Laden» statt «Laden wählen».
 - Vorschlag: alle vier Knöpfe in **einer** ruhigen Zeile (🛒 Start · 📍 Laden · 🔄 · 📷); darunter das Eingabefeld über die ganze Breite, die kleinen Knöpfe (Kategorie, Menge, 🏪, ❗, ＋) in einer Zeile darunter, wenn der Platz nicht reicht.
 - Offen von vorher: Öle (Rapsöl, Olivenöl, Sonnenblumenöl …) als Symbol ergänzen (Rapsöl zeigte 🍅).
+
+### Notiz vom 23.11.2026: Sprachsteuerung (nur festgehalten, noch nicht gebaut)
+
+- Heute schon möglich: Mikrofon 🎤 der iPhone-Tastatur (Diktieren) im Eingabefeld.
+- Idee: eigener 🎤-Knopf; man sagt «Milch, Brot und zwei Kilo Äpfel» → mehrere Produkte mit Mengen auf einmal auf der Liste. Safari unterstützt Spracherkennung (webkitSpeechRecognition), in der Homescreen-App nicht immer zuverlässig → Rückfall auf Tastatur-Diktat. Abschaltbar, in Führung erklären.
