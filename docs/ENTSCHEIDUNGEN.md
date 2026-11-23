@@ -615,3 +615,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Beim Schieberegler sieht man die Grösse beim Verschieben nicht (Finger deckt ab).
 - Neu: Knopf «−», dazwischen gross die aktuelle Grösse (z. B. «22 px»), Knopf «+». Gilt in der Begrüssung und unter Darstellung; Vorschau-Zeile ändert sich sofort. Regler evtl. zusätzlich behalten.
 - **Umgesetzt am 23.11.:** Schriftgrösse nur noch mit «−», Anzeige «xx px», «+» (Begrüssung und Darstellung), Schieberegler entfernt; Führung angepasst.
+- 23.11.: «−»/«+» grösser (1,3-fache Knopfhöhe) und grün umrandet wie die Eingabe-Knöpfe.
