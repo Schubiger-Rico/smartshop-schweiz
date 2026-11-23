@@ -641,3 +641,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 4 neue Hauptkategorien (Internationale Küche mit Asia/Mexiko/Italien/Orient/Indien, Bio/Vegi/Vegan, Fertiggerichte & Convenience, Non-Food) und über 40 neue Unterkategorien (z. B. Gewürze, Öl & Essig, Hülsenfrüchte, Milchalternativen, Windeln, Erste Hilfe). Bestehende Nutzer bekommen sie automatisch dazu, eigene Anpassungen bleiben.
 - Hunderte neue Stichwörter (inkl. Schweizer Marken). Grundwort am Ende entscheidet (Erdbeerjoghurt → Joghurt), Einzahl/Mehrzahl toleranter, Rückfall über das Symbol, Strichcode übernimmt Kategorie von Open Food Facts.
 - Kategorie-Auswahl: grosse Zeilen untereinander mit Symbol und Farbe, Suche oben, Unterkategorien mit ▸ aufklappbar, aktuelle Kategorie markiert.
+
+### Notiz vom 23.11.2026: Ähnliche Produkte nacheinander (nur festgehalten, noch nicht gebaut)
+
+- Ziel: Ähnliche Produkte stehen in der Liste direkt nacheinander. Rico weiss z. B. nicht, wohin Essig gehört.
+- Heute: Liste ist nach Haupt- und Unterkategorie sortiert; Essig → «Öl & Essig» in der Hauptkategorie «Teigwaren, Reis & Konserven» (Name passt schlecht).
+- Vorschlag: Hauptkategorie umbenennen in **«Vorräte»** (Teigwaren, Reis, Konserven, Hülsenfrüchte, Öl & Essig, Gewürze, Saucen, Konfitüre, Müesli); innerhalb einer Unterkategorie alphabetisch sortieren (Olivenöl neben Rapsöl, Essig daneben); beim Gedrückthalten auf dem Kategorie-Symbol zeigen «gehört zu: Vorräte › Öl & Essig».
