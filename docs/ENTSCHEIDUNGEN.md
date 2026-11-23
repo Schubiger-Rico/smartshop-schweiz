@@ -635,3 +635,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
   - Einzahl/Mehrzahl und Tippfehler toleranter; Rückfall über das erkannte Symbol (🫑 → Gemüse).
   - Gescannte Produkte: Kategorie aus Open Food Facts übernehmen.
   - Bleibt: Korrekturen werden gelernt und haben Vorrang.
+
+### Umgesetzt am 23.11.: Mehr Kategorien, bessere Auto-Kategorie, neue Kategorie-Auswahl
+
+- 4 neue Hauptkategorien (Internationale Küche mit Asia/Mexiko/Italien/Orient/Indien, Bio/Vegi/Vegan, Fertiggerichte & Convenience, Non-Food) und über 40 neue Unterkategorien (z. B. Gewürze, Öl & Essig, Hülsenfrüchte, Milchalternativen, Windeln, Erste Hilfe). Bestehende Nutzer bekommen sie automatisch dazu, eigene Anpassungen bleiben.
+- Hunderte neue Stichwörter (inkl. Schweizer Marken). Grundwort am Ende entscheidet (Erdbeerjoghurt → Joghurt), Einzahl/Mehrzahl toleranter, Rückfall über das Symbol, Strichcode übernimmt Kategorie von Open Food Facts.
+- Kategorie-Auswahl: grosse Zeilen untereinander mit Symbol und Farbe, Suche oben, Unterkategorien mit ▸ aufklappbar, aktuelle Kategorie markiert.

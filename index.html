@@ -91,6 +91,7 @@ html.compact .card{min-height:0;padding:1px .3em;margin-bottom:.2em;gap:.3em;lin
 html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr auto;align-items:center;gap:.35em}html.addwrap .add .nm{grid-row:1;grid-column:1 / span calc(var(--n) + 1);width:100%}html.addwrap .add.hasmic .micb{grid-row:1;grid-column:1}html.addwrap .add.hasmic .nm{grid-column:2 / span var(--n)}html.addwrap .add [data-a=add]{grid-row:1 / span 2;grid-column:-2 / -1;height:100%;width:calc(var(--rh)*1.3);font-size:1.4em}
 .btn,.ic{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .btn.sq.fsb{width:calc(var(--rh)*1.3);height:calc(var(--rh)*1.3);font-size:1.6em;font-weight:700;border:clamp(1px,calc(var(--rh)*.08),3px) solid var(--dg);border-radius:20%;color:var(--ink)}
+.catm{display:flex;gap:.4em;align-items:center}.catpk{display:flex;align-items:center;gap:.6em;width:100%;text-align:left;font:inherit;font-size:1.1em;padding:.35em .6em;margin:.2em 0;border:1px solid var(--line);border-radius:.7em;background:var(--card);color:var(--ink);cursor:pointer}.catpk .ci{font-size:1.4em;line-height:1}.catpk.sub{width:calc(100% - 1.6em);margin-left:1.6em;font-size:1em}.catpk.cur{outline:2px solid var(--acc)}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -137,20 +138,26 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 var S;
 function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact',btnText:false,lpHelp:true}}
 var STD=[
-['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
-['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
-['🥩','Fleisch & Fisch',[['🍗','Poulet'],['🥩','Rind'],['🐖','Schwein'],['🌭','Wurstwaren'],['🐟','Fisch']]],
-['🍞','Brot & Backwaren',[['🍞','Brot'],['🥨','Zopf'],['🥐','Gebäck'],['🌾','Mehl & Backzutaten']]],
-['🍝','Teigwaren, Reis & Konserven',[['🍝','Teigwaren'],['🍚','Reis'],['🥫','Konserven'],['🍅','Saucen']]],
-['🧊','Tiefkühl',[['❄️','Gemüse'],['🍕','Fertiggerichte'],['🍨','Glace']]],
-['🥤','Getränke',[['💧','Wasser'],['🥤','Süssgetränke'],['🧃','Saft'],['🍺','Bier & Wein'],['☕','Kaffee & Tee']]],
-['🍫','Snacks & Süsses',[['🍫','Schokolade'],['🥔','Chips'],['🍪','Guetzli'],['🥜','Nüsse']]],
-['🧴','Körperpflege',[['🧼','Haut'],['💇','Haare'],['🪥','Zahnpflege'],['🧻','Hygiene']]],
-['🧽','Haushalt',[['🧹','Reinigung'],['👕','Wäsche'],['🍴','Küchenbedarf'],['📄','Papier']]],
-['🐾','Tiere',[['🐕','Hund'],['🐈','Katze'],['🐾','Sonstiges']]],
-['👶','Baby & Kind',[]],['💊','Apotheke & Gesundheit',[]],['📦','Übrige',[]]];
+['🥦', 'Obst & Gemüse', [['🍎', 'Früchte'], ['🥕', 'Gemüse'], ['🥬', 'Salat'], ['🌿', 'Kräuter'], ['🍄', 'Pilze'], ['🥔', 'Kartoffeln & Zwiebeln'], ['🍍', 'Exotische Früchte'], ['🌰', 'Trockenfrüchte']]],
+['🥛', 'Milch & Eier', [['🥛', 'Milch'], ['🍦', 'Joghurt'], ['🧀', 'Käse'], ['🧈', 'Butter'], ['🥚', 'Eier'], ['🍶', 'Rahm'], ['🌱', 'Milchalternativen'], ['🍮', 'Desserts & Pudding']]],
+['🥩', 'Fleisch & Fisch', [['🍗', 'Poulet'], ['🥩', 'Rind'], ['🐖', 'Schwein'], ['🌭', 'Wurstwaren'], ['🐟', 'Fisch'], ['🐑', 'Lamm & Wild'], ['🦐', 'Meeresfrüchte']]],
+['🍞', 'Brot & Backwaren', [['🍞', 'Brot'], ['🥨', 'Zopf'], ['🥐', 'Gebäck'], ['🌾', 'Mehl & Backzutaten'], ['🥪', 'Toast & Sandwich'], ['🥧', 'Teig & Kuchenteig']]],
+['🍝', 'Teigwaren, Reis & Konserven', [['🍝', 'Teigwaren'], ['🍚', 'Reis'], ['🥫', 'Konserven'], ['🍅', 'Saucen'], ['🫘', 'Hülsenfrüchte'], ['🫗', 'Öl & Essig'], ['🧂', 'Gewürze'], ['🍯', 'Konfitüre & Honig'], ['🥣', 'Müesli & Frühstück']]],
+['🧊', 'Tiefkühl', [['❄️', 'Gemüse'], ['🍕', 'Fertiggerichte'], ['🍨', 'Glace'], ['🍟', 'Pommes & Kartoffelprodukte'], ['🐟', 'Fisch & Meeresfrüchte']]],
+['🥤', 'Getränke', [['💧', 'Wasser'], ['🥤', 'Süssgetränke'], ['🧃', 'Saft'], ['🍺', 'Bier & Wein'], ['☕', 'Kaffee & Tee'], ['🥛', 'Milchdrinks'], ['🍸', 'Spirituosen']]],
+['🍫', 'Snacks & Süsses', [['🍫', 'Schokolade'], ['🥔', 'Chips'], ['🍪', 'Guetzli'], ['🥜', 'Nüsse'], ['🍬', 'Bonbons & Gummi'], ['🥨', 'Salzgebäck & Apéro']]],
+['🧴', 'Körperpflege', [['🧼', 'Haut'], ['💇', 'Haare'], ['🪥', 'Zahnpflege'], ['🧻', 'Hygiene'], ['💄', 'Kosmetik'], ['☀️', 'Sonnenschutz'], ['🩲', 'Intimpflege']]],
+['🧽', 'Haushalt', [['🧹', 'Reinigung'], ['👕', 'Wäsche'], ['🍴', 'Küchenbedarf'], ['📄', 'Papier'], ['🛍️', 'Tragtaschen & Beutel'], ['🔋', 'Batterien & Leuchtmittel']]],
+['🐾', 'Tiere', [['🐕', 'Hund'], ['🐈', 'Katze'], ['🐾', 'Sonstiges'], ['🐹', 'Kleintiere']]],
+['👶', 'Baby & Kind', [['🧷', 'Windeln'], ['🍼', 'Babynahrung'], ['🧴', 'Babypflege']]],
+['💊', 'Apotheke & Gesundheit', [['🩹', 'Erste Hilfe'], ['💊', 'Schmerz & Erkältung'], ['🧪', 'Vitamine & Nahrungsergänzung']]],
+['📦', 'Übrige', []],
+['🌏', 'Internationale Küche', [['🥢', 'Asia'], ['🌮', 'Mexiko & Tex-Mex'], ['🍕', 'Italien'], ['🧆', 'Orient'], ['🍛', 'Indien']]],
+['🌱', 'Bio, Vegi & Vegan', [['🌿', 'Bio'], ['🥦', 'Vegi & Vegan'], ['🌾', 'Glutenfrei & Laktosefrei']]],
+['🍱', 'Fertiggerichte & Convenience', [['🥗', 'Salate & Sandwiches'], ['🍲', 'Suppen & Fertiggerichte'], ['🍝', 'Frische Teigwaren & Saucen']]],
+['🧰', 'Non-Food', [['🔧', 'Baumarkt & Garten'], ['✏️', 'Büro & Schule'], ['👕', 'Kleider'], ['🎁', 'Geschenke & Party'], ['📱', 'Elektronik']]]];
 function mkCats(){var o=[],n=0;STD.forEach(function(m,i){var id='m'+i;o.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:n++,custom:false,hidden:false});
- m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:j,custom:false,hidden:false})})});return o}
+ m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:j,custom:false,hidden:false})})});o.forEach(function(c){if(c.id==='m13')c.sortOrder=999});return o}
 var OSMT={baumarkt:{shop:'doityourself|hardware'},kleider:{shop:'clothes|shoes|boutique|fashion'},elektronik:{shop:'electronics|computer|mobile_phone'},apotheke:{shop:'chemist',amenity:'pharmacy'},papeterie:{shop:'stationery|books'},moebel:{shop:'furniture|houseware|interior_decoration|kitchen|bed'},garten:{shop:'garden_centre|florist|nurseries'}};
 function mkTypes(){return[['baumarkt','🛠️','Baumarkt'],['kleider','👕','Kleider und Schuhe'],['elektronik','🔌','Elektronik'],['apotheke','💊','Apotheke und Drogerie'],['papeterie','✏️','Papeterie und Bücher'],['moebel','🛋️','Möbel und Haushalt'],['garten','🪴','Garten und Pflanzen'],['sonst','🛍️','Sonstiges']].map(function(x){return{id:x[0],icon:x[1],name:x[2],on:true,custom:false,kw:''}})}
 function DEF(){return{v:1,types:mkTypes(),dismiss:[],items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},types:{},on:true},units:[],mine:[],cchains:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
@@ -176,7 +183,7 @@ function cat(id){for(var i=0;i<S.cats.length;i++)if(S.cats[i].id===id)return S.c
 function cname(c){return c.custom||c.ren?c.name:t(c.name)}
 function mains(all){return S.cats.filter(function(c){return !c.parentId&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
 function subsOf(pid,all){return S.cats.filter(function(c){return c.parentId===pid&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
-var DEFCOL=['#43a047','#64b5f6','#e53935','#c49a6c','#fb8c00','#4fc3f7','#26c6da','#8d6e63','#ec407a','#7e57c2','#a1887f','#f48fb1','#ef5350','#9e9e9e'];
+var DEFCOL=['#43a047','#64b5f6','#e53935','#c49a6c','#fb8c00','#4fc3f7','#26c6da','#8d6e63','#ec407a','#7e57c2','#a1887f','#f48fb1','#ef5350','#9e9e9e','#ff7043','#66bb6a','#ffca28','#78909c'];
 function colOfCat(c){if(!c)return'';if(c.color)return c.color;if(c.color==='')return'';if(c.parentId)return colOfCat(cat(c.parentId));var m=/^m(\d+)$/.exec(c.id);return m&&!c.custom?DEFCOL[+m[1]]||'':''}
 function catColor(x){if(!on('catcol'))return'';var sc=x.sub&&cat(x.sub);return(sc&&sc.color)||colOfCat(x.cat&&cat(x.cat))}
 function iconOf(x){var nm=x.name!=null?x.name:x.n;if(nm){var li=S.learn.icons&&S.learn.icons[norm(nm)];if(li)return li;var ai=autoIcon(nm);if(ai)return ai}var c=(x.sub&&cat(x.sub))||(x.cat&&cat(x.cat));return c?c.icon:(x.type&&typeOf(x.type)?typeOf(x.type).icon:'❔')}
@@ -208,8 +215,8 @@ var KW=[
 ['m3s3','mehl,zopfmehl,weissmehl,ruchmehl,halbweissmehl,zucker,puderzucker,backpulver,hefe,trockenhefe,vanillezucker,speisestärke,maizena,kakaopulver,gelierzucker'],
 ['m4s0','spaghetti,pasta,hörnli,penne,fusilli,spätzli,nudeln,tagliatelle,lasagne,teigwaren,ravioli,tortellini,gnocchi,farfalle,makkaroni'],
 ['m4s1','reis,risotto,basmati,couscous,bulgur,quinoa,polenta,hirse'],
-['m4s2','konserven,dosentomaten,kidneybohnen,linsen,kichererbsen'],
-['m4s3','ketchup,mayonnaise,senf,sauce,tomatensauce,pesto,sojasauce,essig,olivenöl,rapsöl,bouillon,gewürz,salz,pfeffer,aromat'],
+['m4s2','konserven,dosentomaten'],
+['m4s3','ketchup,mayonnaise,senf,sauce,tomatensauce,pesto,bouillon'],
 ['m5s0','tiefkühlgemüse,pommes,pommes frites,tiefkühlspinat'],
 ['m5s1','pizza,tiefkühlpizza,fertiggericht,fischstäbchen,nuggets'],
 ['m5s2','glace,eiscreme,magnum,cornet'],
@@ -231,13 +238,93 @@ var KW=[
 ['m9s2','alufolie,backpapier,frischhaltefolie,kehrichtsäcke,müllsäcke,gefrierbeutel,kerzen,batterien,glühbirne,streichhölzer'],
 ['m9s3','küchenpapier,servietten,haushaltpapier'],
 ['m10s0','hundefutter,hundeleckerli'],['m10s1','katzenfutter,katzenstreu,katzensnack'],['m10s2','vogelfutter,tierfutter,fischfutter'],
-['m11','windeln,babybrei,babynahrung,schnuller,pampers'],
-['m12','pflaster,aspirin,dafalgan,ibuprofen,hustensirup,desinfektion,vitamine,magnesium,tabletten,nasenspray']];
+['m11','schnuller,nuggi'],
+['m12','tabletten'],
+['m0s0','apfel,birne,orange,mandarine,clementine,limette,grapefruit,nektarine,aprikose,aprikosen,zwetschge,pflaume,brombeeren,johannisbeeren,cassis,stachelbeeren,feigen,granatapfel,kaki'],
+['m0s1','paprika,peperoncini,chili,fenchel,sellerie,stangensellerie,kürbis,rosenkohl,federkohl,wirz,rotkohl,chinakohl,pak choi,kohlrabi,radieschen,rettich,pastinaken,artischocken,spargel,bohnen,erbsen,kefen,zuckermais,mais,ingwer,mangold,rüebli'],
+['m0s2','lattich,endivien,chicorée,radicchio,cicorino,feldsalat,babyspinat,salatmischung'],
+['m0s5','kartoffel,kartoffeln,härdöpfel,frühkartoffeln,süsskartoffel,süsskartoffeln,zwiebel,zwiebeln,schalotten,frühlingszwiebeln,knoblauch'],
+['m0s6','mango,ananas,papaya,maracuja,passionsfrucht,litschi,kokosnuss,avocado,kiwi,drachenfrucht,physalis'],
+['m0s7','rosinen,sultaninen,dörrobst,dörraprikosen,dörrfeigen,cranberries,dörrbohnen'],
+['m1s0','milch,laktosefreie milch,uht,drink'],
+['m1s1','joghurt,jogurt,birchermüesli,birchermüsli,blévita'],
+['m1s2','reibkäse,frischkäse,hobelkäse,greyerzer,vacherin,tête de moine,bergkäse,cheddar,ricotta,halloumi,gorgonzola,cottage cheese'],
+['m1s6','hafermilch,sojamilch,mandelmilch,reismilch,kokosdrink,haferdrink,sojadrink,mandeldrink,vegane butter,soja joghurt'],
+['m1s7','pudding,crème,caramelköpfli,tiramisu,mousse,griess,griesspudding,schokoladencreme,vanillecreme'],
+['m2s5','lamm,lammfleisch,lammkoteletts,reh,hirsch,wild,wildschwein,gitzi,ente,kaninchen'],
+['m2s6','muscheln,miesmuscheln,tintenfisch,calamari,scampi,hummer,krabben,surimi,meeresfrüchte'],
+['m2s4','dorsch,kabeljau,seelachs,zander,egli,thunfisch,sardinen,makrelen,räucherlachs,hering'],
+['m2s1','burger,hamburger,plätzli,braten,rindsplätzli,tatar,hackbraten'],
+['m2s3','fleischkäse,lyoner,wienerli,schüblig,chorizo,mortadella,coppa,trockenfleisch,salsiz'],
+['m3s4','toast,sandwich,sandwichbrot,toastbrot,burgerbrötchen,hotdog-brötchen,knäckebrot,zwieback,darvida,cracker'],
+['m3s5','blätterteig,kuchenteig,mürbeteig,pizzateig,strudelteig,wähenteig,flammkuchenteig,zopfteig'],
+['m3s3','dinkelmehl,vollkornmehl,maismehl,griess,paniermehl,kakaopulver,schokoladenpulver,mandeln gemahlen,haselnüsse gemahlen,kokosraspeln,gelatine,lebensmittelfarbe,streusel,rohrzucker,würfelzucker,kandiszucker,birnel'],
+['m4s2','mais dose,thon dose,ravioli dose,pelati,tomatenpüree,ananas dose,pfirsiche dose,sauerkraut,essiggurken,cornichons,oliven,kapern'],
+['m4s4','linsen,kichererbsen,kidneybohnen,weisse bohnen,borlotti,erbsen getrocknet,rote linsen'],
+['m4s5','öl,olivenöl,rapsöl,sonnenblumenöl,erdnussöl,sesamöl,bratöl,essig,balsamico,apfelessig,kräuteressig'],
+['m4s6','pulver,gewürz,gewürze,salz,meersalz,pfeffer,paprikapulver,curry,currypulver,zimt,muskat,oregano,kümmel,kurkuma,chilipulver,knoblauchpulver,lorbeer,nelken,vanille,aromat,fondor,bouillonwürfel'],
+['m4s3','sauce,ketchup,mayonnaise,mayo,senf,pesto,salatsauce,dressing,grillsauce,barbecue,tabasco,worcestershire'],
+['m4s7','konfitüre,marmelade,gelee,honig,nutella,brotaufstrich,erdnussbutter,ahornsirup,cenovis,streichkäse'],
+['m4s8','müesli,müsli,cornflakes,haferflocken,flocken,granola,cerealien,porridge,frühstücksflocken'],
+['m5s0','tk gemüse,tiefkühlerbsen,tiefkühlbeeren,gefrorene beeren'],
+['m5s1','tiefkühl,tk,frozen,lasagne tk,cordon bleu,chicken nuggets,frühlingsrollen'],
+['m5s2','glace,eis,sorbet,rakete,glacestängel,eiswürfel'],
+['m5s3','pommes,frites,rösti,kroketten,kartoffelstock,wedges,country potatoes'],
+['m5s4','fischstäbchen,fischstäbli,tk fisch,tk crevetten'],
+['m6s0','mineral,stilles wasser,sprudelwasser,aproz,evian,vittel'],
+['m6s1','pepsi,schweppes,ginger ale,tonic,energy drink,eistee,lipton,mate,limo,süssgetränk'],
+['m6s3','lager,weissbier,alkoholfreies bier,feldschlösschen,schützengarten,rosé,schaumwein,cider,most'],
+['m6s4','kaffeebohnen,cappuccino,kaffeepads,instantkaffee,nescafé,früchtetee,pfefferminztee,kamillentee,kakaopulver,caotina,ovo'],
+['m6s5','milchdrink,schokodrink,kaffeedrink,emmi caffè latte,proteindrink,milkshake,schokomilch'],
+['m6s6','whisky,whiskey,rum,schnaps,kirsch,grappa,likör,baileys,martini,campari,vodka,gin,tequila'],
+['m7s0','cailler,lindt,frey,ragusa,branches,kinder,milchschokolade,schoggistängeli,ostereier,schokohasen,chocolat'],
+['m7s1','zweifel,pringles,paprika chips,nature chips,tortilla chips,crackers'],
+['m7s2','petit beurre,leckerli,mailänderli,spitzbuben,brunsli,zimtsterne,willisauer ringli,biskuit,biber,läckerli'],
+['m7s4','gummibärli,gummibärchen,haribo,kaugummi,ricola,sugus,zältli,lakritze,marshmallows'],
+['m7s5','salzstengel,bretzeli,apérogebäck,erdnüsse gesalzen,oliven apéro,grissini,käsestangen,pommes chips'],
+['m8s0','creme,lotion,nivea,handcreme,peeling,lippenpflege,labello'],
+['m8s3','wattepads,watte,ohrstäbchen,feuchttücher,kosmetiktücher'],
+['m8s4','make-up,mascara,lippenstift,nagellack,puder,abschminktücher,parfum'],
+['m8s5','sonnencreme,sonnenmilch,after sun,sonnenspray,lichtschutz'],
+['m8s6','tampons,binden,slipeinlagen,intimpflege,kondome,menstruationstasse'],
+['m9s0','entkalker,scheuermilch,essigreiniger,bodenreiniger,putzlappen,mikrofasertuch,staubsaugerbeutel,besen,schaufel,gummihandschuhe,abflussreiniger'],
+['m9s1','fleckentferner,wäscheklammern,bügelwasser,colorwaschmittel,feinwaschmittel'],
+['m9s4','tragtaschen,papiertaschen,gebührensack,abfallsack,abfallsäcke,kehrichtsack,robidog,znünibeutel'],
+['m9s5','batterie,batterien,akku,led,lampe,glühbirne,leuchtmittel'],
+['m10s3','hamsterfutter,kaninchenfutter,meerschweinchenfutter,heu,einstreu,nagerfutter'],
+['m10s0','hundeknochen,kauknochen,hundekuchen,robidog'],
+['m10s1','katzenfutter nass,katzenfutter trocken,whiskas,felix,sheba'],
+['m11s0','windeln,pampers,feuchttücher baby,höschenwindeln'],
+['m11s1','babybrei,babynahrung,säuglingsmilch,folgemilch,quetschie,fruchtbrei,hipp,bimbosan'],
+['m11s2','babyshampoo,babycreme,wundschutzcreme,babyöl'],
+['m12s0','pflaster,verband,desinfektion,wundsalbe,kühlpack,fieberthermometer'],
+['m12s1','aspirin,dafalgan,ibuprofen,panadol,hustensirup,halstabletten,nasenspray,lutschtabletten,erkältungstee'],
+['m12s2','vitamine,vitamin,magnesium,zink,eisen,omega,proteinpulver,brausetabletten'],
+['m14s0','sojasauce,sojasosse,teriyaki,kokosmilch,currypaste,reisnudeln,glasnudeln,mie nudeln,ramen,sushi,sushireis,nori,wasabi,ingwer eingelegt,sweet chili,hoisin,fischsauce,frühlingsrollen,tofu,tempeh,miso,sesam,jasminreis,wok,dim sum,kimchi,sriracha'],
+['m14s1','tortilla,tortillas,taco,tacos,nachos,salsa,guacamole,fajita,burrito,jalapeños,refried beans'],
+['m14s2','antipasti,pesto genovese,passata,gnocchi,risottoreis,parmigiano,prosciutto,ciabatta,focaccia,mascarpone'],
+['m14s3','hummus,falafel,couscous,bulgur,tahini,pita,harissa,datteln,baklava,zatar'],
+['m14s4','garam masala,naan,chutney,basmatireis,dal,tikka,korma,ghee,kurkuma'],
+['m15s0','bio,naturaplan,migros bio,demeter'],
+['m15s1','vegan,vegi,vegetarisch,planted,beyond,quorn,seitan,cornatur,veganer,fleischersatz'],
+['m15s2','glutenfrei,laktosefrei,free from,aha'],
+['m16s0','fertigsalat,sandwich fertig,wrap fertig,salatbox,poke bowl,birchermüesli fertig'],
+['m16s1','fertigsuppe,beutelsuppe,suppe,fertiggericht,mikrowelle,cup noodles,instantnudeln,älplermagronen'],
+['m16s2','frische pasta,frische ravioli,frische tortellini,frische sauce'],
+['m17s0','schraube,schrauben,dübel,nägel,werkzeug,erde,blumenerde,dünger,samen,setzling,gartenschlauch,farbe,pinsel,klebeband'],
+['m17s1','heft,hefte,kugelschreiber,bleistift,farbstift,leim,schere,ordner,papier a4,druckerpapier,couvert,briefmarken'],
+['m17s2','socken,strümpfe,unterhose,t-shirt,leggings,strumpfhose,mütze,handschuhe'],
+['m17s3','geschenk,geschenkpapier,karte,ballone,kerzen geburtstag,servietten party,partyhüte,blumen,strauss'],
+['m17s4','ladekabel,kabel,usb,kopfhörer,powerbank,sd-karte,adapter']];
 var KWI=[],KWNAMES=[];
 KW.forEach(function(e){var m=/^m(\d+)(?:s(\d+))?$/.exec(e[0]),c='m'+m[1],s=m[2]!==undefined?c+'s'+m[2]:null;
  e[1].split(',').forEach(function(k){KWI.push({k:k,cat:c,sub:s});if(k.length>=4)KWNAMES.push(cap(k))})});
-function detectKw(n){var best=null;
- KWI.forEach(function(e){var k=e.k,ok=k.length<4?(' '+n.replace(/[-,]/g,' ')+' ').indexOf(' '+k+' ')>-1:n.indexOf(k)>-1;if(ok&&(!best||k.length>best.k.length))best=e});
+function detectKw(n){var r=detectKw0(n);if(r)return r;var v=[n.replace(/(en|n|e|s)$/,''),n+'n',n+'en',n+'s'];for(var i=0;i<v.length;i++){if(v[i].length>=3){r=detectKw0(v[i]);if(r)return r}}
+ var ic=autoIcon(n);if(ic){for(var g=0;g<EMO.length;g++)if(EMO[g][1].some(function(e){return e[0]===ic})&&ICAT[EMO[g][0]]&&cat(ICAT[EMO[g][0]]))return{cat:ICAT[EMO[g][0]].split('s')[0],sub:ICAT[EMO[g][0]].indexOf('s')>-1?ICAT[EMO[g][0]]:null,why:t('Symbol {0}',ic)}}
+ return null}
+var ICAT={'Früchte':'m0s0','Gemüse':'m0s1','Brot & Backen':'m3','Milch & Eier':'m1','Fleisch & Fisch':'m2','Vorrat':'m4','Getränke':'m6','Drogerie':'m8','Baby':'m11','Haushalt':'m9','Tiere':'m10','Baumarkt & Garten':'m17s0','Büro & Schule':'m17s1','Apotheke':'m12','Kleider':'m17s2'};
+function detectKw0(n){var best=null,be=-1;
+ KWI.forEach(function(e){var k=e.k,pos=k.length<4?(' '+n.replace(/[-,]/g,' ')+' ').indexOf(' '+k+' '):n.lastIndexOf(k);if(pos<0)return;var end=pos+k.length;if(!best||end>be||end===be&&k.length>=best.k.length){best=e;be=end}});
  if(!best&&n.length>=5)KWI.forEach(function(e){if(e.k.length>=5&&Math.abs(e.k.length-n.length)<=1&&lev(n,e.k)<=1&&!best)best=e});
  return best?{cat:best.cat,sub:best.sub,why:t('Stichwort «{0}»',best.k)}:null}
 function detect(name){var n=norm(name);if(!n)return null;
@@ -505,10 +592,12 @@ function scanAttach(){var v=$('#scv');if(v&&scan.st&&v.srcObject!==scan.st){v.sr
 function scanFound(code){scanStop();if(navigator.vibrate&&S.set.vib)navigator.vibrate(80);offLook(code)}
 function offLook(code){code=String(code||'').replace(/\D/g,'');if(code.length<8){say(t('Bitte die ganze Nummer unter dem Strichcode eingeben.'));return}
  if(!sh||sh.t!=='scan')sh={t:'scan'};sh.res={code:code,wait:true};R();
- fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,product_name_de,brands,quantity,nutriscore_grade,ingredients_text_de,ingredients_text,image_front_small_url').then(function(r){return r.json()}).then(function(j){
+ fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,product_name_de,brands,quantity,nutriscore_grade,ingredients_text_de,ingredients_text,image_front_small_url,categories_tags').then(function(r){return r.json()}).then(function(j){
   if(!sh||sh.t!=='scan')return;var p=j&&j.status===1&&j.product;
-  sh.res=p&&(p.product_name_de||p.product_name)?{code:code,name:p.product_name_de||p.product_name,brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',ns:(p.nutriscore_grade||'').toUpperCase(),ing:p.ingredients_text_de||p.ingredients_text||'',img:p.image_front_small_url||''}:{code:code,none:true};R()})
+  sh.res=p&&(p.product_name_de||p.product_name)?{code:code,name:p.product_name_de||p.product_name,brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',ns:(p.nutriscore_grade||'').toUpperCase(),ing:p.ingredients_text_de||p.ingredients_text||'',img:p.image_front_small_url||'',ctags:p.categories_tags||[]}:{code:code,none:true};R()})
  .catch(function(){if(sh&&sh.t==='scan'){sh.res={code:code,none:true,off:true};R()}})}
+var OFFC=[['yogurt','m1s1'],['chees','m1s2'],['milk','m1s0'],['butter','m1s3'],['egg','m1s4'],['cream','m1s5'],['chocolat','m7s0'],['chips','m7s1'],['biscuit','m7s2'],['cookie','m7s2'],['candies','m7s4'],['nut','m7s3'],['bread','m3s0'],['pasta','m4s0'],['rice','m4s1'],['sauce','m4s3'],['spice','m4s6'],['oil','m4s5'],['jam','m4s7'],['honey','m4s7'],['cereal','m4s8'],['water','m6s0'],['soda','m6s1'],['juice','m6s2'],['beer','m6s3'],['wine','m6s3'],['coffee','m6s4'],['tea','m6s4'],['frozen','m5'],['ice-cream','m5s2'],['meat','m2'],['fish','m2s4'],['fruit','m0s0'],['vegetable','m0s1'],['baby','m11']];
+function offCat(tags){tags=(tags||[]).join(' ');for(var i=0;i<OFFC.length;i++)if(tags.indexOf(OFFC[i][0])>-1&&cat(OFFC[i][1]))return OFFC[i][1];return null}
 function nsColor(g){return{A:'#038141',B:'#85bb2f',C:'#e6a700',D:'#ee8100',E:'#e63e11'}[g]||'#888'}
 function shScan(){var r=sh.res,h='<h2>🔎 '+t('Strichcode scannen')+'</h2>';
  if(!r)return h+'<video id="scv" playsinline muted autoplay style="width:100%;max-height:40vh;border-radius:.6em;background:#000;display:block"></video><p class="small mute" id="scs">'+t('Kamera wird gestartet …')+'</p>'
@@ -596,9 +685,13 @@ function vFavs(){
  return h}
 
 /* ===== Sheets ===== */
-function shCat(){var tg=sh.id==='draft'?draft:(findItem(sh.id)||{}),h='<h2>'+t('Kategorie wählen')+'</h2>';
+var catQ='',catOpen={};
+function shCat(){var tg=sh.id==='draft'?draft:(findItem(sh.id)||{}),q=norm(catQ),cur0=tg.sub||tg.cat,h='<h2>'+t('Kategorie wählen')+'</h2>';
  if(tg.why)h+='<p class="mute small">'+t('Warum diese Kategorie? {0}',esc(tg.why))+'</p>';
- mains().forEach(function(m){h+='<div class="row" style="padding:.3em 0"><button class="btn" data-a="setcat" data-c="'+m.id+'" data-s="">'+esc(m.icon)+' '+esc(cname(m))+'</button><span class="seg">'+subsOf(m.id).map(function(s){return'<button class="chip" data-a="setcat" data-c="'+m.id+'" data-s="'+s.id+'">'+esc(s.icon)+' '+esc(cname(s))+'</button>'}).join('')+'</span></div>'});
+ h+='<input class="field" id="catq" placeholder="'+t('Suchen (zum Beispiel Asia)')+'" value="'+esc(catQ)+'" style="width:100%;margin-bottom:.5em" autocomplete="off">';
+ function btn(c,m,sb){return'<button class="catpk'+(sb?' sub':'')+(cur0===c.id?' cur':'')+'" data-a="setcat" data-c="'+m.id+'" data-s="'+(sb?c.id:'')+'"'+(catColor({cat:m.id,sub:sb?c.id:null})?' style="border-left:.4em solid '+catColor({cat:m.id,sub:sb?c.id:null})+'"':'')+'><span class="ci">'+esc(c.icon)+'</span><span>'+esc(cname(c))+'</span></button>'}
+ if(q){var hit=0;mains().forEach(function(m){var ms=norm(cname(m)).indexOf(q)>-1,sl=subsOf(m.id).filter(function(x){return ms||norm(cname(x)).indexOf(q)>-1});if(!ms&&!sl.length)return;hit++;h+=btn(m,m)+sl.map(function(x){return btn(x,m,1)}).join('')});if(!hit)h+='<p class="mute">'+t('Nichts gefunden.')+'</p>'}
+ else mains().forEach(function(m){var sl=subsOf(m.id),op=catOpen[m.id]||(tg.cat===m.id);h+='<div class="catm">'+btn(m,m)+(sl.length?'<button class="btn sq" data-a="catopen" data-id="'+m.id+'" aria-label="'+t('Unterkategorien')+'">'+(op?'▾':'▸')+'</button>':'')+'</div>'+(op?sl.map(function(x){return btn(x,m,1)}).join(''):'')});
  return h+'<div class="seg" style="margin-top:.6em"><button class="btn" data-a="picon">🖼️ '+t('Eigenes Symbol für das Produkt')+'</button><button class="btn" data-a="setcat" data-c="" data-s="">'+t('Keine Kategorie')+'</button><button class="btn" data-a="gocats">＋ '+t('Eigene Kategorie')+'</button><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>'}
 function shStore(){var h='<h2>'+t('Laden wählen')+'</h2><div class="seg">';
  var seen={};S.mine.filter(function(m){return m.off!==true}).forEach(function(m){seen[m.name]=1;h+='<button class="btn" data-a="storeset" data-n="'+esc(m.name)+'" data-c="'+esc(m.name)+'">'+esc(m.name)+'</button>'});
@@ -880,7 +973,7 @@ function mn(v,x,m,more){return st('list','.menu [data-v='+v+']',x,m,{menu:1,more
 AREAS.push(['Eingabeseite',[
  st('list','#dn','Das ist die Eingabeseite. In dieses Feld schreibst du, was du brauchst, zum Beispiel «Milch».','Beim Tippen erscheinen darunter Vorschläge aus deinen bisherigen Produkten. Ein Tipp auf einen Vorschlag übernimmt ihn.',{ro:1}),
  st('list','.topbar','Die kleinen Knöpfe zeigen nur Symbole. Bleib 2 Sekunden auf einem Knopf, dann erklärt die App, wofür er ist.','<b>Lieber mit Text?</b> Einstellungen → Darstellung → «Knöpfe mit Text».\n<b>Stört die Erklärung?</b> Dort «Erklärung beim Gedrückthalten» ausschalten.\n<b>Wenn es nicht klappt:</b> Finger ruhig halten und nicht verschieben, sonst zählt es als Wischen.',{ro:1}),
- st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Eigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
+ st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Kategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
  st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
@@ -1122,8 +1215,9 @@ function act(a,el){var D=el.dataset,i,it;
  case'scanopen':case'scanagain':sh={t:'scan'};break;
  case'scanlook':offLook(fval('scn'));return;
  case'scanhand':sh=null;R();var dn0=$('#dn');if(dn0)dn0.focus();return;
- case'scanadd':{var sr=sh&&sh.res;if(!sr||!sr.name)break;sh=null;draft.n=sr.name;var dn1=$('#dn');if(dn1)dn1.value=sr.name;act('add',{dataset:{}});return}
- case'catpick':sh={t:'cat',id:D.id};break;
+ case'scanadd':{var sr=sh&&sh.res;if(!sr||!sr.name)break;sh=null;draft.n=sr.name;var oc=offCat(sr.ctags);if(oc&&!detect(sr.name)){draft.cat=oc.split('s')[0];draft.sub=oc.indexOf('s')>-1?oc:null;draft.why=t('aus Open Food Facts')}var dn1=$('#dn');if(dn1)dn1.value=sr.name;act('add',{dataset:{}});return}
+ case'catpick':sh={t:'cat',id:D.id};catQ='';catOpen={};break;
+ case'catopen':catOpen[D.id]=!catOpen[D.id];break;
  case'setcat':{var c=D.c||null,s=D.s||null;if(sh.id==='draft'){draft.cat=c;draft.sub=s;draft.manual=true;draft.why=''}
   else{it=findItem(sh.id);if(it){it.cat=c;it.sub=s;if(c)learnCat(it.name,c,s)}}sh=null;break}
  case'gocats':sh=null;view='settings';sub='cats';break;
@@ -1264,6 +1358,7 @@ document.addEventListener('input',function(e){var t0=e.target,id=t0.id;
  if(id==='dn'){draft.n=t0.value;updInput()}
  else if(id==='dq'){t0.value=t0.value.replace(/[^0-9.,]/g,'').slice(0,3);draft.q=t0.value}
  else if(id==='du')draft.u=t0.value;
+ else if(id==='catq'){catQ=t0.value;var d2=$('.sheet>div');if(d2){d2.innerHTML=shCat();var q2=$('#catq');q2.focus();q2.setSelectionRange(q2.value.length,q2.value.length)}}
  else if(id==='emq'){emojiQ=t0.value;var d=$('.sheet>div');if(d){d.innerHTML=shEmoji();var q=$('#emq');q.focus();q.setSelectionRange(q.value.length,q.value.length)}}
  else if(t0.dataset&&t0.dataset.chg==='fs'){S.set.fs=+t0.value;applyLook();var v=$('#fsv');if(v)v.textContent=t0.value;save()}
  else if(t0.dataset&&t0.dataset.chg==='accent'){S.set.accent=t0.value;applyLook();save()}});
@@ -1321,7 +1416,10 @@ document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!
   if(w.id==='wq')$('#qm').value=Math.min(99,Math.max(0,i));else{var u=allUnits()[Math.min(allUnits().length-1,Math.max(0,i))];$('#um').value=u}},120)},true);
 document.addEventListener('click',function(e){var o=e.target.closest&&e.target.closest('.wheel .o');if(o){var w=o.parentNode,i=Array.prototype.indexOf.call(w.querySelectorAll('.o'),o);wheelT=0;w.scrollTo({top:i*o.offsetHeight,behavior:'smooth'})}});
 /* ===== Start ===== */
-function init(){if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
+function addStdCats(){var ms=mains(true),ord=ms.length?Math.max.apply(null,ms.map(function(m){return m.sortOrder})):0,ub=cat('m13');
+ STD.forEach(function(m,i){var id='m'+i;if(!cat(id))S.cats.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:ub?ub.sortOrder-0.5+i/1000:++ord,custom:false,hidden:false});
+  m[2].forEach(function(x,j){var sid=id+'s'+j;if(!cat(sid)){var mx=subsOf(id,true);S.cats.push({id:sid,name:x[1],parentId:id,icon:x[0],color:null,sortOrder:mx.length?Math.max.apply(null,mx.map(function(c){return c.sortOrder}))+1:j,custom:false,hidden:false})}})})}
+function init(){addStdCats();if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
  if(S.set.gps!=='off')gpsDetect();runQueue();snap();cloudBak()}
 init();
