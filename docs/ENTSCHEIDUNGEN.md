@@ -622,3 +622,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Rico sprach «Brot und 1 Stk und 1 kg stopp» → nur «Brot» kam heraus (Mengen ohne Produkt werden verworfen).
 - Verbessern: Menge auch **nach** dem Produkt verstehen («Brot 1 Stück», «Mehl ein Kilo»); Teil nur mit Menge an das vorherige Produkt hängen («Brot und 1 Stück» → Brot 1 Stk.); Füllwörter wie «stopp», «fertig», «bitte», «noch» ignorieren; in der Bestätigung Menge/Produkt antippen und korrigieren können. Hinweis-Beispiel im Sheet zeigen.
 - Später evtl.: Befehle («Milch abhaken», «Einkauf starten»).
+- **Umgesetzt am 23.11.:** Spracheingabe versteht Mengen vor und nach dem Produkt («Brot 1 Stück», «Mehl ein Kilo»), hängt reine Mengen an das Produkt davor, ignoriert «stopp/fertig/bitte»; in der Bestätigung Name, Menge, Einheit änderbar und Zeilen entfernbar. Test t18.

@@ -525,10 +525,21 @@ function shCamWhich(){return'<h2>📷 '+t('Was möchtest du?')+'</h2><div class=
 /* ===== Sprache: «Milch, Brot und zwei Kilo Äpfel» → mehrere Produkte ===== */
 var NUMW={ein:1,eine:1,einen:1,eins:1,zwei:2,zwo:2,drei:3,vier:4,fünf:5,sechs:6,sieben:7,acht:8,neun:9,zehn:10,elf:11,zwölf:12,halb:0.5,halbe:0.5,halbes:0.5,halbes:0.5},
  UNW={kilo:'kg',kilogramm:'kg',kg:'kg',gramm:'g',g:'g',liter:'lt',l:'lt',deziliter:'dl',dl:'dl',milliliter:'ml',ml:'ml','stück':'Stk.',stk:'Stk.',packung:'Pack.',packungen:'Pack.',pack:'Pack.',flasche:'Fl.',flaschen:'Fl.',dose:'Dose',dosen:'Dose',becher:'Becher',bund:'Bund',glas:'Glas','gläser':'Glas',sack:'Sack',beutel:'Beutel'};
-function parseSpeech(tx){return String(tx||'').split(/\s*(?:,|;|\.|\bund\b|\bsowie\b|\bplus\b)\s*/i).map(function(p){p=p.trim();if(!p)return null;var w=p.split(/\s+/),q=0,u='Stk.',i=0;
-  var n=parseFloat((w[0]||'').replace(',','.'));if(!isNaN(n)){q=n;i=1}else if(NUMW[(w[0]||'').toLowerCase()]!=null){q=NUMW[w[0].toLowerCase()];i=1}
-  if(w[i]&&UNW[w[i].toLowerCase()]){u=UNW[w[i].toLowerCase()];i++;if(!q)q=1}
-  var nm=w.slice(i).join(' ').replace(/^(liter|kilo)\s+/i,'');if(!nm)return null;nm=nm.charAt(0).toUpperCase()+nm.slice(1);return{n:nm,q:q,u:u}}).filter(Boolean)}
+var FILL={stopp:1,stop:1,fertig:1,bitte:1,noch:1,'äh':1,'ähm':1,dann:1,also:1,okay:1,ok:1,danke:1,merci:1};
+function qtyAt(w,i){var q=0,n=parseFloat((w[i]||'').replace(',','.'));if(!isNaN(n))q=n;else if(NUMW[w[i]]!=null)q=NUMW[w[i]];return q}
+function parseSpeech(tx){var out=[];
+ String(tx||'').toLowerCase().replace(/(\d)([a-zäöü])/g,'$1 $2').split(/\s*(?:,|;|\.|\bund\b|\bsowie\b|\bplus\b)\s*/).forEach(function(p){
+  var w=p.trim().split(/\s+/).filter(function(x){return x&&!FILL[x]}),q=0,u='',i=0,j=w.length;if(!j)return;
+  /* Menge vorne: «zwei Kilo Äpfel» */
+  var q0=qtyAt(w,0);if(q0){q=q0;i=1}if(w[i]&&UNW[w[i]]){u=UNW[w[i]];i++;if(!q)q=1}
+  /* Menge hinten: «Brot 1 Stück», «Mehl ein Kilo» */
+  if(!q&&j-i>=2&&UNW[w[j-1]]&&qtyAt(w,j-2)){u=UNW[w[j-1]];q=qtyAt(w,j-2);j-=2}
+  else if(!q&&j-i>=2&&qtyAt(w,j-1)){q=qtyAt(w,j-1);j-=1}
+  else if(!u&&j-i>=2&&UNW[w[j-1]]){u=UNW[w[j-1]];q=q||1;j-=1}
+  var nm=w.slice(i,j).join(' ');
+  if(!nm){var pr=out[out.length-1];if(pr&&!pr.q&&(q||u)){pr.q=q||1;if(u)pr.u=u}return}
+  out.push({n:nm.charAt(0).toUpperCase()+nm.slice(1),q:q,u:u||'Stk.'})});
+ return out}
 var rec=null;
 function voiceStart(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;sh={t:'voice',st:SR?'hear':'none'};R();if(!SR)return;
  try{rec=new SR();rec.lang='de-CH';rec.interimResults=false;rec.maxAlternatives=1;
@@ -537,9 +548,9 @@ function voiceStart(){var SR=window.SpeechRecognition||window.webkitSpeechRecogn
   rec.onend=function(){if(sh&&sh.t==='voice'&&sh.st==='hear'){sh.st='err';R()}};rec.start()}catch(e){sh.st='err';R()}}
 function shVoice(){var h='<h2>🎤 '+t('Sprache')+'</h2>';
  if(sh.st==='none')return h+'<p>'+t('Die Spracherkennung ist hier nicht verfügbar.')+'</p><p class="small mute">'+t('Tipp ins Eingabefeld und nutze das Mikrofon 🎤 auf der iPhone-Tastatur. Mehrere Produkte mit Komma trennen.')+'</p><div class="seg"><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>';
- if(sh.st==='hear')return h+'<p class="pulse" style="font-size:1.2em">'+t('Ich höre zu …')+'</p><p class="small mute">'+t('Zum Beispiel: «Milch, Brot und zwei Kilo Äpfel».')+'</p><div class="seg"><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';
+ if(sh.st==='hear')return h+'<p class="pulse" style="font-size:1.2em">'+t('Ich höre zu …')+'</p><p class="small mute">'+t('Zum Beispiel: «Milch, Brot 1 Stück und zwei Kilo Äpfel». Die Menge darf vor oder nach dem Produkt stehen.')+'</p><div class="seg"><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';
  if(sh.st==='err')return h+'<p>'+t('Ich habe nichts verstanden.')+'</p><p class="small mute">'+t(sh.err==='not-allowed'?'Das Mikrofon ist für Safari nicht erlaubt. Erlaube es in den iPhone-Einstellungen oder nutze 🎤 auf der Tastatur.':'Sprich nach dem Tippen deutlich und nicht zu leise. Klappt es nicht, nutze 🎤 auf der Tastatur.')+'</p><div class="seg"><button class="btn pri" data-a="voice">'+t('Nochmals')+'</button><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>';
- return h+'<p class="small mute">«'+esc(sh.tx)+'»</p>'+(sh.l.length?sh.l.map(function(x){return'<div class="row"><span>'+esc(iconOf({name:x.n}))+' '+esc(x.n)+'</span><span class="mute">'+(x.q?esc(x.q+' '+x.u):'')+'</span></div>'}).join(''):'<p>'+t('Keine Produkte erkannt.')+'</p>')
+ return h+'<p class="small mute">«'+esc(sh.tx)+'»</p>'+(sh.l.length?'<p class="small mute">'+t('Du kannst Produkt und Menge noch antippen und ändern.')+'</p>'+sh.l.map(function(x,i){return'<div class="row" style="flex-wrap:nowrap;gap:.3em"><span>'+esc(iconOf({name:x.n}))+'</span><input class="field" data-vi="'+i+'" data-f="n" value="'+esc(x.n)+'" style="flex:1;min-width:0"><input class="field" data-vi="'+i+'" data-f="q" inputmode="decimal" value="'+(x.q||'')+'" placeholder="0" style="width:3.2em"><input class="field" data-vi="'+i+'" data-f="u" value="'+esc(x.u)+'" style="width:3.6em"><button class="btn sq" data-a="vdel" data-v="'+i+'" aria-label="'+t('Entfernen')+'">✕</button></div>'}).join(''):'<p>'+t('Keine Produkte erkannt.')+'</p>')
   +'<div class="seg" style="margin-top:.6em">'+(sh.l.length?'<button class="btn pri" data-a="voiceadd">＋ '+t('{0} auf die Liste',sh.l.length)+'</button>':'')+'<button class="btn" data-a="voice">'+t('Nochmals')+'</button></div>'}
 function fsCtl(){return'<div class="seg fsctl" style="align-items:center;flex-wrap:nowrap;margin:.3em 0 .7em"><button class="btn sq fsb" data-a="fsdn" aria-label="'+t('Schrift kleiner')+'">−</button><b id="fsv" style="min-width:3.6em;text-align:center;font-size:1.4em">'+S.set.fs+' px</b><button class="btn sq fsb" data-a="fsup" aria-label="'+t('Schrift grösser')+'">+</button></div>'}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
@@ -881,7 +892,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.',{ro:1}),
  st('list','#shopbtn','🛒 «Start» startet den Einkauf: Die App lernt deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.\nWenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.',{ro:1}),
  st('list','[data-a=gpsrefresh]','🔄 sucht den Laden, in dem du gerade bist, neu.','Ohne Erkennung wählst du den Laden mit «📍 Laden wählen» von Hand.\nWenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist.',{ro:1}),
- st('list','.micb','🎤 Sprache: Tippe darauf und sag zum Beispiel «Milch, Brot und zwei Kilo Äpfel». Die App zeigt, was sie verstanden hat, du bestätigst.','<b>Wofür geeignet:</b> schnell mehrere Produkte auf einmal, auch mit Mengen.\n<b>Wenn es nicht klappt:</b> Mikrofon für Safari erlauben, deutlich sprechen, Produkte mit «und» oder einer Pause trennen. In der Homescreen-App klappt es nicht immer, dann im Eingabefeld das 🎤 der iPhone-Tastatur nutzen.',{ro:1}),
+ st('list','.micb','🎤 Sprache: Tippe darauf und sag zum Beispiel «Milch, Brot 1 Stück und zwei Kilo Äpfel». Die App zeigt, was sie verstanden hat, du kannst es ändern und bestätigst.','<b>Wofür geeignet:</b> schnell mehrere Produkte auf einmal, auch mit Mengen.\n<b>Wenn es nicht klappt:</b> Mikrofon für Safari erlauben, deutlich sprechen, Produkte mit «und» oder einer Pause trennen. Die Menge darf vor oder nach dem Produkt stehen. In der Homescreen-App klappt es nicht immer, dann im Eingabefeld das 🎤 der iPhone-Tastatur nutzen.',{ro:1}),
  st('list','.camb','📷 öffnet den Ratgeber oder den Strichcode-Scanner.','<b>Ratgeber:</b> Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.\n<b>Strichcode:</b> zeigt Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts. Mit einem Tipp kommt das Produkt auf die Liste.',{ro:1}),
  st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.\nAus Versehen weggewischt? Unten erscheint 4 Sekunden lang «↩ Rückgängig», ein Tipp holt das Produkt zurück.',{act:'check'}),
  st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Rechts wählst du, wie viele erscheinen und in welcher Reihenfolge.',{ro:1})]]);
@@ -1128,7 +1139,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'esave':it=findItem(D.id);if(it){var nn=fval('en').trim();if(nn)it.name=nn;}editId=null;break;
  case'del':delItem(D.id,'i');editId=null;break;
  case'voice':voiceStart();return;
- case'voiceadd':{var vl=sh&&sh.l||[];sh=null;vl.forEach(function(x){addItem(x.n,x.q,x.u)});say(t('{0} Produkte hinzugefügt.',vl.length));break}
+ case'vdel':if(sh&&sh.l){sh.l.splice(+D.v,1)}break;
+ case'voiceadd':{var vl=(sh&&sh.l||[]).filter(function(x){return String(x.n).trim()});sh=null;vl.forEach(function(x){addItem(x.n,x.q,x.u)});say(t('{0} Produkte hinzugefügt.',vl.length));break}
  case'fsdn':case'fsup':S.set.fs=Math.max(10,Math.min(40,(+S.set.fs||18)+(a==='fsup'?1:-1)));break;
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
@@ -1248,6 +1260,7 @@ document.addEventListener('click',function(e){
  act(el.dataset.a,el)});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='dn'){e.preventDefault();var b=$('[data-a=add]');if(b)act('add',b)}});
 document.addEventListener('input',function(e){var t0=e.target,id=t0.id;
+ if(t0.dataset&&t0.dataset.vi!=null&&sh&&sh.l&&sh.l[+t0.dataset.vi]){var vx=sh.l[+t0.dataset.vi],vf=t0.dataset.f;vx[vf]=vf==='q'?(parseFloat(String(t0.value).replace(',','.'))||0):t0.value;return}
  if(id==='dn'){draft.n=t0.value;updInput()}
  else if(id==='dq'){t0.value=t0.value.replace(/[^0-9.,]/g,'').slice(0,3);draft.q=t0.value}
  else if(id==='du')draft.u=t0.value;
