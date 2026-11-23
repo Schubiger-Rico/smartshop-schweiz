@@ -587,3 +587,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 🎤 Sprache: «Milch, Brot und zwei Kilo Äpfel» → Liste zum Bestätigen, dann alle auf einmal hinzufügen (Mengen und Einheiten erkannt). Ohne Spracherkennung Hinweis auf das Tastatur-Mikrofon. Schalter in «Einkaufsliste» (bei «Einfach» aus), in der Führung erklärt.
 - Öle (Rapsöl, Olivenöl, Sonnenblumenöl …) bekommen 🫗.
 - Nicht echt geprüft: Spracherkennung in Safari/Homescreen-App auf dem iPhone.
+
+### Notiz vom 23.11.2026: ＋ doppelt hoch (nur festgehalten, noch nicht gebaut)
+
+- Wenn das Eingabefeld eine eigene Zeile hat: ＋ rechts in doppelter Höhe, von der Zeile «Produkt hinzufügen» bis zur Knopfzeile darunter (grosser, gut treffbarer Knopf).
