@@ -142,7 +142,7 @@ var STD=[
 ['🥛', 'Milch & Eier', [['🥛', 'Milch'], ['🍦', 'Joghurt'], ['🧀', 'Käse'], ['🧈', 'Butter'], ['🥚', 'Eier'], ['🍶', 'Rahm'], ['🌱', 'Milchalternativen'], ['🍮', 'Desserts & Pudding']]],
 ['🥩', 'Fleisch & Fisch', [['🍗', 'Poulet'], ['🥩', 'Rind'], ['🐖', 'Schwein'], ['🌭', 'Wurstwaren'], ['🐟', 'Fisch'], ['🐑', 'Lamm & Wild'], ['🦐', 'Meeresfrüchte']]],
 ['🍞', 'Brot & Backwaren', [['🍞', 'Brot'], ['🥨', 'Zopf'], ['🥐', 'Gebäck'], ['🌾', 'Mehl & Backzutaten'], ['🥪', 'Toast & Sandwich'], ['🥧', 'Teig & Kuchenteig']]],
-['🍝', 'Teigwaren, Reis & Konserven', [['🍝', 'Teigwaren'], ['🍚', 'Reis'], ['🥫', 'Konserven'], ['🍅', 'Saucen'], ['🫘', 'Hülsenfrüchte'], ['🫗', 'Öl & Essig'], ['🧂', 'Gewürze'], ['🍯', 'Konfitüre & Honig'], ['🥣', 'Müesli & Frühstück']]],
+['🍝', 'Vorräte', [['🍝', 'Teigwaren'], ['🍚', 'Reis'], ['🥫', 'Konserven'], ['🍅', 'Saucen'], ['🫘', 'Hülsenfrüchte'], ['🫗', 'Öl & Essig'], ['🧂', 'Gewürze'], ['🍯', 'Konfitüre & Honig', 1], ['🥣', 'Müesli & Frühstück', 1]]],
 ['🧊', 'Tiefkühl', [['❄️', 'Gemüse'], ['🍕', 'Fertiggerichte'], ['🍨', 'Glace'], ['🍟', 'Pommes & Kartoffelprodukte'], ['🐟', 'Fisch & Meeresfrüchte']]],
 ['🥤', 'Getränke', [['💧', 'Wasser'], ['🥤', 'Süssgetränke'], ['🧃', 'Saft'], ['🍺', 'Bier & Wein'], ['☕', 'Kaffee & Tee'], ['🥛', 'Milchdrinks'], ['🍸', 'Spirituosen']]],
 ['🍫', 'Snacks & Süsses', [['🍫', 'Schokolade'], ['🥔', 'Chips'], ['🍪', 'Guetzli'], ['🥜', 'Nüsse'], ['🍬', 'Bonbons & Gummi'], ['🥨', 'Salzgebäck & Apéro']]],
@@ -155,9 +155,11 @@ var STD=[
 ['🌏', 'Internationale Küche', [['🥢', 'Asia'], ['🌮', 'Mexiko & Tex-Mex'], ['🍕', 'Italien'], ['🧆', 'Orient'], ['🍛', 'Indien']]],
 ['🌱', 'Bio, Vegi & Vegan', [['🌿', 'Bio'], ['🥦', 'Vegi & Vegan'], ['🌾', 'Glutenfrei & Laktosefrei']]],
 ['🍱', 'Fertiggerichte & Convenience', [['🥗', 'Salate & Sandwiches'], ['🍲', 'Suppen & Fertiggerichte'], ['🍝', 'Frische Teigwaren & Saucen']]],
-['🧰', 'Non-Food', [['🔧', 'Baumarkt & Garten'], ['✏️', 'Büro & Schule'], ['👕', 'Kleider'], ['🎁', 'Geschenke & Party'], ['📱', 'Elektronik']]]];
+['🧰', 'Non-Food', [['🔧', 'Baumarkt & Garten'], ['✏️', 'Büro & Schule'], ['👕', 'Kleider'], ['🎁', 'Geschenke & Party'], ['📱', 'Elektronik']]],
+['🥣', 'Frühstück', [['🥣', 'Müesli & Flocken'], ['🍯', 'Konfitüre & Honig'], ['🥜', 'Brotaufstrich']]]];
+var VORD=[0,1,2,4,3,5,6,7,8];
 function mkCats(){var o=[],n=0;STD.forEach(function(m,i){var id='m'+i;o.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:n++,custom:false,hidden:false});
- m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:j,custom:false,hidden:false})})});o.forEach(function(c){if(c.id==='m13')c.sortOrder=999});return o}
+ m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:id==='m4'?VORD.indexOf(j):j,custom:false,hidden:!!s[2]})})});o.forEach(function(c){if(c.id==='m13')c.sortOrder=999});return o}
 var OSMT={baumarkt:{shop:'doityourself|hardware'},kleider:{shop:'clothes|shoes|boutique|fashion'},elektronik:{shop:'electronics|computer|mobile_phone'},apotheke:{shop:'chemist',amenity:'pharmacy'},papeterie:{shop:'stationery|books'},moebel:{shop:'furniture|houseware|interior_decoration|kitchen|bed'},garten:{shop:'garden_centre|florist|nurseries'}};
 function mkTypes(){return[['baumarkt','🛠️','Baumarkt'],['kleider','👕','Kleider und Schuhe'],['elektronik','🔌','Elektronik'],['apotheke','💊','Apotheke und Drogerie'],['papeterie','✏️','Papeterie und Bücher'],['moebel','🛋️','Möbel und Haushalt'],['garten','🪴','Garten und Pflanzen'],['sonst','🛍️','Sonstiges']].map(function(x){return{id:x[0],icon:x[1],name:x[2],on:true,custom:false,kw:''}})}
 function DEF(){return{v:1,types:mkTypes(),dismiss:[],items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},types:{},on:true},units:[],mine:[],cchains:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
@@ -183,7 +185,7 @@ function cat(id){for(var i=0;i<S.cats.length;i++)if(S.cats[i].id===id)return S.c
 function cname(c){return c.custom||c.ren?c.name:t(c.name)}
 function mains(all){return S.cats.filter(function(c){return !c.parentId&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
 function subsOf(pid,all){return S.cats.filter(function(c){return c.parentId===pid&&(all||!c.hidden)}).sort(function(a,b){return a.sortOrder-b.sortOrder})}
-var DEFCOL=['#43a047','#64b5f6','#e53935','#c49a6c','#fb8c00','#4fc3f7','#26c6da','#8d6e63','#ec407a','#7e57c2','#a1887f','#f48fb1','#ef5350','#9e9e9e','#ff7043','#66bb6a','#ffca28','#78909c'];
+var DEFCOL=['#43a047','#64b5f6','#e53935','#c49a6c','#fb8c00','#4fc3f7','#26c6da','#8d6e63','#ec407a','#7e57c2','#a1887f','#f48fb1','#ef5350','#9e9e9e','#ff7043','#66bb6a','#ffca28','#78909c','#ffb300'];
 function colOfCat(c){if(!c)return'';if(c.color)return c.color;if(c.color==='')return'';if(c.parentId)return colOfCat(cat(c.parentId));var m=/^m(\d+)$/.exec(c.id);return m&&!c.custom?DEFCOL[+m[1]]||'':''}
 function catColor(x){if(!on('catcol'))return'';var sc=x.sub&&cat(x.sub);return(sc&&sc.color)||colOfCat(x.cat&&cat(x.cat))}
 function iconOf(x){var nm=x.name!=null?x.name:x.n;if(nm){var li=S.learn.icons&&S.learn.icons[norm(nm)];if(li)return li;var ai=autoIcon(nm);if(ai)return ai}var c=(x.sub&&cat(x.sub))||(x.cat&&cat(x.cat));return c?c.icon:(x.type&&typeOf(x.type)?typeOf(x.type).icon:'❔')}
@@ -264,8 +266,9 @@ var KW=[
 ['m4s5','öl,olivenöl,rapsöl,sonnenblumenöl,erdnussöl,sesamöl,bratöl,essig,balsamico,apfelessig,kräuteressig'],
 ['m4s6','pulver,gewürz,gewürze,salz,meersalz,pfeffer,paprikapulver,curry,currypulver,zimt,muskat,oregano,kümmel,kurkuma,chilipulver,knoblauchpulver,lorbeer,nelken,vanille,aromat,fondor,bouillonwürfel'],
 ['m4s3','sauce,ketchup,mayonnaise,mayo,senf,pesto,salatsauce,dressing,grillsauce,barbecue,tabasco,worcestershire'],
-['m4s7','konfitüre,marmelade,gelee,honig,nutella,brotaufstrich,erdnussbutter,ahornsirup,cenovis,streichkäse'],
-['m4s8','müesli,müsli,cornflakes,haferflocken,flocken,granola,cerealien,porridge,frühstücksflocken'],
+['m18s1','konfitüre,marmelade,gelee,honig,ahornsirup,birnel,quittengelee'],
+['m18s2','nutella,brotaufstrich,erdnussbutter,cenovis,streichkäse,ovomaltine crunchy,schokoaufstrich,leberwurst,frischkäse aufstrich'],
+['m18s0','müesli,müsli,cornflakes,haferflocken,flocken,granola,cerealien,porridge,frühstücksflocken,birchermüesli flocken,chiasamen,leinsamen'],
 ['m5s0','tk gemüse,tiefkühlerbsen,tiefkühlbeeren,gefrorene beeren'],
 ['m5s1','tiefkühl,tk,frozen,lasagne tk,cordon bleu,chicken nuggets,frühlingsrollen'],
 ['m5s2','glace,eis,sorbet,rakete,glacestängel,eiswürfel'],
@@ -430,7 +433,7 @@ function catOrder(){var base=mains(true).map(function(c){return c.id}),o=(S.set.
  if(!o)return base;return o.filter(function(id){return base.indexOf(id)>-1}).concat(base.filter(function(id){return o.indexOf(id)<0}))}
 function subIdx(x){var c=x.sub&&cat(x.sub);return c?c.sortOrder:-1}
 function sortedItems(){var ord=catOrder();
- return S.items.slice().sort(function(a,b){if(!!a.urg!==!!b.urg)return a.urg?-1:1;var ia=ord.indexOf(a.cat),ib=ord.indexOf(b.cat);if(ia<0)ia=999;if(ib<0)ib=999;return ia!==ib?ia-ib:subIdx(a)-subIdx(b)})}
+ return S.items.slice().sort(function(a,b){if(!!a.urg!==!!b.urg)return a.urg?-1:1;var ia=ord.indexOf(a.cat),ib=ord.indexOf(b.cat);if(ia<0)ia=999;if(ib<0)ib=999;return ia!==ib?ia-ib:(subIdx(a)-subIdx(b))||String(a.name).localeCompare(String(b.name),'de')})}
 
 /* ===== Filialerkennung (Block 9, Kapitel 2) ===== */
 function rad(){return S.set.radius==='auto'?100:(+S.set.radius||50)}
@@ -596,7 +599,7 @@ function offLook(code){code=String(code||'').replace(/\D/g,'');if(code.length<8)
   if(!sh||sh.t!=='scan')return;var p=j&&j.status===1&&j.product;
   sh.res=p&&(p.product_name_de||p.product_name)?{code:code,name:p.product_name_de||p.product_name,brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',ns:(p.nutriscore_grade||'').toUpperCase(),ing:p.ingredients_text_de||p.ingredients_text||'',img:p.image_front_small_url||'',ctags:p.categories_tags||[]}:{code:code,none:true};R()})
  .catch(function(){if(sh&&sh.t==='scan'){sh.res={code:code,none:true,off:true};R()}})}
-var OFFC=[['yogurt','m1s1'],['chees','m1s2'],['milk','m1s0'],['butter','m1s3'],['egg','m1s4'],['cream','m1s5'],['chocolat','m7s0'],['chips','m7s1'],['biscuit','m7s2'],['cookie','m7s2'],['candies','m7s4'],['nut','m7s3'],['bread','m3s0'],['pasta','m4s0'],['rice','m4s1'],['sauce','m4s3'],['spice','m4s6'],['oil','m4s5'],['jam','m4s7'],['honey','m4s7'],['cereal','m4s8'],['water','m6s0'],['soda','m6s1'],['juice','m6s2'],['beer','m6s3'],['wine','m6s3'],['coffee','m6s4'],['tea','m6s4'],['frozen','m5'],['ice-cream','m5s2'],['meat','m2'],['fish','m2s4'],['fruit','m0s0'],['vegetable','m0s1'],['baby','m11']];
+var OFFC=[['yogurt','m1s1'],['chees','m1s2'],['milk','m1s0'],['butter','m1s3'],['egg','m1s4'],['cream','m1s5'],['chocolat','m7s0'],['chips','m7s1'],['biscuit','m7s2'],['cookie','m7s2'],['candies','m7s4'],['nut','m7s3'],['bread','m3s0'],['pasta','m4s0'],['rice','m4s1'],['sauce','m4s3'],['spice','m4s6'],['oil','m4s5'],['jam','m18s1'],['honey','m18s1'],['cereal','m18s0'],['spread','m18s2'],['water','m6s0'],['soda','m6s1'],['juice','m6s2'],['beer','m6s3'],['wine','m6s3'],['coffee','m6s4'],['tea','m6s4'],['frozen','m5'],['ice-cream','m5s2'],['meat','m2'],['fish','m2s4'],['fruit','m0s0'],['vegetable','m0s1'],['baby','m11']];
 function offCat(tags){tags=(tags||[]).join(' ');for(var i=0;i<OFFC.length;i++)if(tags.indexOf(OFFC[i][0])>-1&&cat(OFFC[i][1]))return OFFC[i][1];return null}
 function nsColor(g){return{A:'#038141',B:'#85bb2f',C:'#e6a700',D:'#ee8100',E:'#e63e11'}[g]||'#888'}
 function shScan(){var r=sh.res,h='<h2>🔎 '+t('Strichcode scannen')+'</h2>';
@@ -973,7 +976,7 @@ function mn(v,x,m,more){return st('list','.menu [data-v='+v+']',x,m,{menu:1,more
 AREAS.push(['Eingabeseite',[
  st('list','#dn','Das ist die Eingabeseite. In dieses Feld schreibst du, was du brauchst, zum Beispiel «Milch».','Beim Tippen erscheinen darunter Vorschläge aus deinen bisherigen Produkten. Ein Tipp auf einen Vorschlag übernimmt ihn.',{ro:1}),
  st('list','.topbar','Die kleinen Knöpfe zeigen nur Symbole. Bleib 2 Sekunden auf einem Knopf, dann erklärt die App, wofür er ist.','<b>Lieber mit Text?</b> Einstellungen → Darstellung → «Knöpfe mit Text».\n<b>Stört die Erklärung?</b> Dort «Erklärung beim Gedrückthalten» ausschalten.\n<b>Wenn es nicht klappt:</b> Finger ruhig halten und nicht verschieben, sonst zählt es als Wischen.',{ro:1}),
- st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Kategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
+ st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Gedrückt halten auf dem Symbol eines Produkts zeigt, wohin es gehört, zum Beispiel «Vorräte › Öl & Essig».\nKategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
  st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
@@ -1391,10 +1394,11 @@ document.addEventListener('pointerdown',function(e){
  var up=e.target.closest&&e.target.closest('[data-up]');if(up){upS={x:e.clientX,y:e.clientY};return}
  var c=e.target.closest&&e.target.closest('[data-sw]');if(c&&!e.target.closest('input,select,textarea'))sw0={el:c,x:e.clientX,y:e.clientY,id:c.dataset.sw,k:c.dataset.swk,dx:0}});
 var sw0=null,dragId=null,upS=null;
+function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
 var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
- hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var m=HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
+ hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
 ['pointerup','pointercancel'].forEach(function(n){document.addEventListener(n,function(){clearTimeout(hpT);hp0=null},true)});
 document.addEventListener('click',function(e){if(helpShown&&Date.now()-helpShown<2000){helpShown=0;e.preventDefault();e.stopPropagation()}},true);
@@ -1418,7 +1422,11 @@ document.addEventListener('click',function(e){var o=e.target.closest&&e.target.c
 /* ===== Start ===== */
 function addStdCats(){var ms=mains(true),ord=ms.length?Math.max.apply(null,ms.map(function(m){return m.sortOrder})):0,ub=cat('m13');
  STD.forEach(function(m,i){var id='m'+i;if(!cat(id))S.cats.push({id:id,name:m[1],parentId:null,icon:m[0],color:null,sortOrder:ub?ub.sortOrder-0.5+i/1000:++ord,custom:false,hidden:false});
-  m[2].forEach(function(x,j){var sid=id+'s'+j;if(!cat(sid)){var mx=subsOf(id,true);S.cats.push({id:sid,name:x[1],parentId:id,icon:x[0],color:null,sortOrder:mx.length?Math.max.apply(null,mx.map(function(c){return c.sortOrder}))+1:j,custom:false,hidden:false})}})})}
+  m[2].forEach(function(x,j){var sid=id+'s'+j;if(!cat(sid)){var mx=subsOf(id,true);S.cats.push({id:sid,name:x[1],parentId:id,icon:x[0],color:null,sortOrder:mx.length?Math.max.apply(null,mx.map(function(c){return c.sortOrder}))+1:j,custom:false,hidden:!!x[2]})}})});
+ if(!S.set.migFr){S.set.migFr=1;var m4=cat('m4');if(m4&&!m4.ren&&m4.name==='Teigwaren, Reis & Konserven')m4.name='Vorräte';
+  ['m4s7','m4s8'].forEach(function(k){var c=cat(k);if(c)c.hidden=true});VORD.forEach(function(j,i){var c=cat('m4s'+j);if(c)c.sortOrder=i});
+  var MV={m4s7:'m18s1',m4s8:'m18s0'};[S.items,S.recent,S.favs,S.hist].forEach(function(a){(a||[]).forEach(function(x){if(MV[x.sub]){x.sub=MV[x.sub];x.cat='m18'}})});
+  Object.keys(S.learn.names||{}).forEach(function(k){var l=S.learn.names[k];if(MV[l.sub]){l.sub=MV[l.sub];l.cat='m18'}})}}
 function init(){addStdCats();if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
  if(S.set.gps!=='off')gpsDetect();runQueue();snap();cloudBak()}
