@@ -15,3 +15,10 @@ with sync_playwright() as p:
     bb=pg.locator('[data-a=gpsrefresh]').bounding_box();pg.evaluate("document.getElementById('toast').textContent=''");pg.mouse.move(bb['x']+10,bb['y']+10);pg.mouse.down();pg.wait_for_timeout(2200);print('help off toast',repr(pg.inner_text('#toast')[:20]));pg.mouse.up()
     b.close()
 print(errs)
+# Schriftgrösse − / +
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':800});pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.clear()");pg.reload()
+    pg.click('[data-a=onname][data-skip]');pg.click('[data-a=fsup]');pg.click('[data-a=fsup]');print('fs shown',pg.inner_text('#fsv'))
+    pg.screenshot(path='s17.png');b.close()
+print(errs)
