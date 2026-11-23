@@ -567,3 +567,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Vorschlag: Einstellung «Zeilenhöhe: Kompakt / Normal» unter Darstellung, Standard neu «Kompakt»; «Normal» für alle, die grosse Tippflächen brauchen.
 
 - **Umgesetzt am 23.11.:** Darstellung → «Zeilenhöhe: Kompakt / Normal», Standard Kompakt (Zeile ca. 30 % niedriger, kleinere Knöpfe). In der Einstellungen-Führung erklärt.
+- 23.11.: «Kompakt» nochmals enger (Zeile ca. 40 % niedriger als «Normal»), da Rico zu wenig Unterschied sah.
