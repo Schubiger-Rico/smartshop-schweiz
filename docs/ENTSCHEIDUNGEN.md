@@ -609,3 +609,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - 🎤 aus der Kopfzeile nehmen und direkt vor «Produkt hinzufügen» setzen (in der Eingabezeile).
 - **Umgesetzt am 23.11.:** 🎤 steht jetzt direkt vor «Produkt hinzufügen»; Eingabefeld bekommt schon ab normaler Schrift eine eigene Zeile (Schwelle 24).
+
+### Notiz vom 23.11.2026: Schriftgrösse mit − / Wert / + (nur festgehalten, noch nicht gebaut)
+
+- Beim Schieberegler sieht man die Grösse beim Verschieben nicht (Finger deckt ab).
+- Neu: Knopf «−», dazwischen gross die aktuelle Grösse (z. B. «22 px»), Knopf «+». Gilt in der Begrüssung und unter Darstellung; Vorschau-Zeile ändert sich sofort. Regler evtl. zusätzlich behalten.
