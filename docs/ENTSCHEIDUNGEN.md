@@ -565,3 +565,5 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Rahmen/Zeile um die Produkte schmaler im Verhältnis zur Schrift (weniger Innenabstand, kleinere Knöpfe ☆ ✓ 🔥), damit mehr Produkte auf den Bildschirm passen.
 - Vorschlag: Einstellung «Zeilenhöhe: Kompakt / Normal» unter Darstellung, Standard neu «Kompakt»; «Normal» für alle, die grosse Tippflächen brauchen.
+
+- **Umgesetzt am 23.11.:** Darstellung → «Zeilenhöhe: Kompakt / Normal», Standard Kompakt (Zeile ca. 30 % niedriger, kleinere Knöpfe). In der Einstellungen-Führung erklärt.

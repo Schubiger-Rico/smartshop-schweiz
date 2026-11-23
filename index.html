@@ -86,6 +86,7 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 .undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1em + env(safe-area-inset-bottom,0px));z-index:85;display:flex;gap:.6em;align-items:center;background:var(--ink);color:var(--bg);padding:.4em .5em .4em 1em;border-radius:.8em;box-shadow:0 .3em 1em #0005;max-width:92vw}
 .ns{display:inline-block;min-width:1.6em;text-align:center;font-weight:800;color:#fff;border-radius:.4em;padding:0 .3em}
 .card.urg{border:2px solid var(--red);background:color-mix(in srgb,var(--red) 13%,var(--card))}.card.urg .nm{font-size:1.25em;font-weight:800}.urgb.on{background:var(--red);border-color:var(--red);color:#fff}
+html.compact .card{min-height:0;padding:.08em .3em .08em .3em;margin-bottom:.25em;gap:.3em}html.compact .card .btn.sq,html.compact .card .ic{width:calc(var(--rh)*.8);height:calc(var(--rh)*.8);min-width:0;min-height:0}html.compact .card.urg .nm{font-size:1.15em}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -130,7 +131,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact'}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -762,7 +763,7 @@ function vTest(){var h='<h2>🧪 '+t('Test & Feedback')+'</h2><h3>'+t('Abo teste
 
 /* ===== Aussehen ===== */
 function lum(h){var m=/^#?(..)(..)(..)$/.exec(h);if(!m)return 0;return(parseInt(m[1],16)*.299+parseInt(m[2],16)*.587+parseInt(m[3],16)*.114)/255}
-function applyLook(){var r=document.documentElement,s=S.set;r.style.setProperty('--fs',s.fs+'px');r.style.setProperty('--acc',s.accent);r.style.setProperty('--accd',dk(s.accent));r.style.setProperty('--onacc',lum(s.accent)>.6?'#000':'#fff');
+function applyLook(){var r=document.documentElement,s=S.set;r.classList.toggle('compact',s.rows!=='normal');r.style.setProperty('--fs',s.fs+'px');r.style.setProperty('--acc',s.accent);r.style.setProperty('--accd',dk(s.accent));r.style.setProperty('--onacc',lum(s.accent)>.6?'#000':'#fff');
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
@@ -781,7 +782,7 @@ function vSettings(){
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#39FF14','#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
-  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
+  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowS(t('Zeilenhöhe'),selH('rows',[['compact',t('Kompakt')],['normal',t('Normal')]]))+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
  case'lang':h+='<div class="seg">'+Object.keys(LANGS).map(function(k){return'<button class="btn'+(S.set.lang===k?' sel':'')+'"'+(k==='de'?' data-a="lang" data-v="de"':' disabled')+'>'+LANGS[k]+(k==='de'?'':' · '+t('bald verfügbar'))+'</button>'}).join('')+'</div>';break;
  case'cats':h+=vCatsAdm();break;
  case'favs':h+=rowS(t('Automatisch Favorit nach'),selH('favAfter',[['3','3 '+t('Käufen')],['5','5 '+t('Käufen')],['10','10 '+t('Käufen')],['off',t('Aus')]]))
@@ -913,6 +914,7 @@ SA('Darstellung',[
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
  ss('look','row:Menü','Minimal, Normal oder Gross.','Bei «Minimal» sind die Menüknöpfe klein, bei «Gross» besonders gross.'),
  ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.'),
+ ss('look','row:Zeilenhöhe','Zeilenhöhe der Produkte: Kompakt oder Normal.','<b>Kompakt:</b> schmale Zeilen, mehr Produkte auf dem Bildschirm.\n<b>Normal:</b> grössere Zeilen und Knöpfe, gut für grosse Finger oder unterwegs.\n<b>Wenn du oft daneben tippst:</b> Wähle «Normal» oder mache die Schrift grösser.'),
  ss('look','row:Test-Hinweise anzeigen','Gelbe «🚧 TEST»-Schilder in Bereichen, die noch nicht fertig sind.','Wofür geeignet: Eingeschaltet weisst du, wo noch gebaut wird. Ausgeschaltet ist die App ruhiger.\nWenn dich die Schilder stören: Schalte sie hier aus.')]);
 SA('Sprache',[ss('lang','#app .seg','Zurzeit gibt es Deutsch. Weitere Sprachen folgen.')]);
 SA('Favoriten und Letzte Produkte',[
