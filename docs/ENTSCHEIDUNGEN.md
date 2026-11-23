@@ -650,3 +650,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Ergänzung: **«Frühstück»** als eigene Hauptkategorie (Müesli & Flocken, Konfitüre & Honig, Brotaufstrich), herausgelöst aus Vorräte; Unterkategorien in «Vorräte» nach typischer Ladenordnung (Teigwaren & Reis, Konserven, Hülsenfrüchte, Saucen, Öl & Essig, Gewürze). Echte Ladenreihenfolge lernt die App weiterhin mit «Einkauf starten».
 
 - **Umgesetzt am 23.11.:** Hauptkategorie heisst «Vorräte» (Unterkategorien in Ladenordnung), neue Hauptkategorie «Frühstück» (Müesli & Flocken, Konfitüre & Honig, Brotaufstrich; bestehende Produkte automatisch verschoben), innerhalb einer Unterkategorie alphabetisch, Gedrückthalten aufs Produkt-Symbol zeigt «gehört zu …».
+
+### Notiz vom 23.11.2026: Menü-Knopf auf Höhe der Anrede (nur festgehalten, noch nicht gebaut)
+
+- ☰ nicht mehr neben dem Titel, sondern rechts auf der Zeile «Hallo Rico». Ohne Namen trotzdem eine Zeile mit ☰ rechts.
