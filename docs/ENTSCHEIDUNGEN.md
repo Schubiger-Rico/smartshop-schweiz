@@ -654,3 +654,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 23.11.2026: Menü-Knopf auf Höhe der Anrede (nur festgehalten, noch nicht gebaut)
 
 - ☰ nicht mehr neben dem Titel, sondern rechts auf der Zeile «Hallo Rico». Ohne Namen trotzdem eine Zeile mit ☰ rechts.
+- **Umgesetzt am 23.11.:** ☰ steht rechts auf der Zeile «Hallo Rico» (Klasse `hrow`, in jeder Ansicht; Anrede nur in der Liste).
