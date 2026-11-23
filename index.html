@@ -665,13 +665,13 @@ function vList(){
  h+=addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
  var mineI=sortedItems().filter(function(i){return inTab(i)||(i.urg&&ltab==='food')});
  if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
- else h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
+ else if((S.set.swipeN||0)<3)h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
  function row(i){return card(i)+(dealOpen===i.id?dealPanel(i):'')}
  if(ltab==='food'){var vis=mineI.filter(function(i){return i.urg||curMatch(i)||i.today===ld()}),nh=mineI.length-vis.length;vis.forEach(function(i){h+=row(i)});
   if(nh)h+='<p class="small mute" style="margin:.3em 0 .6em">🏪 '+t('{0} Produkte warten auf ihren Laden.',nh)+' <button class="chip" data-a="nav" data-v="shops">'+t('Anzeigen')+'</button></p>'}
  else S.types.forEach(function(tp){var l=mineI.filter(function(i){return(typeOf(i.type)?i.type:'sonst')===tp.id});if(!l.length)return;h+='<h3>'+tp.icon+' '+esc(tname(tp))+'</h3>';l.forEach(function(i){h+=row(i)})});
  if(!on('recent'))return h;
- h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2><span class="seg">'+selH('recN',[['10','10'],['20','20'],['50','50'],['100','100'],['all',t('Alle')]])+selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]])+'</span></div>';
+ h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2></div>';
  var rl=recList();
  if(!rl.length)h+='<div class="empty">'+t('Abgehakte Produkte erscheinen hier und lassen sich zurückholen.')+'</div>';
  rl.forEach(function(i){h+='<div class="card done"><span class="ic" style="cursor:default">'+esc(iconOf(i))+'</span><span class="nm">'+esc(i.name)+'</span><span class="q">'+esc(fmt(i))+'</span><button class="btn" data-a="back" data-id="'+i.id+'">'+t('Zurückholen')+'</button></div>'});
@@ -915,7 +915,7 @@ function vSettings(){
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#39FF14','#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
-  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowC(t('Knöpfe mit Text («Start», «Laden»)'),'btnText',!!S.set.btnText)+rowC(t('Erklärung beim Gedrückthalten (2 Sekunden)'),'lpHelp',S.set.lpHelp!==false)+rowS(t('Zeilenhöhe'),selH('rows',[['compact',t('Kompakt')],['normal',t('Normal')]]))+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
+  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+'<div class="row"><span>'+t('Hinweise wie «nach links wischen»')+'</span><button class="btn" data-a="hintsback">'+t('Wieder anzeigen')+'</button></div>'+rowC(t('Knöpfe mit Text («Start», «Laden»)'),'btnText',!!S.set.btnText)+rowC(t('Erklärung beim Gedrückthalten (2 Sekunden)'),'lpHelp',S.set.lpHelp!==false)+rowS(t('Zeilenhöhe'),selH('rows',[['compact',t('Kompakt')],['normal',t('Normal')]]))+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
  case'lang':h+='<div class="seg">'+Object.keys(LANGS).map(function(k){return'<button class="btn'+(S.set.lang===k?' sel':'')+'"'+(k==='de'?' data-a="lang" data-v="de"':' disabled')+'>'+LANGS[k]+(k==='de'?'':' · '+t('bald verfügbar'))+'</button>'}).join('')+'</div>';break;
  case'cats':h+=vCatsAdm();break;
  case'favs':h+=rowS(t('Automatisch Favorit nach'),selH('favAfter',[['3','3 '+t('Käufen')],['5','5 '+t('Käufen')],['10','10 '+t('Käufen')],['off',t('Aus')]]))
@@ -992,7 +992,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.micb','🎤 Sprache: Tippe darauf und sag zum Beispiel «Milch, Brot 1 Stück und zwei Kilo Äpfel». Die App zeigt, was sie verstanden hat, du kannst es ändern und bestätigst.','<b>Wofür geeignet:</b> schnell mehrere Produkte auf einmal, auch mit Mengen.\n<b>Wenn es nicht klappt:</b> Mikrofon für Safari erlauben, deutlich sprechen, Produkte mit «und» oder einer Pause trennen. Die Menge darf vor oder nach dem Produkt stehen. In der Homescreen-App klappt es nicht immer, dann im Eingabefeld das 🎤 der iPhone-Tastatur nutzen.',{ro:1}),
  st('list','.camb','📷 öffnet den Ratgeber oder den Strichcode-Scanner.','<b>Ratgeber:</b> Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.\n<b>Strichcode:</b> zeigt Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts. Mit einem Tipp kommt das Produkt auf die Liste.',{ro:1}),
  st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.\nAus Versehen weggewischt? Unten erscheint 4 Sekunden lang «↩ Rückgängig», ein Tipp holt das Produkt zurück.',{act:'check'}),
- st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Rechts wählst du, wie viele erscheinen und in welcher Reihenfolge.',{ro:1})]]);
+ st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Wie viele erscheinen und in welcher Reihenfolge, stellst du unter Einstellungen → «Favoriten und Letzte Produkte» ein.',{ro:1})]]);
 AREAS.push(['Menü und Ansicht',[
  st('list','.ttl','Oben steht der Titel. Bei laufendem Einkauf erscheint daneben der Stopp-Knopf.','Der Stopp-Knopf zeigt den Laden, in dem du gerade einkaufst. Ein Tipp beendet den Einkauf.',{ro:1}),
  st('list','#hamb','Mit ☰ öffnest du das Menü. Alles, was die App kann, findest du dort.','In den Einstellungen unter «Darstellung» wählst du, ob das Menü minimal, normal oder gross ist.',{ro:1}),
@@ -1051,6 +1051,7 @@ SA('Darstellung',[
  ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.'),
  ss('look','row:Knöpfe mit Text','Knöpfe mit Text: zeigt «Start» und «Laden» neben den Symbolen.','<b>Aus (Standard):</b> nur Symbole, ruhiger und platzsparend.\n<b>Ein:</b> mit Text, gut am Anfang, bis man die Symbole kennt.\n<b>Wenn du die Symbole nicht verstehst:</b> Schalte es ein oder halte den Knopf 2 Sekunden gedrückt.'),
  ss('look','row:Erklärung beim Gedrückthalten','Erklärung beim Gedrückthalten: 2 Sekunden auf einem Knopf zeigt, wofür er ist.','<b>Wofür geeignet:</b> Symbole kennenlernen, ohne die Führung zu starten.\n<b>Wenn es stört:</b> ausschalten. Die Knöpfe funktionieren genau gleich.'),
+ ss('look','row:Hinweise wie','Kleine Hinweise wie «Zum Löschen nach links wischen» verschwinden von selbst, wenn du es ein paar Mal gemacht hast.','<b>Wieder anzeigen:</b> Mit diesem Knopf erscheinen sie wieder, zum Beispiel wenn jemand anderes die App benutzt.'),
  ss('look','row:Zeilenhöhe','Zeilenhöhe der Produkte: Kompakt oder Normal.','<b>Kompakt:</b> schmale Zeilen, mehr Produkte auf dem Bildschirm.\n<b>Normal:</b> grössere Zeilen und Knöpfe, gut für grosse Finger oder unterwegs.\n<b>Wenn du oft daneben tippst:</b> Wähle «Normal» oder mache die Schrift grösser.'),
  ss('look','row:Test-Hinweise anzeigen','Gelbe «🚧 TEST»-Schilder in Bereichen, die noch nicht fertig sind.','Wofür geeignet: Eingeschaltet weisst du, wo noch gebaut wird. Ausgeschaltet ist die App ruhiger.\nWenn dich die Schilder stören: Schalte sie hier aus.')]);
 SA('Sprache',[ss('lang','#app .seg','Zurzeit gibt es Deutsch. Weitere Sprachen folgen.')]);
@@ -1240,6 +1241,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'vdel':if(sh&&sh.l){sh.l.splice(+D.v,1)}break;
  case'voiceadd':{var vl=(sh&&sh.l||[]).filter(function(x){return String(x.n).trim()});sh=null;vl.forEach(function(x){addItem(x.n,x.q,x.u)});say(t('{0} Produkte hinzugefügt.',vl.length));break}
  case'fsdn':case'fsup':S.set.fs=Math.max(10,Math.min(40,(+S.set.fs||18)+(a==='fsup'?1:-1)));break;
+ case'hintsback':S.set.swipeN=0;say(t('Die Hinweise erscheinen wieder.'));break;
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
@@ -1397,7 +1399,7 @@ document.addEventListener('pointerdown',function(e){
 var sw0=null,dragId=null,upS=null;
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
-var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
  hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
@@ -1410,7 +1412,7 @@ function pointerEnd(e){clearTimeout(lpT);
  if(dragId){var u=document.elementFromPoint(e.clientX,e.clientY),o=u&&u.closest&&u.closest('[data-ord]');if(o&&o.dataset.ord!==dragId){reorderTo(dragId,o.dataset.ord);save();R()}dragId=null}
  if(sw0){var s=sw0;sw0=null;s.el.style.transform='';
   if(s.dx<-70){swiped=true;setTimeout(function(){swiped=false},400);
-   delItem(s.id,s.k==='i'?'i':'h');save();R()}}}
+   delItem(s.id,s.k==='i'?'i':'h');S.set.swipeN=(S.set.swipeN||0)+1;save();R()}}}
 document.addEventListener('pointerup',pointerEnd);document.addEventListener('pointercancel',function(){clearTimeout(lpT);if(sw0){sw0.el.style.transform='';sw0=null}dragId=null});
 document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('[data-fire]'))e.preventDefault()});
 window.addEventListener('online',runQueue);

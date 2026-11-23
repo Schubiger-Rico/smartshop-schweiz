@@ -655,3 +655,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - ☰ nicht mehr neben dem Titel, sondern rechts auf der Zeile «Hallo Rico». Ohne Namen trotzdem eine Zeile mit ☰ rechts.
 - **Umgesetzt am 23.11.:** ☰ steht rechts auf der Zeile «Hallo Rico» (Klasse `hrow`, in jeder Ansicht; Anrede nur in der Liste).
+- **Umgesetzt am 23.11.:** Hinweis «Zum Löschen nach links wischen» verschwindet nach 3× Wischen (`S.set.swipeN`), «Wieder anzeigen» unter Darstellung. «Letzte Produkte»: Anzahl und Sortierung nur noch in den Einstellungen (nicht mehr in der Liste). Führung angepasst.
