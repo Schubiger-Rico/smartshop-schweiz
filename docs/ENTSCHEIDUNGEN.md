@@ -580,3 +580,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Heute schon möglich: Mikrofon 🎤 der iPhone-Tastatur (Diktieren) im Eingabefeld.
 - Idee: eigener 🎤-Knopf; man sagt «Milch, Brot und zwei Kilo Äpfel» → mehrere Produkte mit Mengen auf einmal auf der Liste. Safari unterstützt Spracherkennung (webkitSpeechRecognition), in der Homescreen-App nicht immer zuverlässig → Rückfall auf Tastatur-Diktat. Abschaltbar, in Führung erklären.
+
+### Umgesetzt am 23.11.: Kopfzeile aufgeräumt, Sprache, Öle
+
+- Kopfzeile in einer Zeile: «🛒 Start» · «📍 Laden» · 🔄 · 🎤 · 📷. Bei grosser Schrift steht das Eingabefeld allein über die ganze Breite, die kleinen Knöpfe darunter, ＋ rechts.
+- 🎤 Sprache: «Milch, Brot und zwei Kilo Äpfel» → Liste zum Bestätigen, dann alle auf einmal hinzufügen (Mengen und Einheiten erkannt). Ohne Spracherkennung Hinweis auf das Tastatur-Mikrofon. Schalter in «Einkaufsliste» (bei «Einfach» aus), in der Führung erklärt.
+- Öle (Rapsöl, Olivenöl, Sonnenblumenöl …) bekommen 🫗.
+- Nicht echt geprüft: Spracherkennung in Safari/Homescreen-App auf dem iPhone.
