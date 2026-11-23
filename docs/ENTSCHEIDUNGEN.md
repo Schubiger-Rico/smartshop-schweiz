@@ -623,3 +623,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Verbessern: Menge auch **nach** dem Produkt verstehen («Brot 1 Stück», «Mehl ein Kilo»); Teil nur mit Menge an das vorherige Produkt hängen («Brot und 1 Stück» → Brot 1 Stk.); Füllwörter wie «stopp», «fertig», «bitte», «noch» ignorieren; in der Bestätigung Menge/Produkt antippen und korrigieren können. Hinweis-Beispiel im Sheet zeigen.
 - Später evtl.: Befehle («Milch abhaken», «Einkauf starten»).
 - **Umgesetzt am 23.11.:** Spracheingabe versteht Mengen vor und nach dem Produkt («Brot 1 Stück», «Mehl ein Kilo»), hängt reine Mengen an das Produkt davor, ignoriert «stopp/fertig/bitte»; in der Bestätigung Name, Menge, Einheit änderbar und Zeilen entfernbar. Test t18.
+
+### Notiz vom 23.11.2026: Kategorie-Auswahl übersichtlicher, mehr Kategorien (nur festgehalten, noch nicht gebaut)
+
+- Kategorie-Auswahl (beim Produkt) so übersichtlich wie die Liste unter Einstellungen → Kategorien: untereinander, eine Hauptkategorie pro Zeile mit grossem Symbol, Unterkategorien eingerückt darunter (aufklappbar). Grösser, gut lesbar.
+- Mehr vordefinierte Kategorien und Unterkategorien. **Asia fehlt komplett** (neu z. B. «Internationale Küche»: Asia, Mexiko/Tex-Mex, Italien, Orient, Indien).
+- Orientierung an einer gängigen Einteilung: Rubriken der Onlineshops von Migros/Coop (Früchte & Gemüse, Brot & Backwaren, Milchprodukte & Eier, Fleisch & Fisch, Vorräte, Süsses & Salziges, Getränke, Tiefkühl, Fertiggerichte, Internationale Küche, Bio/Vegi/Vegan, Drogerie & Kosmetik, Haushalt, Baby, Tiere …); offizieller Standard wäre GS1 GPC (für den Alltag zu fein). Bestehende eigene Anpassungen dürfen nicht verloren gehen.
