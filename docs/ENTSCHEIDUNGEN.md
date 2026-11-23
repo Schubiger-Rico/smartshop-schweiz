@@ -592,3 +592,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Wenn das Eingabefeld eine eigene Zeile hat: ＋ rechts in doppelter Höhe, von der Zeile «Produkt hinzufügen» bis zur Knopfzeile darunter (grosser, gut treffbarer Knopf).
 - **Umgesetzt am 23.11.:** ＋ doppelt hoch rechts neben Eingabefeld und Knopfzeile (Grid, `--n` = Anzahl kleiner Knöpfe), Kopfzeile wieder sicher einzeilig.
+
+### Notiz vom 23.11.2026: Nur Symbole + Erklärung beim Gedrückthalten (nur festgehalten, noch nicht gebaut)
+
+- Alle kleinen Knöpfe nur mit Symbol (ohne Text).
+- 2 Sekunden auf einem Knopf bleiben → kurze Erklärung erscheint, wofür er ist (z. B. «🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden»). Gilt für alle Symbol-Knöpfe (🛒 📍 🔄 🎤 📷 🏪 ❗ ☆ ✓ 🔥 …). Achtung: 🔥 hat heute schon langes Drücken (Aktionen) – abklären.
+- Offen: Ob auch «🛒 Start» und «📍 Laden» nur noch Symbol sein sollen (Vorschlag: ja). In der Führung erwähnen.
