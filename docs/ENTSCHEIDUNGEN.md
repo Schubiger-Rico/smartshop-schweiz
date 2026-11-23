@@ -608,3 +608,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 23.11.2026: 🎤 vor das Eingabefeld (nur festgehalten, noch nicht gebaut)
 
 - 🎤 aus der Kopfzeile nehmen und direkt vor «Produkt hinzufügen» setzen (in der Eingabezeile).
+- **Umgesetzt am 23.11.:** 🎤 steht jetzt direkt vor «Produkt hinzufügen»; Eingabefeld bekommt schon ab normaler Schrift eine eigene Zeile (Schwelle 24).
