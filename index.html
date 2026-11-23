@@ -89,6 +89,7 @@ input[type=color]{padding:0;width:calc(var(--fs)*2.5);cursor:pointer}
 html.compact .card{min-height:0;padding:1px .3em;margin-bottom:.2em;gap:.3em;line-height:1.15}html.compact .card .btn.sq,html.compact .card .ic{width:calc(var(--rh)*.7);height:calc(var(--rh)*.7);min-width:0;min-height:0;font-size:.85em}html.compact .card.urg .nm{font-size:1.15em}
 .topbar{flex-wrap:nowrap;overflow-x:auto;gap:.3em}.topbar .btn{padding:0 .5em;white-space:nowrap}
 html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr auto;align-items:center;gap:.35em}html.addwrap .add .nm{grid-row:1;grid-column:1 / span calc(var(--n) + 1);width:100%}html.addwrap .add [data-a=add]{grid-row:1 / span 2;grid-column:-2 / -1;height:100%;width:calc(var(--rh)*1.3);font-size:1.4em}
+.btn,.ic{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -133,7 +134,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact'}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact',btnText:false,lpHelp:true}}
 var STD=[
 ['🥦','Obst & Gemüse',[['🍎','Früchte'],['🥕','Gemüse'],['🥬','Salat'],['🌿','Kräuter'],['🍄','Pilze']]],
 ['🥛','Milch & Eier',[['🥛','Milch'],['🍦','Joghurt'],['🧀','Käse'],['🧈','Butter'],['🥚','Eier'],['🍶','Rahm']]],
@@ -275,7 +276,7 @@ function rememberUnit(u){if(u&&allUnits().indexOf(u)<0){S.units.push(u);S.units=
 function fmt(i){return i.qty>0?(i.qty+(i.unit?' '+i.unit:'')):''}
 
 var toastT;
-function say(m){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){e.classList.remove('show')},2600)}
+function say(m,ms){var e=$('#toast');if(!e)return;e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){e.classList.remove('show')},ms||2600)}
 
 /* ===== Laufzeitzustand ===== */
 var dealOpen=null,view='list',sub='main',menu=false,more=false,sh=null,editId=null,cur=null,near=[],pend=null,pick=null,declined={},stMsg='',ask=null,tt0=0;
@@ -411,7 +412,7 @@ function banner(){
  return''}
 function shopBar(pv){
  if(S.shop&&!pv)return'';var b=on('bar'),c=on('cam')||on('scan');if(!b&&!c&&!on('voice'))return'';var x=pv?'':' id="shopbtn"';
- return'<div class="seg topbar" style="margin-bottom:.5em">'+(b?'<button class="btn"'+x+' data-a="shopstart" aria-label="'+t('Einkauf starten')+'">🛒 '+t('Start')+'</button>'+(cur?'':'<button class="btn" data-a="storepick" aria-label="'+t('Laden wählen')+'">📍 '+t('Laden')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(on('voice')?'<button class="btn sq'+(pv?'':' micb')+'" data-a="voice" aria-label="'+t('Sprache')+'">🎤</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t(on('scan')&&!on('cam')?'Strichcode scannen':'Ratgeber')+'">📷</button>':'')+'</div>'}
+ return'<div class="seg topbar" style="margin-bottom:.5em">'+(b?'<button class="btn"'+x+' data-a="shopstart" aria-label="'+t('Einkauf starten')+'">🛒'+(S.set.btnText?' '+t('Start'):'')+'</button>'+(cur?'':'<button class="btn" data-a="storepick" aria-label="'+t('Laden wählen')+'">📍'+(S.set.btnText?' '+t('Laden'):'')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(on('voice')?'<button class="btn sq'+(pv?'':' micb')+'" data-a="voice" aria-label="'+t('Sprache')+'">🎤</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t(on('scan')&&!on('cam')?'Strichcode scannen':'Ratgeber')+'">📷</button>':'')+'</div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
@@ -803,7 +804,7 @@ function vSettings(){
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +'<div class="row"><span>'+t('Akzentfarbe')+'</span><span class="sw">'+['#39FF14','#1f8a70','#2e6fd1','#8a4fd1','#d1642e','#c8453b','#444444'].map(swatch).join('')+'<input type="color" data-chg="accent" value="'+S.set.accent+'" aria-label="'+t('Eigene Farbe')+'"></span></div>'
-  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowS(t('Zeilenhöhe'),selH('rows',[['compact',t('Kompakt')],['normal',t('Normal')]]))+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
+  +'<p>'+t('Vorschau')+':</p><div class="card"><span class="ic">🥛</span><span class="nm">'+t('Milch')+'</span><span class="q">1 lt</span><button class="btn sq">✓</button></div>'+rowC(t('Knöpfe mit Text («Start», «Laden»)'),'btnText',!!S.set.btnText)+rowC(t('Erklärung beim Gedrückthalten (2 Sekunden)'),'lpHelp',S.set.lpHelp!==false)+rowS(t('Zeilenhöhe'),selH('rows',[['compact',t('Kompakt')],['normal',t('Normal')]]))+rowS(t('Test-Hinweise anzeigen'),sw('testBan',S.set.testBan!==false));break;
  case'lang':h+='<div class="seg">'+Object.keys(LANGS).map(function(k){return'<button class="btn'+(S.set.lang===k?' sel':'')+'"'+(k==='de'?' data-a="lang" data-v="de"':' disabled')+'>'+LANGS[k]+(k==='de'?'':' · '+t('bald verfügbar'))+'</button>'}).join('')+'</div>';break;
  case'cats':h+=vCatsAdm();break;
  case'favs':h+=rowS(t('Automatisch Favorit nach'),selH('favAfter',[['3','3 '+t('Käufen')],['5','5 '+t('Käufen')],['10','10 '+t('Käufen')],['off',t('Aus')]]))
@@ -864,6 +865,7 @@ function mn(v,x,m,more){return st('list','.menu [data-v='+v+']',x,m,{menu:1,more
 /* App-Führung */
 AREAS.push(['Eingabeseite',[
  st('list','#dn','Das ist die Eingabeseite. In dieses Feld schreibst du, was du brauchst, zum Beispiel «Milch».','Beim Tippen erscheinen darunter Vorschläge aus deinen bisherigen Produkten. Ein Tipp auf einen Vorschlag übernimmt ihn.',{ro:1}),
+ st('list','.topbar','Die kleinen Knöpfe zeigen nur Symbole. Bleib 2 Sekunden auf einem Knopf, dann erklärt die App, wofür er ist.','<b>Lieber mit Text?</b> Einstellungen → Darstellung → «Knöpfe mit Text».\n<b>Stört die Erklärung?</b> Dort «Erklärung beim Gedrückthalten» ausschalten.\n<b>Wenn es nicht klappt:</b> Finger ruhig halten und nicht verschieben, sonst zählt es als Wischen.',{ro:1}),
  st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Eigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
@@ -936,6 +938,8 @@ SA('Darstellung',[
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
  ss('look','row:Menü','Minimal, Normal oder Gross.','Bei «Minimal» sind die Menüknöpfe klein, bei «Gross» besonders gross.'),
  ss('look','row:Akzentfarbe','Die Akzentfarbe: Neon-Grün oder eine eigene Farbe.'),
+ ss('look','row:Knöpfe mit Text','Knöpfe mit Text: zeigt «Start» und «Laden» neben den Symbolen.','<b>Aus (Standard):</b> nur Symbole, ruhiger und platzsparend.\n<b>Ein:</b> mit Text, gut am Anfang, bis man die Symbole kennt.\n<b>Wenn du die Symbole nicht verstehst:</b> Schalte es ein oder halte den Knopf 2 Sekunden gedrückt.'),
+ ss('look','row:Erklärung beim Gedrückthalten','Erklärung beim Gedrückthalten: 2 Sekunden auf einem Knopf zeigt, wofür er ist.','<b>Wofür geeignet:</b> Symbole kennenlernen, ohne die Führung zu starten.\n<b>Wenn es stört:</b> ausschalten. Die Knöpfe funktionieren genau gleich.'),
  ss('look','row:Zeilenhöhe','Zeilenhöhe der Produkte: Kompakt oder Normal.','<b>Kompakt:</b> schmale Zeilen, mehr Produkte auf dem Bildschirm.\n<b>Normal:</b> grössere Zeilen und Knöpfe, gut für grosse Finger oder unterwegs.\n<b>Wenn du oft daneben tippst:</b> Wähle «Normal» oder mache die Schrift grösser.'),
  ss('look','row:Test-Hinweise anzeigen','Gelbe «🚧 TEST»-Schilder in Bereichen, die noch nicht fertig sind.','Wofür geeignet: Eingeschaltet weisst du, wo noch gebaut wird. Ausgeschaltet ist die App ruhiger.\nWenn dich die Schilder stören: Schalte sie hier aus.')]);
 SA('Sprache',[ss('lang','#app .seg','Zurzeit gibt es Deutsch. Weitere Sprachen folgen.')]);
@@ -1259,7 +1263,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
  if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
  if(D.chk&&D.chk.indexOf('v_')===0){setOn(D.chk.slice(2),t0.checked);S.set.view='manual';save();R();return}
- if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='cloudBak'&&t0.checked){if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save();cloudBak(true)}if(kk==='remSc'||kk==='autoBak'||kk==='cloudBak')R();return}
+ if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='cloudBak'&&t0.checked){if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save();cloudBak(true)}if(kk==='remSc'||kk==='autoBak'||kk==='cloudBak'||kk==='btnText')R();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
  if(k==='miner'||k==='minehint'){var m2=S.mine[+D.i];if(m2){if(k==='miner')m2.r=+v2;else m2.hint=v2.trim();save()}return}
@@ -1275,6 +1279,13 @@ document.addEventListener('pointerdown',function(e){
  var up=e.target.closest&&e.target.closest('[data-up]');if(up){upS={x:e.clientX,y:e.clientY};return}
  var c=e.target.closest&&e.target.closest('[data-sw]');if(c&&!e.target.closest('input,select,textarea'))sw0={el:c,x:e.clientX,y:e.clientY,id:c.dataset.sw,k:c.dataset.swk,dx:0}});
 var sw0=null,dragId=null,upS=null;
+/* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
+document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
+ hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var m=HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
+document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
+['pointerup','pointercancel'].forEach(function(n){document.addEventListener(n,function(){clearTimeout(hpT);hp0=null},true)});
+document.addEventListener('click',function(e){if(helpShown&&Date.now()-helpShown<2000){helpShown=0;e.preventDefault();e.stopPropagation()}},true);
 document.addEventListener('pointermove',function(e){clearTimeout(lpT);
  if(sw0){var dx=e.clientX-sw0.x,dy=e.clientY-sw0.y;if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>12){sw0.el.style.transform='';sw0=null;return}sw0.dx=dx;if(dx<0)sw0.el.style.transform='translateX('+dx+'px)'}});
 function pointerEnd(e){clearTimeout(lpT);

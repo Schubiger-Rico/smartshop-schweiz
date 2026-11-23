@@ -598,3 +598,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Alle kleinen Knöpfe nur mit Symbol (ohne Text).
 - 2 Sekunden auf einem Knopf bleiben → kurze Erklärung erscheint, wofür er ist (z. B. «🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden»). Gilt für alle Symbol-Knöpfe (🛒 📍 🔄 🎤 📷 🏪 ❗ ☆ ✓ 🔥 …). Achtung: 🔥 hat heute schon langes Drücken (Aktionen) – abklären.
 - Offen: Ob auch «🛒 Start» und «📍 Laden» nur noch Symbol sein sollen (Vorschlag: ja). In der Führung erwähnen.
+
+### Umgesetzt am 23.11.: Nur Symbole, Erklärung beim Gedrückthalten
+
+- Alle kleinen Knöpfe nur mit Symbol, auch 🛒 und 📍 (Text wieder einschaltbar: Darstellung → «Knöpfe mit Text»).
+- 2 Sekunden auf einem Knopf bleiben zeigt, wofür er ist; der Knopf wird dabei nicht ausgelöst. Abschaltbar: Darstellung → «Erklärung beim Gedrückthalten». 🔥 behält sein eigenes langes Drücken (Aktionen).
+- In App- und Einstellungen-Führung erklärt.
