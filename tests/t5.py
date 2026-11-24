@@ -23,7 +23,7 @@ with sync_playwright() as p:
     print('demo deal not in banner',pg.locator('[data-a=dealx]').count()==0)
     pg.evaluate("var s=JSON.parse(localStorage.getItem('sebu.v1'));var d=new Date(),e=new Date(Date.now()+5*864e5),f=function(x){return x.toISOString().slice(0,10)};s.deals=[{product:'Butter',chain:'Coop',price:2,normal:3,from:f(d),to:f(e),own:true}];localStorage.setItem('sebu.v1',JSON.stringify(s))");pg.reload()
     n=pg.locator('[data-a=dealx]').count()
-    pg.click('#hamb');pg.click('.menu [data-v=deals]');print('retailer links',pg.locator('#app a[href*=google]').count());pg.click('#hamb');pg.click('.menu [data-v=list]')
+    pg.click('#hamb');pg.click('.menu [data-v=deals]');print('retailer links',pg.locator('#app a[href*=google]').count(),'coop direct',pg.locator('#app a[href*="coop.ch"]').count());pg.click('#hamb');pg.click('.menu [data-v=list]')
     if n:pg.click('[data-a=dealx]');print('hidden',pg.locator('[data-a=dealx]').count());pg.reload()
     print('deal banner x',n,'after dismiss+reload (back)',pg.locator('[data-a=dealx]').count())
     b.close()

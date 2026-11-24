@@ -792,10 +792,12 @@ function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0'
  return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1;min-width:0">🔥 '+esc(tx)+'</span><button class="btn sq dealxb" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
 var allDealsOpen=false;
+/* direkte Aktionsseiten (von Rico geprüft); übrige Händler über Internetsuche */
+var DLINK={Coop:'https://www.coop.ch/de/aktionen/aktuelle-aktionen/c/m_1011'};
 function vDeals(){var l=allDeals().sort(function(a,b){return pct(b)-pct(a)}),h='<h2>'+t('Aktionen')+'</h2>';
  if(l.length&&l[0].demo)h+='<div class="ban"><span class="small">'+t('Beispieldaten: Es sind noch keine eigenen Aktionen gespeichert. Fotografiere ein Aktionsschild, dann erscheinen echte Aktionen.')+'</span></div>';
  h+='<div class="seg" style="margin-bottom:.5em"><button class="btn pri" data-a="dealphoto">📷 '+t('Aktion per Foto')+'</button></div>';
- h+='<h3 id="dlinks">'+t('Aktionen der Händler ansehen')+'</h3><div class="seg" style="margin-bottom:.4em">'+['Migros','Coop','Denner','Aldi','Lidl','Volg','Spar'].map(function(c){return'<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/search?q='+encodeURIComponent('Aktionen '+c+' Schweiz diese Woche')+'">'+esc(c)+' ↗</a>'}).join('')+'</div><p class="small mute">'+t('Öffnet die aktuelle Aktionsseite über eine Internetsuche. Gratis, ohne Konto.')+'</p>';
+ h+='<h3 id="dlinks">'+t('Aktionen der Händler ansehen')+'</h3><div class="seg" style="margin-bottom:.4em">'+['Migros','Coop','Denner','Aldi','Lidl','Volg','Spar'].map(function(c){return'<a class="btn" target="_blank" rel="noopener" href="'+(DLINK[c]||'https://www.google.com/search?q='+encodeURIComponent('Aktionen '+c+' Schweiz diese Woche'))+'">'+esc(c)+' ↗</a>'}).join('')+'</div><p class="small mute">'+t('Öffnet die aktuelle Aktionsseite über eine Internetsuche. Gratis, ohne Konto.')+'</p>';
  var n=allDealsOpen?l.length:10;l.slice(0,n).forEach(function(d){h+=dealRow(d)});
  if(l.length>10)h+='<button class="btn" data-a="dealsall">'+(allDealsOpen?t('Weniger'):t('Alle {0} anzeigen',l.length))+'</button>';
  var w=S.items.filter(watched);h+='<h2>'+t('Beobachtungsliste')+'</h2>';
