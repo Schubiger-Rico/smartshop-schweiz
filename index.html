@@ -787,7 +787,7 @@ function purgeDeals(){var keep=S.items.filter(watched).map(function(i){return no
  S.dealHist=S.dealHist.slice(-200)}
 var dealHid=false;
 function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
- S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
+ S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i)[0];if(d)l.push(i.name+' '+d.chain+' −'+pct(d)+'%')});
  if(!l.length||dealHid)return'';var tx=l.slice(0,lim).join(' · '),dk='';
  return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1;min-width:0">🔥 '+esc(tx)+'</span><button class="btn sq dealxb" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}

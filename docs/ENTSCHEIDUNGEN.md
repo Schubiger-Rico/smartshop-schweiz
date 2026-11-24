@@ -663,3 +663,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Arbeitsregel (seit 24.11.2026)
 
 - Bei unklarer Definition immer nachfragen, bevor gebaut wird – nicht raten (Anlass: ✕ beim Aktionshinweis zuerst «für heute» statt «bis zum nächsten Öffnen» gebaut).
+- 24.11.: Aktionshinweis ohne Klammer und ohne «Beispiel»: «Butter Aldi −29%».
