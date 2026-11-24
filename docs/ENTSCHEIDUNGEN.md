@@ -701,3 +701,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Behoben 24.11.:** 🔥-Farbe und «immer»-Anzeige rechnen nur noch mit echten Aktionen (`realDeals`), nicht mit Beispieldaten (Butter war fälschlich grün).
 - **Umgesetzt am 24.11.:** Die 4 Knöpfe (🛒 📍 🔄 📷) stehen neben «Hallo …», wenn sie in die Zeile passen (`barUp()` misst nach dem Zeichnen), sonst in eigener Zeile darunter.
 - **Umgesetzt am 24.11.:** Mikrofon-Beispiel «Brot 1 Stück und Mehl 1 Kilo – stopp»; «stopp» beendet das Zuhören sofort (alles danach wird ignoriert), sonst endet es nach einer Pause (continuous + interimResults). Führung angepasst.
+
+### Notiz vom 24.11.2026: Menü-Knopf und grüne Umrandung (nur festgehalten, noch nicht gebaut)
+
+- ☰ ist kleiner als die anderen Knöpfe → gleich gross machen.
+- «Die grüne Umrandung könnte mehr auffallen» – welche genau, ist noch zu klären (Vorschlag: Rahmen um die Symbole der Produkte und das Kategorie-Feld, im dunklen Design kaum sichtbar → heller Neon-Grün statt Dunkelgrün).
