@@ -717,3 +717,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - «Senden» öffnet eine einzige E-Mail (mailto) an Rico mit der Zusammenfassung, z. B. «Aktionsdaten: Ja · Produktdaten: Nein · …». Die Mail geht aus dem Mailprogramm des Händlers → geringes Spam-Risiko.
 - Der Knopf «Antwort senden» in den PDFs zeigt dann auf diese Seite.
 - **Umgesetzt am 24.11.:** `antwort.html` gebaut (Ja/Nein mit ✓, Name/Funktion und Bemerkungen freiwillig, Senden erst wenn alle Zeilen gewählt). PDFs verlinken «Antwort senden» auf https://schubiger-rico.github.io/smartshop-schweiz/antwort.html?an=Migros.
+- 24.11.: Antwort-Seite: grosser grüner Ja-Knopf, rotes Nein, gewählte Antwort mit ✓ (andere blass), Tipp «Der grüne Knopf ist leichter zu treffen 😉» jetzt hier statt im PDF. PDFs: Ja/Nein gleich gross, Nein rot, Knopf heisst «✉️ Antworten».

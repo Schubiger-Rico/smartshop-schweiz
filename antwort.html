@@ -19,11 +19,13 @@ h1{font:700 1.25em Quicksand,sans-serif;color:var(--dg);margin:6px 0 8px}
 p{margin:6px 0}
 .row{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--fr);border-radius:12px;padding:8px 10px;margin:8px 0}
 .row .t{flex:1}
-.pill{font:inherit;font-weight:700;border-radius:999px;border:2px solid var(--fr);background:#fff;color:var(--dg);padding:6px 14px;min-width:4.4em;cursor:pointer}
-.pill.ja{font-size:1.1em;padding:7px 18px}
-.pill.on{background:var(--acc);border-color:var(--dg);color:#0a2a00}
+.pill{font:inherit;font-weight:700;border-radius:999px;border:2px solid;padding:6px 14px;min-width:4.4em;cursor:pointer;opacity:.6}
+.pill.ja{background:var(--acc);border-color:#29a714;color:#0a2a00;font-size:1.3em;padding:9px 24px;min-width:5em}
+.pill.nein{background:#ffe2df;border-color:#c8453b;color:#7a1c14}
+.pill.on{opacity:1;box-shadow:0 0 0 3px #0f181522}
 .pill.on::before{content:"✓ "}
-.pill.nein.on{background:#ffe2df;border-color:#c8453b;color:#7a1c14}
+.row.done .pill:not(.on){opacity:.3}
+.tip{font-style:italic;color:var(--mute);margin:4px 0 0}
 label{display:block;font-weight:700;margin:12px 0 4px}
 textarea,input{width:100%;font:inherit;border:1.5px solid var(--fr);border-radius:12px;padding:8px 10px;background:#fff}
 textarea{min-height:5em}
@@ -38,6 +40,7 @@ textarea{min-height:5em}
  <h1 id="ti">Ihre Antwort</h1>
  <p>Bitte bei jeder Zeile <b>Ja</b> oder <b>Nein</b> antippen. Danach «Antwort senden» – es öffnet sich eine fertige E-Mail mit der Zusammenfassung.</p>
  <div id="rows"></div>
+ <p class="tip">Kleiner Tipp: Der grüne Knopf ist leichter zu treffen. 😉</p>
  <label for="nm">Name und Funktion (freiwillig)</label>
  <input id="nm" autocomplete="name">
  <label for="bm">Bemerkungen (freiwillig)</label>
@@ -66,7 +69,7 @@ textarea{min-height:5em}
   var body='Grüezi Herr Schubiger\n\nHier unsere Antwort zu sEBU:\n\n'+lines.join('\n')+(bm?'\n\nBemerkungen:\n'+bm:'')+'\n\nFreundliche Grüsse'+(nm?'\n'+nm:'')+'\n';
   s.href='mailto:'+to+'?subject='+encodeURIComponent('sEBU – Antwort'+(an?' von '+an:''))+'&body='+encodeURIComponent(body)}
  box.addEventListener('click',function(e){var b=e.target.closest('.pill');if(!b)return;var i=b.getAttribute('data-i');ans[i]=b.getAttribute('data-v');
-  b.parentNode.querySelectorAll('.pill').forEach(function(x){x.classList.toggle('on',x===b)});upd()});
+  b.parentNode.querySelectorAll('.pill').forEach(function(x){x.classList.toggle('on',x===b)});b.parentNode.classList.add('done');upd()});
  document.getElementById('nm').addEventListener('input',upd);document.getElementById('bm').addEventListener('input',upd);upd();
 })();
 </script>
