@@ -94,6 +94,8 @@ html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr a
 .catm{display:flex;gap:.4em;align-items:center}.catpk{display:flex;align-items:center;gap:.6em;width:100%;text-align:left;font:inherit;font-size:1.1em;padding:.35em .6em;margin:.2em 0;border:1px solid var(--line);border-radius:.7em;background:var(--card);color:var(--ink);cursor:pointer}.catpk .ci{font-size:1.4em;line-height:1}.catpk.sub{width:calc(100% - 1.6em);margin-left:1.6em;font-size:1em}.catpk.cur{outline:2px solid var(--acc)}
 .hrow{display:flex;justify-content:space-between;align-items:center;gap:.5em;margin:-.2em 0 .5em;flex-wrap:nowrap}.hrow>span{white-space:nowrap;flex:1 1 auto}.topbar.up{flex:0 0 auto;margin:0;overflow:visible}
 .btn.sq.dealxb{width:calc(var(--rh)*1.2);height:calc(var(--rh)*1.2);font-size:1.35em;font-weight:700;flex:0 0 auto;margin-left:.4em}
+.btn.sq#hamb{width:calc(var(--rh)*1.4);font-size:1.25em}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .ic{border-color:var(--acc)}}:root[data-theme=dark] .ic{border-color:var(--acc)}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}

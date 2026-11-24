@@ -706,3 +706,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - ☰ ist kleiner als die anderen Knöpfe → gleich gross machen.
 - «Die grüne Umrandung könnte mehr auffallen» – welche genau, ist noch zu klären (Vorschlag: Rahmen um die Symbole der Produkte und das Kategorie-Feld, im dunklen Design kaum sichtbar → heller Neon-Grün statt Dunkelgrün).
+- **Umgesetzt am 24.11.:** ☰ gleich gross wie die Kopf-Knöpfe (1,4-fache Breite, grösseres Symbol); im dunklen Design sind die Rahmen um Produkt-Symbole und das Kategorie-Feld in der Akzentfarbe (Neon-Grün) statt Dunkelgrün.
