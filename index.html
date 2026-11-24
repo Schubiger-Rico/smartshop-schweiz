@@ -797,7 +797,7 @@ var DLINK={Coop:'https://www.coop.ch/de/aktionen/aktuelle-aktionen/c/m_1011',Mig
 function vDeals(){var l=allDeals().sort(function(a,b){return pct(b)-pct(a)}),h='<h2>'+t('Aktionen')+'</h2>';
  if(l.length&&l[0].demo)h+='<div class="ban"><span class="small">'+t('Beispieldaten: Es sind noch keine eigenen Aktionen gespeichert. Fotografiere ein Aktionsschild, dann erscheinen echte Aktionen.')+'</span></div>';
  h+='<div class="seg" style="margin-bottom:.5em"><button class="btn pri" data-a="dealphoto">📷 '+t('Aktion per Foto')+'</button></div>';
- h+='<h3 id="dlinks">'+t('Aktionen der Händler ansehen')+'</h3><div class="seg" style="margin-bottom:.4em">'+['Migros','Coop','Denner','Aldi','Lidl','Volg','Spar'].map(function(c){return'<a class="btn" target="_blank" rel="noopener" href="'+(DLINK[c]||'https://www.google.com/search?q='+encodeURIComponent('Aktionen '+c+' Schweiz diese Woche'))+'">'+esc(c)+' ↗</a>'}).join('')+'</div><p class="small mute">'+t('Öffnet die aktuelle Aktionsseite über eine Internetsuche. Gratis, ohne Konto.')+'</p>';
+ h+='<h3 id="dlinks">'+t('Aktionen der Händler ansehen')+'</h3><div class="seg" style="margin-bottom:.4em">'+['Migros','Coop','Denner','Aldi','Lidl','Volg','Spar','Aligro',"Otto's"].map(function(c){return'<a class="btn" target="_blank" rel="noopener" href="'+(DLINK[c]||'https://www.google.com/search?q='+encodeURIComponent('Aktionen '+c+' Schweiz diese Woche'))+'">'+esc(c)+' ↗</a>'}).join('')+'</div><p class="small mute">'+t('Öffnet die aktuelle Aktionsseite über eine Internetsuche. Gratis, ohne Konto.')+'</p>';
  var n=allDealsOpen?l.length:10;l.slice(0,n).forEach(function(d){h+=dealRow(d)});
  if(l.length>10)h+='<button class="btn" data-a="dealsall">'+(allDealsOpen?t('Weniger'):t('Alle {0} anzeigen',l.length))+'</button>';
  var w=S.items.filter(watched);h+='<h2>'+t('Beobachtungsliste')+'</h2>';
@@ -1023,7 +1023,7 @@ AREAS.push(['Kategorien',[
  st('settings','.ordrow .btn:last-child','Standard-Kategorien blendest du aus, eigene löschst du. Dann fragt die App, wohin die Produkte gehen.',0,{sub:'cats'})]]);
 AREAS.push(['Aktionen',[
  st('deals','[data-a=dealphoto]','Fotografiere ein Aktionsschild. Die App liest es, du bestätigst, erst dann wird es gespeichert.','Die Zahlen prüfst du selbst. Gespeichert wird nichts ohne deine Bestätigung.'),
- st('deals','#dlinks','Aktionen der Händler: Ein Tipp auf Migros, Coop, Denner, Aldi, Lidl, Volg oder Spar öffnet deren aktuelle Aktionen im Internet.','Gratis und ohne Konto. Die Suche führt zur offiziellen Aktionsseite.\n<b>Wenn es nicht klappt:</b> Internetverbindung prüfen. Öffnet sich nichts, den Link etwas länger gedrückt halten und «Öffnen» wählen.'),
+ st('deals','#dlinks','Aktionen der Händler: Ein Tipp auf Migros, Coop, Denner, Aldi, Lidl, Volg, Spar, Aligro oder Otto\'s öffnet deren aktuelle Aktionen im Internet.','Gratis und ohne Konto. Die Suche führt zur offiziellen Aktionsseite.\n<b>Wenn es nicht klappt:</b> Internetverbindung prüfen. Öffnet sich nichts, den Link etwas länger gedrückt halten und «Öffnen» wählen.'),
  st('deals','#app .card.blk','So sieht eine Aktion aus: Preis, Ersparnis, Preis pro Einheit und Zeitraum. Beispieldaten sind markiert.','Der Preis pro Einheit macht Packungen vergleichbar. Die Einheit stellst du in den Einstellungen ein.'),
  st('deals','#app h2:nth-of-type(2)','Alle Produkte mit 🔥 stehen in der Beobachtungsliste.','Ein Produkt ohne Marke zeigt Aktionen für alle Marken. Mit Marke, zum Beispiel «Thomy Mayonnaise», nur für diese.')]]);
 AREAS.push(['Läden',[

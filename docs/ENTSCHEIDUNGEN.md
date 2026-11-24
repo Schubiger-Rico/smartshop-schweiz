@@ -678,3 +678,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 24.11.: Denner-Knopf direkt auf https://www.denner.ch/de/aktionen/aktuelle-aktionen.
 - 24.11.: Aldi-Knopf direkt auf https://www.aldi-suisse.ch/de/aktionen-und-angebote.
 - 24.11.: Volg-Knopf direkt auf https://www.volg.ch/sortiment/wochenaktionen/. Lidl: Startseite https://www.lidl.ch/de-CH/ (von Rico bestätigt). Spar: https://www.spar.ch/aktuelles/angebote. Alle 7 Händler direkt verlinkt (Tracking-Teile entfernt).
+- 24.11.: Knöpfe Aligro und Otto's ergänzt (vorerst über Internetsuche, bis Rico die direkten Adressen schickt).
