@@ -679,3 +679,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 24.11.: Aldi-Knopf direkt auf https://www.aldi-suisse.ch/de/aktionen-und-angebote.
 - 24.11.: Volg-Knopf direkt auf https://www.volg.ch/sortiment/wochenaktionen/. Lidl: Startseite https://www.lidl.ch/de-CH/ (von Rico bestätigt). Spar: https://www.spar.ch/aktuelles/angebote. Alle 7 Händler direkt verlinkt (Tracking-Teile entfernt).
 - 24.11.: Knöpfe Aligro und Otto's ergänzt (vorerst über Internetsuche, bis Rico die direkten Adressen schickt).
+
+### Notiz vom 24.11.2026: KI-Aktionssuche als weitere Option (nur festgehalten, noch nicht gebaut)
+
+- Zusätzlich zu den Händler-Links: Knopf «🔎 Aktionen für meine Liste suchen» – die KI (eigener Anthropic-Schlüssel, Websuche) sucht für die 🔥-Produkte der Liste aktuelle Aktionen bei den eingeschalteten Ketten und zeigt Treffer mit Händler, Preis/Rabatt, Gültigkeit und Quelle. Nur auf Knopfdruck, Kosten ca. 1–4 Rappen pro Suche (Hinweis vor dem ersten Mal). Ergebnisse als «aus dem Internet, ohne Gewähr» markiert; abschaltbar; in der Führung erklären.
+- Die App liest Händlerseiten weiterhin nicht selbst aus (technisch/rechtlich nicht möglich ohne Server bzw. Zustimmung).
