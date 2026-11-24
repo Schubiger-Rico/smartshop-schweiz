@@ -5,6 +5,7 @@ Besitzer: Rico Schubiger (GitHub `Schubiger-Rico`), Schweiz, Deutsch. Er arbeite
 
 ## Regeln für die Zusammenarbeit (verbindlich)
 - Sprache: Deutsch, **Schweizer Rechtschreibung (ss, nie ß)**. App-Texte ebenso.
+- **Bei unklarer Definition immer nachfragen**, bevor gebaut wird (z. B. welcher Knopf, wo genau, wie lange). Nicht raten.
 - **Nur eine Frage auf einmal**, mit einem Vorschlag daneben. Kurz antworten, keine langen Listen.
 - **Wünsche zuerst nur festhalten** (in `docs/ENTSCHEIDUNGEN.md` unter «Gewünscht, noch nicht gebaut»). **Bauen erst**, wenn Rico ausdrücklich sagt: «umsetzen», «erstelle», «setze alles um». Bei Fehlern sagt er «bitte beheben», dann sofort beheben.
 - App-Prinzip: **«Alles kann, nichts muss.»** Nichts ist aufdringlich, jede Automatik ist erklärbar und abschaltbar. Die App hilft, sie entscheidet nicht.

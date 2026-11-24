@@ -659,3 +659,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 24.11.:** Aktionshinweis oben hat ✕; blendet ihn für heute aus (`S.dismiss`, Schlüssel mit Datum und Inhalt), bei neuer Aktion erscheint er wieder. In der Führung erklärt.
 - 24.11. korrigiert: Aktionshinweis erscheint bei jedem Öffnen der App; ✕ blendet ihn nur bis zum nächsten Öffnen aus (`dealHid`, wird beim Wechsel in den Hintergrund zurückgesetzt).
 - 24.11.: ✕ beim Aktionshinweis grösser und immer rechts neben dem Text.
+
+### Arbeitsregel (seit 24.11.2026)
+
+- Bei unklarer Definition immer nachfragen, bevor gebaut wird – nicht raten (Anlass: ✕ beim Aktionshinweis zuerst «für heute» statt «bis zum nächsten Öffnen» gebaut).
