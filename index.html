@@ -93,6 +93,7 @@ html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr a
 .btn.sq.fsb{width:calc(var(--rh)*1.3);height:calc(var(--rh)*1.3);font-size:1.6em;font-weight:700;border:clamp(1px,calc(var(--rh)*.08),3px) solid var(--dg);border-radius:20%;color:var(--ink)}
 .catm{display:flex;gap:.4em;align-items:center}.catpk{display:flex;align-items:center;gap:.6em;width:100%;text-align:left;font:inherit;font-size:1.1em;padding:.35em .6em;margin:.2em 0;border:1px solid var(--line);border-radius:.7em;background:var(--card);color:var(--ink);cursor:pointer}.catpk .ci{font-size:1.4em;line-height:1}.catpk.sub{width:calc(100% - 1.6em);margin-left:1.6em;font-size:1em}.catpk.cur{outline:2px solid var(--acc)}
 .hrow{display:flex;justify-content:space-between;align-items:center;gap:.5em;margin:-.2em 0 .5em}
+.btn.sq.dealxb{width:calc(var(--rh)*1.2);height:calc(var(--rh)*1.2);font-size:1.35em;font-weight:700;flex:0 0 auto;margin-left:.4em}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -788,7 +789,7 @@ var dealHid=false;
 function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
  S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
  if(!l.length||dealHid)return'';var tx=l.slice(0,lim).join(' · '),dk='';
- return'<div class="ban"><span>🔥 '+esc(tx)+'</span><button class="btn sq" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
+ return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1;min-width:0">🔥 '+esc(tx)+'</span><button class="btn sq dealxb" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
 var allDealsOpen=false;
 function vDeals(){var l=allDeals().sort(function(a,b){return pct(b)-pct(a)}),h='<h2>'+t('Aktionen')+'</h2>';

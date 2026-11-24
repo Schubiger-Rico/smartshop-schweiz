@@ -658,3 +658,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 23.11.:** Hinweis «Zum Löschen nach links wischen» verschwindet nach 3× Wischen (`S.set.swipeN`), «Wieder anzeigen» unter Darstellung. «Letzte Produkte»: Anzahl und Sortierung nur noch in den Einstellungen (nicht mehr in der Liste). Führung angepasst.
 - **Umgesetzt am 24.11.:** Aktionshinweis oben hat ✕; blendet ihn für heute aus (`S.dismiss`, Schlüssel mit Datum und Inhalt), bei neuer Aktion erscheint er wieder. In der Führung erklärt.
 - 24.11. korrigiert: Aktionshinweis erscheint bei jedem Öffnen der App; ✕ blendet ihn nur bis zum nächsten Öffnen aus (`dealHid`, wird beim Wechsel in den Hintergrund zurückgesetzt).
+- 24.11.: ✕ beim Aktionshinweis grösser und immer rechts neben dem Text.
