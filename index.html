@@ -784,9 +784,10 @@ function purgeDeals(){var keep=S.items.filter(watched).map(function(i){return no
  S.deals=S.deals.filter(function(d){if(daysTo(d.to)>=0)return true;
   if(keep.some(function(k){return norm(d.product).indexOf(k)>-1||k.indexOf(norm(d.product))>-1}))S.dealHist.push({product:d.product,from:d.from,to:d.to,chain:d.chain});return false});
  S.dealHist=S.dealHist.slice(-200)}
+var dealHid=false;
 function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
  S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i)[0];if(d)l.push(i.name+' ('+d.chain+' −'+pct(d)+'%'+(d.demo?', '+t('Beispiel'):'')+')')});
- if(!l.length)return'';var tx=l.slice(0,lim).join(' · '),dk='deal:'+ld()+':'+tx;if(S.dismiss.indexOf(dk)>-1)return'';
+ if(!l.length||dealHid)return'';var tx=l.slice(0,lim).join(' · '),dk='';
  return'<div class="ban"><span>🔥 '+esc(tx)+'</span><button class="btn sq" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
 var allDealsOpen=false;
@@ -1086,7 +1087,7 @@ SA('Ladentypen',[
 SA('Preise und Alarme',[
  ss('price','row:Aktionen','Aktionen: automatisch, manuell oder aus.','<b>Automatisch:</b> beobachtet neue Produkte von selbst.\n<b>Manuell:</b> du tippst auf 🔥.\n<b>Immer:</b> alle Produkte werden beobachtet, 🔥 erscheint nur bei einer Aktion.\n<b>Aus:</b> kein 🔥-Knopf und keine Hinweise.\n<b>Wenn du zu viele Hinweise bekommst:</b> Wähle «Manuell» oder «Aus».'),
  ss('price','row:Preiseinheit','Preise pro 100 g, pro kg oder automatisch.'),
- ss('price','row:Alarme pro Tag','Wie viele Aktions-Hinweise pro Tag erscheinen dürfen.','Der Hinweis steht oben über der Liste. Mit ✕ blendest du ihn für heute aus. Kommt eine neue Aktion dazu, erscheint er wieder.\n<b>Wenn dich die Hinweise stören:</b> hier 0 wählen oder Aktionen auf «Manuell» oder «Aus» stellen.')]);
+ ss('price','row:Alarme pro Tag','Wie viele Aktions-Hinweise pro Tag erscheinen dürfen.','Der Hinweis steht oben über der Liste. Er erscheint jedes Mal, wenn du die App öffnest. Mit ✕ blendest du ihn bis zum nächsten Öffnen aus.\n<b>Wenn dich die Hinweise stören:</b> hier 0 wählen oder Aktionen auf «Manuell» oder «Aus» stellen.')]);
 SA('KI',[
  ss('ai','row:API-Schlüssel','Dein eigener Anthropic-Schlüssel für den Ratgeber. Er bleibt auf diesem Gerät.'),
  ss('ai','row:Modell','Welches Modell antwortet.'),
@@ -1243,7 +1244,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'voiceadd':{var vl=(sh&&sh.l||[]).filter(function(x){return String(x.n).trim()});sh=null;vl.forEach(function(x){addItem(x.n,x.q,x.u)});say(t('{0} Produkte hinzugefügt.',vl.length));break}
  case'fsdn':case'fsup':S.set.fs=Math.max(10,Math.min(40,(+S.set.fs||18)+(a==='fsup'?1:-1)));break;
  case'hintsback':S.set.swipeN=0;say(t('Die Hinweise erscheinen wieder.'));break;
- case'dealx':S.dismiss.push(D.k);S.dismiss=S.dismiss.slice(-200);break;
+ case'dealx':dealHid=true;break;
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
@@ -1401,7 +1402,7 @@ document.addEventListener('pointerdown',function(e){
 var sw0=null,dragId=null,upS=null;
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
-var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',dealx:'✕ Aktionshinweis für heute ausblenden. Kommt eine neue Aktion dazu, erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
  hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
@@ -1418,7 +1419,7 @@ function pointerEnd(e){clearTimeout(lpT);
 document.addEventListener('pointerup',pointerEnd);document.addEventListener('pointercancel',function(){clearTimeout(lpT);if(sw0){sw0.el.style.transform='';sw0=null}dragId=null});
 document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('[data-fire]'))e.preventDefault()});
 window.addEventListener('online',runQueue);
-document.addEventListener('visibilitychange',function(){if(document.hidden)return;if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
+document.addEventListener('visibilitychange',function(){if(document.hidden){dealHid=false;return}if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
 
 document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel')||Date.now()-wheelT<400)return;clearTimeout(w._t);
  w._t=setTimeout(function(){var o=w.querySelector('.o');if(!o)return;var i=Math.round(w.scrollTop/o.offsetHeight);
