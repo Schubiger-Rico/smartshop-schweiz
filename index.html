@@ -47,12 +47,12 @@ header .stop{}
 .chip.sel{background:var(--acc);color:var(--onacc);border-color:var(--accd)}
 .qu{flex:none;padding:0 .5em;min-width:calc(var(--rh)*1.7)}
 .q[data-a]{cursor:pointer;text-decoration:underline dotted;text-underline-offset:.2em}
-.wheels{position:relative;display:flex;gap:.5em;margin:.5em 0}
-.wheel{flex:1;height:calc(var(--rh)*5);overflow-y:auto;scroll-snap-type:y mandatory;text-align:center;scrollbar-width:none;overscroll-behavior:contain}
+.wheels{position:relative;display:flex;gap:.5em;margin:.5em 0;--wo:calc(var(--rh)*1.55)}
+.wheel{flex:1;height:calc(var(--wo)*5);overflow-y:auto;scroll-snap-type:y mandatory;text-align:center;scrollbar-width:none;overscroll-behavior:contain}
 .wheel::-webkit-scrollbar{display:none}
-.wheel .sp{height:calc(var(--rh)*2)}
-.wheel .o{height:var(--rh);line-height:var(--rh);scroll-snap-align:center;cursor:pointer}
-.band{position:absolute;left:0;right:0;top:calc(var(--rh)*2);height:var(--rh);border:2px solid var(--acc);border-radius:.5em;pointer-events:none}
+.wheel .sp{height:calc(var(--wo)*2)}
+.wheel .o{height:var(--wo);line-height:var(--wo);font-size:1.45em;scroll-snap-align:center;scroll-snap-stop:always;cursor:pointer;color:var(--mute);transition:color .1s}.wheel .o.on{color:var(--ink);font-weight:800}
+.band{position:absolute;left:0;right:0;top:calc(var(--wo)*2);height:var(--wo);background:color-mix(in srgb,var(--acc) 12%,transparent);border:2px solid var(--acc);border-radius:.5em;pointer-events:none}
 .ic{width:var(--rh);height:var(--rh);flex:none;display:inline-grid;place-items:center;background:transparent;border:clamp(1px,calc(var(--rh)*.08),3px) solid var(--dg);border-radius:20%;padding:0;font-size:.95em;line-height:1;cursor:pointer;box-shadow:none;animation:none;color:var(--ink)}
 .card{display:flex;align-items:center;gap:.4em;min-height:var(--rh);padding:.25em .4em .25em .35em;margin-bottom:.4em;background:var(--card);border:1px solid var(--line);border-radius:.7em;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .card.blk{display:block;user-select:text;-webkit-user-select:text;touch-action:auto}
@@ -749,7 +749,10 @@ function shQty(){var us=allUnits(),h='<h2>'+t('Menge und Einheit')+'</h2><div cl
  +'<div class="seg"><input class="field" id="qm" inputmode="decimal" maxlength="6" value="'+esc(sh.q)+'" placeholder="'+t('Menge')+'" style="flex:1 1 5em;min-width:0"><input class="field" id="um" value="'+esc(sh.u)+'" placeholder="'+t('Eigene Einheit')+'" style="flex:1 1 5em;min-width:0"></div>'
  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="qtyok">OK</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
 function wheelInit(){var q=$('#wq'),u=$('#wu');if(!q||!u||!sh||sh.t!=='qty')return;var rh=q.querySelector('.o').offsetHeight,us=allUnits(),ui=us.indexOf(sh.u);
- q.scrollTop=Math.min(99,Math.max(0,Math.round(num(sh.q,0))))*rh;u.scrollTop=Math.max(0,ui)*rh;wheelT=Date.now()}
+ q.scrollTop=Math.min(99,Math.max(0,Math.round(num(sh.q,0))))*rh;u.scrollTop=Math.max(0,ui)*rh;wheelT=Date.now();[q,u].forEach(function(w){w._last=Math.round(w.scrollTop/rh);wheelMark(w,w._last)})}
+function wheelMark(w,i){var os=w.querySelectorAll('.o');for(var k=0;k<os.length;k++)os[k].classList.toggle('on',k===i)}
+/* Klick-Ton (und auf Android kurze Vibration) bei jedem Schritt */
+var actx=null;function tick(){if(S.set.tick===false||S.set.quiet)return;try{if(!actx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;actx=new AC()}if(actx.state==='suspended')actx.resume();var o=actx.createOscillator(),g=actx.createGain(),t0=actx.currentTime;o.type='square';o.frequency.value=1800;g.gain.setValueAtTime(0.06,t0);g.gain.exponentialRampToValueAtTime(0.0001,t0+0.025);o.connect(g);g.connect(actx.destination);o.start(t0);o.stop(t0+0.03)}catch(e){}if(navigator.vibrate)try{navigator.vibrate(8)}catch(e){}}
 var wheelT=0,wheelD=null;
 function dealPanel(i){return'<div class="card blk" data-up="1" style="touch-action:none">'+dealBody(i)+'<div class="seg"><button class="btn sq" data-a="dealclose" aria-label="'+t('Schliessen')+'">✕</button><span class="small mute" style="align-self:center">↑ '+t('Nach oben wischen zum Schliessen')+'</span></div></div>'}
 
@@ -928,7 +931,7 @@ function vSettings(){
   +rowS(t('Letzte Produkte anzeigen'),selH('recN',[['10','10'],['20','20'],['50','50'],['100','100'],['all',t('Alle')]]))
   +rowS(t('Sortierung'),selH('recSort',[['new',t('Neueste zuerst')],['old',t('Älteste zuerst')]]))
   +rowS(t('Kategorien unter der Liste anzeigen'),sw('cats',S.set.cats))+rowS(t('Liste bei Filialwechsel öffnen'),sw('openList',S.set.openList))
-  +rowS(t('Vibration'),sw('vib',S.set.vib))+rowS(t('Lautlos'),sw('quiet',S.set.quiet))+'<p class="small mute">'+t('Lautlos kann eine Web-App nicht erzwingen. Der Wert wird nur gemerkt.')+'</p>';break;
+  +rowS(t('Vibration'),sw('vib',S.set.vib))+rowC(t('Klick beim Drehrad (Menge/Einheit)'),'tick',S.set.tick!==false)+rowS(t('Lautlos'),sw('quiet',S.set.quiet))+'<p class="small mute">'+t('Lautlos kann eine Web-App nicht erzwingen. Der Wert wird nur gemerkt.')+'</p>';break;
  case'gps':h+=rowS(t('Filialerkennung'),selH('gps',[['off',t('Aus')],['ask',t('Nachfragen')],['auto',t('Automatisch')]]))+rowS(t('Radius'),selH('radius',[['auto',t('Automatisch (empfohlen)')],['25','25 m'],['50','50 m'],['100','100 m'],['250','250 m']]))
   +'<div class="seg" style="margin-top:.5em"><button class="btn pri" data-a="gpsnow">📍 '+t('Jetzt suchen')+'</button></div><p class="small">'+esc(stMsg)+'</p><p class="small mute">'+t('Automatisch: kleine Läden genau, grosse grosszügig. Nicht erkannt? Wähle einen grösseren Radius. Falscher Laden? Wähle einen kleineren.')+'</p><p class="small mute">'+t('Die Suche braucht Internet (OpenStreetMap). Standort wird nur dafür verwendet und nicht gespeichert.')+'</p>';break;
  case'stores':h+=allCh().map(function(c){var cu=(S.cchains||[]).indexOf(c)>-1;return rowS(c,'<span class="seg"><input type="checkbox" data-chain="'+esc(c)+'"'+(chainOn(c)?' checked':'')+' style="width:1.4em;height:1.4em">'+(cu?'<button class="btn sq" data-a="chaindel" data-n="'+esc(c)+'">✕</button>':'')+'</span>')}).join('')
@@ -984,7 +987,7 @@ AREAS.push(['Eingabeseite',[
  st('list','#dn','Das ist die Eingabeseite. In dieses Feld schreibst du, was du brauchst, zum Beispiel «Milch».','Beim Tippen erscheinen darunter Vorschläge aus deinen bisherigen Produkten. Ein Tipp auf einen Vorschlag übernimmt ihn.',{ro:1}),
  st('list','.topbar','Die kleinen Knöpfe zeigen nur Symbole. Bleib 2 Sekunden auf einem Knopf, dann erklärt die App, wofür er ist.','<b>Lieber mit Text?</b> Einstellungen → Darstellung → «Knöpfe mit Text».\n<b>Stört die Erklärung?</b> Dort «Erklärung beim Gedrückthalten» ausschalten.\n<b>Wenn es nicht klappt:</b> Finger ruhig halten und nicht verschieben, sonst zählt es als Wischen.',{ro:1}),
  st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Gedrückt halten auf dem Symbol eines Produkts zeigt, wohin es gehört, zum Beispiel «Vorräte › Öl & Essig».\nKategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
- st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei Räder erscheinen, eines für die Menge, eines für die Einheit.',{ro:1}),
+ st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei grosse Räder erscheinen, eines für die Menge, eines für die Einheit. Jeder Schritt rastet ein und macht «klick».\nDer Klick lässt sich unter Einstellungen → «Favoriten und Letzte Produkte» ausschalten.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
  st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
  st('list','.add','Jetzt probierst du es: Schreibe «Milch» und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
@@ -1069,6 +1072,7 @@ SA('Favoriten und Letzte Produkte',[
  ss('favs','row:Kategorien unter der Liste anzeigen','Schaltet die Kategorien-Zeile unter der Liste ein oder aus.'),
  ss('favs','row:Liste bei Filialwechsel öffnen','Öffnet die Liste von selbst, wenn du in einem neuen Laden bist.'),
  ss('favs','row:Vibration','Kurzes Vibrieren bei Hinweisen.'),
+ ss('favs','row:Klick beim Drehrad','Klick beim Drehrad: Bei jedem Schritt von Menge und Einheit macht es einmal «klick», auf Android zusätzlich eine kurze Vibration.','<b>Wofür geeignet:</b> schnell und genau drehen, ohne hinzuschauen.\n<b>Wenn du nichts hörst:</b> Am iPhone den Stummschalter an der Seite prüfen und die Lautstärke erhöhen. Bei «Lautlos» klickt es nie.\n<b>Wenn es stört:</b> hier ausschalten.'),
  ss('favs','row:Lautlos','Eine Web-App kann den Ton nicht erzwingen. Der Wert wird nur gemerkt.')]);
 SA('Filialerkennung',[
  ss('gps','row:Filialerkennung','Aus, Nachfragen oder Automatisch.','<b>Aus:</b> keine Erkennung.\n<b>Nachfragen:</b> oben erscheint eine Zeile, die du bestätigst.\n<b>Automatisch:</b> die App wechselt selbst.'),
@@ -1405,6 +1409,7 @@ document.addEventListener('pointerdown',function(e){
  var up=e.target.closest&&e.target.closest('[data-up]');if(up){upS={x:e.clientX,y:e.clientY};return}
  var c=e.target.closest&&e.target.closest('[data-sw]');if(c&&!e.target.closest('input,select,textarea'))sw0={el:c,x:e.clientX,y:e.clientY,id:c.dataset.sw,k:c.dataset.swk,dx:0}});
 var sw0=null,dragId=null,upS=null;
+document.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.wheels')&&S.set.tick!==false&&!actx){try{var AC=window.AudioContext||window.webkitAudioContext;if(AC){actx=new AC();var b=actx.createBuffer(1,1,22050),sr=actx.createBufferSource();sr.buffer=b;sr.connect(actx.destination);sr.start(0)}}catch(x){}}},true);
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
 var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'☰ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
@@ -1426,7 +1431,7 @@ document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.targe
 window.addEventListener('online',runQueue);
 document.addEventListener('visibilitychange',function(){if(document.hidden){dealHid=false;return}if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
 
-document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel')||Date.now()-wheelT<400)return;clearTimeout(w._t);
+document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel'))return;var o0=w.querySelector('.o');if(o0){var li=Math.round(w.scrollTop/o0.offsetHeight);if(li!==w._last){w._last=li;wheelMark(w,li);if(Date.now()-wheelT>=400)tick()}}if(Date.now()-wheelT<400)return;clearTimeout(w._t);
  w._t=setTimeout(function(){var o=w.querySelector('.o');if(!o)return;var i=Math.round(w.scrollTop/o.offsetHeight);
   if(w.id==='wq')$('#qm').value=Math.min(99,Math.max(0,i));else{var u=allUnits()[Math.min(allUnits().length-1,Math.max(0,i))];$('#um').value=u}},120)},true);
 document.addEventListener('click',function(e){var o=e.target.closest&&e.target.closest('.wheel .o');if(o){var w=o.parentNode,i=Array.prototype.indexOf.call(w.querySelectorAll('.o'),o);wheelT=0;w.scrollTo({top:i*o.offsetHeight,behavior:'smooth'})}});
