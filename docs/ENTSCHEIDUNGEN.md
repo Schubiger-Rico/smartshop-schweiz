@@ -664,3 +664,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Bei unklarer Definition immer nachfragen, bevor gebaut wird – nicht raten (Anlass: ✕ beim Aktionshinweis zuerst «für heute» statt «bis zum nächsten Öffnen» gebaut).
 - 24.11.: Aktionshinweis ohne Klammer und ohne «Beispiel»: «Butter Aldi −29%».
+
+### Notiz vom 24.11.2026: Echte Aktionen aus dem Internet (nur festgehalten, noch nicht gebaut)
+
+- Rico möchte echte Aktionen aus dem Internet statt Beispieldaten.
+- Grenzen: Migros/Coop/Aldi/Lidl haben keine offene Schnittstelle; Aktionsportale (z. B. aktionis.ch, profital.ch) automatisch auslesen verstösst meist gegen deren Nutzungsbedingungen und wird vom Browser blockiert (bräuchte eigenen Server). Rechtliche Prüfung war zurückgestellt.
+- Machbar ohne Server: (a) 🔥 «Aktionen im Internet suchen» über den KI-Ratgeber mit Websuche (eigener Schlüssel, auf Knopfdruck, Ergebnis mit Quelle und Datum, nur als Hinweis); (b) Link «Aktionen ansehen» zu den offiziellen Aktionsseiten der Händler; (c) Aktionsschild fotografieren (gibt es schon).
+- Offen: Beispiel-Aktionen nicht mehr als Hinweis oben zeigen (Vorschlag), weil «Butter Aldi −29%» ohne «Beispiel» echt wirkt.
