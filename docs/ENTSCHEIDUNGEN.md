@@ -709,3 +709,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 24.11.:** ☰ gleich gross wie die Kopf-Knöpfe (1,4-fache Breite, grösseres Symbol); im dunklen Design sind die Rahmen um Produkt-Symbole und das Kategorie-Feld in der Akzentfarbe (Neon-Grün) statt Dunkelgrün.
 - 24.11.: Neon-Rahmen im dunklen Design eine Stufe dezenter (62 % Akzentfarbe), übrige Rahmen (--line) etwas heller (#3a4c46); ☰ wieder schmaler (1,15-fache Breite).
 - 24.11.: Menü-Knopf zeigt drei fette Punkte untereinander (⋮) statt ☰, schmal, auf gleicher Höhe wie die Kopf-Knöpfe (Ausrichtung behoben). Texte in Führung/Hilfe angepasst.
+
+### Notiz vom 24.11.2026: Antwort-Seite für den Händler-Brief (nur festgehalten, noch nicht gebaut)
+
+- Kleine Seite im sEBU-Design auf GitHub Pages (z. B. `antwort.html?an=Migros`), nicht verlinkt, speichert nichts.
+- Pro Zeile Ja/Nein antippen (gewählter Knopf mit ✓): Aktionsdaten, Produktdaten, Subito-Schnittstelle, persönliche Vorstellung; Feld für Bemerkungen.
+- «Senden» öffnet eine einzige E-Mail (mailto) an Rico mit der Zusammenfassung, z. B. «Aktionsdaten: Ja · Produktdaten: Nein · …». Die Mail geht aus dem Mailprogramm des Händlers → geringes Spam-Risiko.
+- Der Knopf «Antwort senden» in den PDFs zeigt dann auf diese Seite.
