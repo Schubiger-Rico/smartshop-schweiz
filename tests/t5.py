@@ -15,3 +15,13 @@ with sync_playwright() as p:
         pg.evaluate("document.querySelectorAll('.card').forEach(c=>c)")
     b.close()
 print(errs)
+# Aktionshinweis mit ✕ ausblenden
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':800});pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify({ob:{done:true},set:{dm:'always'}}))");pg.reload()
+    pg.fill('#dn','Butter');pg.click('[data-a=add]')
+    n=pg.locator('[data-a=dealx]').count()
+    if n:pg.click('[data-a=dealx]');pg.reload()
+    print('deal banner x',n,'after dismiss+reload',pg.locator('[data-a=dealx]').count())
+    b.close()
+print(errs)
