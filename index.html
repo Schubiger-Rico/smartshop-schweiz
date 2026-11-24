@@ -92,7 +92,7 @@ html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr a
 .btn,.ic{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .btn.sq.fsb{width:calc(var(--rh)*1.3);height:calc(var(--rh)*1.3);font-size:1.6em;font-weight:700;border:clamp(1px,calc(var(--rh)*.08),3px) solid var(--dg);border-radius:20%;color:var(--ink)}
 .catm{display:flex;gap:.4em;align-items:center}.catpk{display:flex;align-items:center;gap:.6em;width:100%;text-align:left;font:inherit;font-size:1.1em;padding:.35em .6em;margin:.2em 0;border:1px solid var(--line);border-radius:.7em;background:var(--card);color:var(--ink);cursor:pointer}.catpk .ci{font-size:1.4em;line-height:1}.catpk.sub{width:calc(100% - 1.6em);margin-left:1.6em;font-size:1em}.catpk.cur{outline:2px solid var(--acc)}
-.hrow{display:flex;justify-content:space-between;align-items:center;gap:.5em;margin:-.2em 0 .5em}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:.5em;margin:-.2em 0 .5em;flex-wrap:nowrap}.hrow>span{white-space:nowrap;flex:1 1 auto}.topbar.up{flex:0 0 auto;margin:0;overflow:visible}
 .btn.sq.dealxb{width:calc(var(--rh)*1.2);height:calc(var(--rh)*1.2);font-size:1.35em;font-weight:700;flex:0 0 auto;margin-left:.4em}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
@@ -1190,6 +1190,10 @@ var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','�
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')&&!(n[0]==='favs'&&!on('fav'))}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
 function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter EinkaufsBerater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'</header><div class="hrow"><span class="mute">'+(view==='list'&&S.ob.name?t('Hallo {0}',esc(S.ob.name)):'')+'</span><div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">☰</button>'+(menu?menuHtml():'')+'</div></div>'}
+/* 4 Knöpfe neben «Hallo …», wenn Platz; sonst bleiben sie in eigener Zeile */
+function barUp(){var tb=$('.topbar'),hr=$('.hrow');if(view!=='list'||!tb||!hr)return;var mk=document.createElement('span');mk.style.display='none';tb.parentNode.insertBefore(mk,tb);
+ hr.insertBefore(tb,hr.lastElementChild);tb.classList.add('up');
+ if(hr.scrollWidth>hr.clientWidth+1){tb.classList.remove('up');mk.parentNode.insertBefore(tb,mk)}mk.parentNode.removeChild(mk)}
 function hlTour(keep){if(!tour)return;var s=tour.steps[tour.i];if(!s)return;var e=tourEl(s.sel);if(e){e.classList.add('hl');if(!keep&&e.scrollIntoView){e.scrollIntoView({block:'start'});window.scrollBy(0,-60)}}tourPos(e)}
 /* Erklärfeld unter das leuchtende Feld setzen (passt es nicht, darüber; sonst unten mit Scrollen) */
 function tourPos(e){var tc=$('.tc');if(!tc)return;var c=tc.firstElementChild,H=window.innerHeight;tc.style.top='';tc.style.bottom='';if(c){c.style.maxHeight='';c.style.overflowY=''}
@@ -1204,6 +1208,7 @@ function R(){applyLook();var a=$('#app');if(!a)return;
  var tw=['ideas','events','stamm','kipro'].indexOf(view)>-1||(view==='settings'&&(sub==='plan'||sub==='lang'));if(tw)b=testBan()+b;else if(view==='deals')b=testBan(1)+b;
  document.documentElement.classList.toggle('touring',!!tour);
  a.innerHTML=head()+b+sheetHtml()+tourCard()+undoHtml();
+ barUp();
  if(sh&&sh.t==='scan'&&!sh.res){if(scan.st)scanAttach();else setTimeout(scanStart,0)}else if(scan.st)scanStop();
  if(rec&&(!sh||sh.t!=='voice'||sh.st!=='hear')){try{rec.abort()}catch(e){}rec=null}save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
 function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
