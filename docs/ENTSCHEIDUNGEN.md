@@ -698,3 +698,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Kein Scraping (auch nicht «nur privat»): verstösst gegen Nutzungsbedingungen, wäre für die Händler sichtbar und wird blockiert, wackelig, und passt nicht zum fairen Brief an Migros/Coop. Keine Tarnung von Abrufen.
 - Stattdessen: Händler-Links (gebaut), KI-Suche auf Knopfdruck (festgehalten), Zugang über den Brief an die Händler.
+- **Behoben 24.11.:** 🔥-Farbe und «immer»-Anzeige rechnen nur noch mit echten Aktionen (`realDeals`), nicht mit Beispieldaten (Butter war fälschlich grün).

@@ -28,3 +28,12 @@ with sync_playwright() as p:
     print('deal banner x',n,'after dismiss+reload (back)',pg.locator('[data-a=dealx]').count())
     b.close()
 print(errs)
+# 🔥 färbt sich nicht mehr wegen Beispiel-Aktionen
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':800});pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify({ob:{done:true},set:{dm:'manual'}}))");pg.reload()
+    pg.fill('#dn','Butter');pg.click('[data-a=add]');pg.click('[data-fire]')
+    st_=pg.locator('[data-fire]').get_attribute('style') or ''
+    print('fire with demo only: not green',('grn' not in st_) and ('a8c13a' not in st_) and ('yel' not in st_))
+    b.close()
+print(errs)

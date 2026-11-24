@@ -519,7 +519,7 @@ function askBar(){var i=ask&&findItem(ask);if(!i)return'';
 function card(i){
  if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn sq urgb'+(i.urg?' on':'')+'" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Dringend')+'">❗</button><button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
  var cc=catColor(i);return'<div class="card'+(i.urg?' urg':'')+'" data-sw="'+i.id+'" data-swk="i"'+(cc?' style="border-left:.45em solid '+cc+'"':'')+'>'+(i.urg?'<button class="btn sq urgb on" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Nicht mehr dringend')+'">❗</button>':'')+(on('cat')?'<button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button>':'')+'<span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
-  +(S.set.dm==='off'||(S.set.dm==='always'&&!dealsFor(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
+  +(S.set.dm==='off'||(S.set.dm==='always'&&!realDeals(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
   +(on('fav')?'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>':'')
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
@@ -780,7 +780,8 @@ var SYN={mayo:'mayonnaise',schoggi:'schokolade',schoki:'schokolade',jogurt:'jogh
 function words(s){return norm(s).split(/[^a-zäöüéèàç0-9]+/).filter(function(w){return w.length>1}).map(function(w){return SYN[w]||w})}
 function dealsFor(i){var iw=words(i.name);if(!iw.length)return[];return allDeals().filter(function(d){var dw=words(d.product);if(!dw.length)return false;
  return dw.every(function(w){return iw.indexOf(w)>-1})||iw.every(function(w){return dw.indexOf(w)>-1})}).sort(function(a,b){return pct(b)-pct(a)})}
-function fst(i){var d=dealsFor(i)[0];if(!d)return'background:var(--red);border-color:var(--red)';var p=pct(d);return'background:'+(p>=30?'var(--grn)':p>=15?'#a8c13a':'var(--yel)')}
+function realDeals(i){return dealsFor(i).filter(function(x){return !x.demo})}
+function fst(i){var d=realDeals(i)[0];if(!d)return'background:var(--red);border-color:var(--red)';var p=pct(d);return'background:'+(p>=30?'var(--grn)':p>=15?'#a8c13a':'var(--yel)')}
 function rhythm(p){var s=S.dealHist.filter(function(h){return norm(h.product)===norm(p)}).map(function(h){return h.from}).sort();if(s.length<3)return null;
  var g=[];for(var i=1;i<s.length;i++)g.push((new Date(s[i])-new Date(s[i-1]))/864e5);var a=Math.round(g.reduce(function(x,y){return x+y},0)/g.length);return{n:s.length,every:a,next:addDays(daysTo(s[s.length-1])+a)}}
 function watched(i){return !!i.fire||S.set.dm==='always'}
@@ -790,7 +791,7 @@ function purgeDeals(){var keep=S.items.filter(watched).map(function(i){return no
  S.dealHist=S.dealHist.slice(-200)}
 var dealHid=false;
 function alarm(){var lim=+S.set.alim;if(S.set.dm==='off'||!lim||S.set.alim==='0')return'';var l=[];
- S.items.forEach(function(i){if(!watched(i))return;var d=dealsFor(i).filter(function(x){return !x.demo})[0];if(d)l.push(i.name+' '+d.chain+' −'+pct(d)+'%')});
+ S.items.forEach(function(i){if(!watched(i))return;var d=realDeals(i)[0];if(d)l.push(i.name+' '+d.chain+' −'+pct(d)+'%')});
  if(!l.length||dealHid)return'';var tx=l.slice(0,lim).join(' · '),dk='';
  return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1;min-width:0">🔥 '+esc(tx)+'</span><button class="btn sq dealxb" data-a="dealx" data-k="'+esc(dk)+'" aria-label="'+t('Aktionshinweis ausblenden')+'">✕</button></div>'}
 function dealRow(d){return'<div class="card blk"><b>'+esc(d.product)+'</b> · '+esc(d.chain)+(d.demo?' <span class="mute small">('+t('Beispieldaten')+')</span>':'')+'<br><span class="small">'+money(d.price)+' CHF <s class="mute">'+money(d.normal)+'</s> · −'+pct(d)+'% · '+esc(ppu(d))+'<br>'+fd(d.from)+' – '+fd(d.to)+' ('+t('noch {0} Tage',Math.max(0,daysTo(d.to)))+')</span></div>'}
