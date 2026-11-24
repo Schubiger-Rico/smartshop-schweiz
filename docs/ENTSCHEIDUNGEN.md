@@ -691,3 +691,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Drehräder für Menge und Einheit grösser (höhere Zeilen, grössere Schrift), damit man schnell und präzise drehen kann; jede Stufe rastet sauber ein.
 - Bei jedem Schritt eine gleich kurze Vibration. Achtung: Safari auf dem iPhone unterstützt Vibration aus Web-Apps nicht (navigator.vibrate fehlt) – auf Android geht es. Mögliche Alternative auf dem iPhone: kurzer, leiser Klick-Ton pro Schritt (abschaltbar) und deutliches Aufleuchten der gewählten Zahl.
+- Entschieden: Klick-Ton pro Schritt auf iPhone **und** Android (abschaltbar); Vorschlag zusätzlich Vibration auf Android, wo möglich.
