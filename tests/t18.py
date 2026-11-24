@@ -2,9 +2,9 @@
 from playwright.sync_api import sync_playwright
 import os
 errs=[]
-MOCK="""window.webkitSpeechRecognition=function(){var me=this;this.start=function(){setTimeout(function(){me.onresult({results:[[{transcript:window.__tx}]]})},30)};this.abort=function(){}};window.SpeechRecognition=window.webkitSpeechRecognition;"""
+MOCK="""window.webkitSpeechRecognition=function(){var me=this;this.start=function(){setTimeout(function(){me.onresult({results:[[{transcript:window.__tx}]]});me.onend&&me.onend()},30)};this.abort=function(){}};window.SpeechRecognition=window.webkitSpeechRecognition;"""
 def st(pg):return pg.evaluate("JSON.parse(localStorage.getItem('sebu.v1'))")
-cases=['Brot und 1Stk und 1kg stopp','Mehl ein Kilo und Milch 2 Liter','zwei Kilo Äpfel, Butter bitte','Eier 6 fertig']
+cases=['Brot 1 Stück und Mehl 1 Kilo stopp und Käse','Brot und 1Stk und 1kg stopp','Mehl ein Kilo und Milch 2 Liter','zwei Kilo Äpfel, Butter bitte','Eier 6 fertig']
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':800});pg.on('pageerror',lambda e:errs.append(str(e)));pg.add_init_script(MOCK)
     pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify({ob:{done:true}}))");pg.reload()

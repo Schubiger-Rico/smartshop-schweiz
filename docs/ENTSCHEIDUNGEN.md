@@ -700,3 +700,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Stattdessen: Händler-Links (gebaut), KI-Suche auf Knopfdruck (festgehalten), Zugang über den Brief an die Händler.
 - **Behoben 24.11.:** 🔥-Farbe und «immer»-Anzeige rechnen nur noch mit echten Aktionen (`realDeals`), nicht mit Beispieldaten (Butter war fälschlich grün).
 - **Umgesetzt am 24.11.:** Die 4 Knöpfe (🛒 📍 🔄 📷) stehen neben «Hallo …», wenn sie in die Zeile passen (`barUp()` misst nach dem Zeichnen), sonst in eigener Zeile darunter.
+- **Umgesetzt am 24.11.:** Mikrofon-Beispiel «Brot 1 Stück und Mehl 1 Kilo – stopp»; «stopp» beendet das Zuhören sofort (alles danach wird ignoriert), sonst endet es nach einer Pause (continuous + interimResults). Führung angepasst.

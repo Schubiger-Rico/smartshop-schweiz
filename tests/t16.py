@@ -2,7 +2,7 @@
 from playwright.sync_api import sync_playwright
 import os
 errs=[]
-MOCK="""window.webkitSpeechRecognition=function(){var me=this;this.start=function(){setTimeout(function(){me.onresult({results:[[{transcript:'Milch, Brot und zwei Kilo Äpfel sowie 3 Dosen Mais'}]]})},50)};this.abort=function(){}};window.SpeechRecognition=window.webkitSpeechRecognition;"""
+MOCK="""window.webkitSpeechRecognition=function(){var me=this;this.start=function(){setTimeout(function(){me.onresult({results:[[{transcript:'Milch, Brot und zwei Kilo Äpfel sowie 3 Dosen Mais'}]]});me.onend&&me.onend()},50)};this.abort=function(){}};window.SpeechRecognition=window.webkitSpeechRecognition;"""
 def st(pg):return pg.evaluate("JSON.parse(localStorage.getItem('sebu.v1'))")
 with sync_playwright() as p:
     b=p.chromium.launch()
