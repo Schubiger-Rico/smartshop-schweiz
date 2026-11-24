@@ -675,3 +675,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 24.11.:** Beispiel-Aktionen erscheinen nicht mehr als Hinweis oben (nur echte, z. B. fotografierte). Unter «Aktionen» neu «Aktionen der Händler ansehen»: Migros, Coop, Denner, Aldi, Lidl, Volg, Spar als Links (Google-Suche «Aktionen <Händler> Schweiz diese Woche», weil die genauen Händler-Adressen hier nicht prüfbar waren). In der Führung erklärt.
 - 24.11.: Coop-Knopf führt direkt auf https://www.coop.ch/de/aktionen/aktuelle-aktionen/c/m_1011 (von Rico geliefert, Tracking-Teil entfernt). Weitere direkte Adressen in `DLINK` eintragen.
 - 24.11.: Migros-Knopf direkt auf https://www.migros.ch/de/offers/home.
+- 24.11.: Denner-Knopf direkt auf https://www.denner.ch/de/aktionen/aktuelle-aktionen.
