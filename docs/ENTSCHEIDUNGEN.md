@@ -693,3 +693,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Bei jedem Schritt eine gleich kurze Vibration. Achtung: Safari auf dem iPhone unterstützt Vibration aus Web-Apps nicht (navigator.vibrate fehlt) – auf Android geht es. Mögliche Alternative auf dem iPhone: kurzer, leiser Klick-Ton pro Schritt (abschaltbar) und deutliches Aufleuchten der gewählten Zahl.
 - Entschieden: Klick-Ton pro Schritt auf iPhone **und** Android (abschaltbar); Vorschlag zusätzlich Vibration auf Android, wo möglich.
 - **Umgesetzt am 24.11.:** Drehräder grösser (ca. 1,5-fach, grössere Schrift, gewählte Zahl fett und hinterlegt, jede Stufe rastet ein); Klick-Ton bei jedem Schritt auf iPhone und Android, auf Android zusätzlich kurze Vibration; abschaltbar unter «Favoriten und Letzte Produkte» → «Klick beim Drehrad». In der Führung erklärt. Hinweis: iPhone-Stummschalter macht den Klick stumm.
+
+### Entscheid 24.11.2026: Kein automatisches Auslesen von Händlerseiten
+
+- Kein Scraping (auch nicht «nur privat»): verstösst gegen Nutzungsbedingungen, wäre für die Händler sichtbar und wird blockiert, wackelig, und passt nicht zum fairen Brief an Migros/Coop. Keine Tarnung von Abrufen.
+- Stattdessen: Händler-Links (gebaut), KI-Suche auf Knopfdruck (festgehalten), Zugang über den Brief an die Händler.
