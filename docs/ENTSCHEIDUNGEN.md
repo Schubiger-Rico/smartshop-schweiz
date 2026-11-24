@@ -686,3 +686,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Die App liest Händlerseiten weiterhin nicht selbst aus (technisch/rechtlich nicht möglich ohne Server bzw. Zustimmung).
 - 24.11.: Aligro-Knopf direkt auf https://www.aligro.ch/de/dokumente/prospekte (Prospekte).
 - 24.11.: Otto's-Knopf direkt auf https://www.ottos.ch/de/aktionen/c/m_1000. Alle 9 Händler direkt verlinkt.
+
+### Notiz vom 24.11.2026: Drehräder Menge/Einheit grösser + Vibration pro Schritt (nur festgehalten, noch nicht gebaut)
+
+- Drehräder für Menge und Einheit grösser (höhere Zeilen, grössere Schrift), damit man schnell und präzise drehen kann; jede Stufe rastet sauber ein.
+- Bei jedem Schritt eine gleich kurze Vibration. Achtung: Safari auf dem iPhone unterstützt Vibration aus Web-Apps nicht (navigator.vibrate fehlt) – auf Android geht es. Mögliche Alternative auf dem iPhone: kurzer, leiser Klick-Ton pro Schritt (abschaltbar) und deutliches Aufleuchten der gewählten Zahl.
