@@ -14,3 +14,8 @@ with sync_playwright() as p:
     pg.screenshot(path='s21.png',full_page=True)
     b.close()
 print(errs)
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page();pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file://'+os.getcwd()+'/antwort.html?an=Coop');print('coop row',pg.locator('.row .t').nth(2).inner_text(),'title',pg.inner_text('#ti'))
+    b.close()
+print(errs)

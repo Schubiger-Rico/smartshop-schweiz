@@ -54,7 +54,7 @@ textarea{min-height:5em}
  var Q={};location.search.replace(/^\?/,'').split('&').forEach(function(p){var k=p.split('=');if(k[0])Q[decodeURIComponent(k[0])]=decodeURIComponent((k[1]||'').replace(/\+/g,' '))});
  var an=(Q.an||'').replace(/[^\w äöüÄÖÜ'&-]/g,'').slice(0,40);
  var ROWS=['Zugang zu Aktionsdaten','Zugang zu Produktdaten','Zugang zur Subito-Schnittstelle','Persönliche Vorstellung'];
- if(an&&an.toLowerCase()!=='migros')ROWS[2]='Zugang zur Scanner-Schnittstelle';
+ var SC={migros:'Subito',coop:'Passabene'};if(an){var sc=SC[an.toLowerCase()];ROWS[2]=sc?'Zugang zur '+sc+'-Schnittstelle':'Zugang zur Scanner-Schnittstelle'}
  if(an)document.getElementById('ti').textContent='Ihre Antwort'+' ('+an+')';
  var ans={},box=document.getElementById('rows');
  ROWS.forEach(function(r,i){var d=document.createElement('div');d.className='row';
