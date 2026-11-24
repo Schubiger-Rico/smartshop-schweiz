@@ -684,3 +684,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Zusätzlich zu den Händler-Links: Knopf «🔎 Aktionen für meine Liste suchen» – die KI (eigener Anthropic-Schlüssel, Websuche) sucht für die 🔥-Produkte der Liste aktuelle Aktionen bei den eingeschalteten Ketten und zeigt Treffer mit Händler, Preis/Rabatt, Gültigkeit und Quelle. Nur auf Knopfdruck, Kosten ca. 1–4 Rappen pro Suche (Hinweis vor dem ersten Mal). Ergebnisse als «aus dem Internet, ohne Gewähr» markiert; abschaltbar; in der Führung erklären.
 - Die App liest Händlerseiten weiterhin nicht selbst aus (technisch/rechtlich nicht möglich ohne Server bzw. Zustimmung).
+- 24.11.: Aligro-Knopf direkt auf https://www.aligro.ch/de/dokumente/prospekte (Prospekte).
