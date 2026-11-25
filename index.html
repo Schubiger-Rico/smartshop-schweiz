@@ -1023,7 +1023,7 @@ function applyLook(){var r=document.documentElement,s=S.set;r.classList.toggle('
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
-var SUBS=[['lists','📋','Einkaufslisten'],['profil','👤','Profil'],['liste','🧾','Einkaufsliste'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
+var SUBS=[['profil','👤','Profil'],['liste','🧾','Einkaufsliste'],['lists','📋','Einkaufslisten'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
 function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'" role="button" aria-label="'+c+'"></i>'}
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
@@ -1126,6 +1126,7 @@ AREAS.push(['Menü und Ansicht',[
  st('list','.ttl','Oben steht der Titel. Bei laufendem Einkauf erscheint daneben der Stopp-Knopf.','Der Stopp-Knopf zeigt den Laden, in dem du gerade einkaufst. Ein Tipp beendet den Einkauf.',{ro:1}),
  st('list','#hamb','Mit ⋮ öffnest du das Menü. Alles, was die App kann, findest du dort.','In den Einstellungen unter «Darstellung» wählst du, ob das Menü minimal, normal oder gross ist.',{ro:1}),
  mn('list','Einkaufsliste: Hier schreibst du auf, was du brauchst.','Das ist die Startseite. Alles andere ist Zugabe, nichts muss.'),
+ mn('lists','📋 Einkaufslisten: mehrere Listen, zum Beispiel «Aligro» neben «Allgemein».','Hier legst du Listen an, gibst ihnen einen Laden und löschst sie wieder. Mit Laden öffnet sich die Liste dort von selbst.\n<b>Wenn du nur eine Liste brauchst:</b> einfach nichts tun – «Allgemein» genügt.'),
  mn('favs','Favoriten: Was du oft kaufst, holst du mit einem Tipp auf die Liste.','Favoriten entstehen auch automatisch, wenn du etwas oft kaufst. Wie oft, stellst du ein. Darunter steht der Verlauf.'),
  mn('shops','Läden: Produkte, die du einem bestimmten Laden zugeordnet hast.','So bleibt die Hauptliste ruhig. Produkte für Coop, Migros oder den Baumarkt erscheinen dort, und in der Liste, sobald du im passenden Laden bist.'),
  mn('deals','Aktionen: aktuelle Angebote und deine Beobachtungsliste.','Das 🔥 bei einem Produkt beobachtet es. In den Einstellungen schaltest du das auf automatisch, manuell oder aus. Bei «aus» verschwindet der Menüpunkt.'),
@@ -1167,10 +1168,6 @@ AREAS.push(['Ratgeber',[
 function SA(name,steps){AREAS.push([name,steps,1])}
 SA('Neuheiten',[
  ss('tour','row:«Neu in sEBU»','«Neu in sEBU»: Nach einer Aktualisierung zeigt sEBU einmal die neuen Funktionen, mit «Kurz zeigen» für eine Mini-Führung.','<b>Wenn du keine Hinweise willst:</b> hier ausschalten. Mit «Neuheiten ansehen» liest du sie jederzeit nach.')]);
-SA('Einkaufslisten',[
- ss('lists','#app .card','📋 Jede Liste hat einen Namen und auf Wunsch einen Laden. «Allgemein» ist die Standardliste.','<b>Wofür geeignet:</b> Läden, in denen du anders einkaufst, zum Beispiel Aligro, Landi oder der Wochenmarkt.\n<b>Mit Laden:</b> Bist du dort, öffnet sich die Liste von selbst; nach dem Einkauf kehrt sEBU zu «Allgemein» zurück.\n<b>Ohne Laden:</b> Du holst die Liste oben über der Einkaufsliste von Hand hervor.\n<b>Löschen:</b> ✕ – die Produkte kommen in «Allgemein».\n<b>Wenn sich die Liste nicht öffnet:</b> Prüfe, ob der Laden erkannt wird (📍) oder ob der Schalter unten eingeschaltet ist.'),
- ss('lists','#lnn','Hier legst du eine neue Liste an: Name eintippen, «＋ Liste».'),
- ss('lists','row:Liste automatisch öffnen','Liste automatisch öffnen: Bist du im Laden einer Liste, wechselt sEBU zu dieser Liste.','<b>Wenn du lieber selbst wählst:</b> ausschalten. Die Listen bleiben oben wählbar.')]);
 SA('Profil',[
  ss('profil','row:Name','Dein Name ist freiwillig und dient nur für persönliche Texte.'),
  ss('profil','row:Nutzung','Privat, Familie, Verein oder Geschäft. Das ist nur eine Notiz.')]);
@@ -1182,6 +1179,10 @@ SA('Einkaufsliste',[
  ss('liste','row:🔎 Strichcode scannen','🔎 Strichcode scannen: Produktinfos wie Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts.','<b>Wofür geeignet:</b> Produkte schnell erfassen und vergleichen.\n<b>So geht es:</b> 📷 antippen, «Strichcode scannen», Strichcode vor die Kamera halten.\n<b>Wenn es nicht klappt:</b> Mehr Licht, Strichcode ruhig und gerade halten, etwa 10 bis 15 cm Abstand. Oder «Foto aufnehmen» oder die Nummer unter dem Strichcode von Hand eingeben.\nKamera muss für Safari erlaubt sein. Nicht jedes Schweizer Produkt ist erfasst, dann kommt «Nicht gefunden».'),
  ss('liste','#remoth','🏪 Erinnerung an andere Läden: Wann soll sEBU dich an Produkte erinnern, die du einem anderen Laden zugeordnet hast? Mehrere möglich.','<b>Bei jedem Öffnen:</b> oben ein Hinweis, mit ✕ bis zum nächsten Öffnen weg.\n<b>Vor dem Einkaufen:</b> beim Tipp auf 🛒.\n<b>Nach dem Einkaufen:</b> «Noch offen» beim Einkaufsende.\n<b>Dauernd:</b> bleibt stehen, bis du das Produkt abhakst.\n<b>Beim Zuordnen fragen:</b> Wählst du für ein Produkt einen Laden, fragt sEBU, wann es erinnern soll.\n<b>Wenn es nervt:</b> Häkchen hier entfernen.'),
  ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
+SA('Einkaufslisten',[
+ ss('lists','#app .card','📋 Jede Liste hat einen Namen und auf Wunsch einen Laden. «Allgemein» ist die Standardliste.','<b>Wofür geeignet:</b> Läden, in denen du anders einkaufst, zum Beispiel Aligro, Landi oder der Wochenmarkt.\n<b>Mit Laden:</b> Bist du dort, öffnet sich die Liste von selbst; nach dem Einkauf kehrt sEBU zu «Allgemein» zurück.\n<b>Ohne Laden:</b> Du holst die Liste oben über der Einkaufsliste von Hand hervor.\n<b>Löschen:</b> ✕ – die Produkte kommen in «Allgemein».\n<b>Wenn sich die Liste nicht öffnet:</b> Prüfe, ob der Laden erkannt wird (📍) oder ob der Schalter unten eingeschaltet ist.'),
+ ss('lists','#lnn','Hier legst du eine neue Liste an: Name eintippen, «＋ Liste».'),
+ ss('lists','row:Liste automatisch öffnen','Liste automatisch öffnen: Bist du im Laden einer Liste, wechselt sEBU zu dieser Liste.','<b>Wenn du lieber selbst wählst:</b> ausschalten. Die Listen bleiben oben wählbar.')]);
 SA('Darstellung',[
  ss('look','.fsctl','Textgrösse: Tippe auf − oder +. Die Zahl zeigt die Grösse, die Anzeige ändert sich sofort.','<b>Wofür geeignet:</b> 16 bis 18 px für viel auf einen Blick, 22 px und mehr für gute Lesbarkeit.\n<b>Wenn Knöpfe zu eng werden:</b> Schrift etwas kleiner machen oder «Zeilenhöhe: Normal» wählen.'),
  ss('look','row:Begrüssung','Begrüssung beim Öffnen: 3 Sekunden gross, passend zur Tageszeit.','<b>Witzig (Standard):</b> jeden Tag ein anderer Spruch – einen Monat lang keine Wiederholung.\n<b>Kurz:</b> nur «Guten Morgen, Rico».\n<b>Aus:</b> keine Begrüssung, oben bleibt mehr Platz.\n<b>Wenn sie stört:</b> antippen, dann verschwindet sie sofort – oder hier ausschalten.'),
@@ -1316,9 +1317,9 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
  return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
-var NAV=[['list','🛒','Einkaufsliste'],['favs','★','Favoriten'],['shops','🏪','Läden'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
+var NAV=[['list','🛒','Einkaufsliste'],['lists','📋','Einkaufslisten'],['favs','★','Favoriten'],['shops','🏪','Läden'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
 var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
-function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+(view===n[0]?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
+function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+((view===n[0]&&!(view==='settings'&&sub==='lists'))||(n[0]==='lists'&&view==='settings'&&sub==='lists')?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')&&!(n[0]==='favs'&&!on('fav'))}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
 function head(){return'<header><div class="ttl"><div class="brand">sEBU</div><span class="sub">'+t('smarter EinkaufsBerater')+'</span></div>'+(S.shop?'<button class="btn stop" data-a="shopend" aria-label="'+t('Einkauf beenden')+'">⏹ '+esc(S.shop.store)+'</button>':'')+'</header><div class="hrow"><span class="mute"></span>'+greetHtml()+'<div style="position:relative"><button class="btn sq" data-a="menu" id="hamb" aria-label="'+t('Menü')+'">⋮</button>'+(menu?menuHtml():'')+'</div></div>'}
 /* 4 Knöpfe neben «Hallo …», wenn Platz; sonst bleiben sie in eigener Zeile */
@@ -1342,7 +1343,7 @@ function R(){applyLook();var a=$('#app');if(!a)return;
  barUp();
  if(sh&&sh.t==='scan'&&!sh.res){if(scan.st)scanAttach();else setTimeout(scanStart,0)}else if(scan.st)scanStop();
  if(rec&&(!sh||sh.t!=='voice'||sh.st!=='hear')){try{rec.abort()}catch(e){}rec=null}save();hlTour(tour&&tour.keep);if(tour)tour.keep=false;wheelInit()}
-function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
+function nav(v){dealOpen=null;if(view==='advice'&&v!=='advice')kiReset();view=v;sub='main';if(v==='lists'){view='settings';sub='lists'}menu=false;more=false;sh=null;window.scrollTo(0,0);R()}
 
 /* ===== Aktionen (Klicks) ===== */
 var impData=null,lp=false,lpT=null,swiped=false;

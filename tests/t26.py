@@ -10,7 +10,7 @@ with sync_playwright() as p:
     print('no bar with one list',pg.locator('#lbar').count()==0)
     pg.fill('#dn','Milch');pg.click('[data-a=add]')
     pg.fill('#dn','Pflaster');pg.click('[data-a=urgtog][data-id=draft]');pg.click('[data-a=add]')
-    pg.click('#hamb');pg.click('.menu [data-v=settings]');pg.click('[data-a=sub][data-v=lists]')
+    pg.click('#hamb');pg.click('.menu [data-v=lists]')
     pg.fill('#lnn','Aligro');pg.click('[data-a=listadd]')
     sid=[l['id'] for l in st(pg)['lists'] if l['name']=='Aligro'][0]
     pg.select_option('[data-chg=lstore][data-id="%s"]'%sid,'Aligro Schlieren')
