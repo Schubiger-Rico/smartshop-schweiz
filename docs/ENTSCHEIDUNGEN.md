@@ -719,3 +719,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 24.11.:** `antwort.html` gebaut (Ja/Nein mit ✓, Name/Funktion und Bemerkungen freiwillig, Senden erst wenn alle Zeilen gewählt). PDFs verlinken «Antwort senden» auf https://schubiger-rico.github.io/smartshop-schweiz/antwort.html?an=Migros.
 - 24.11.: Antwort-Seite: grosser grüner Ja-Knopf, rotes Nein, gewählte Antwort mit ✓ (andere blass), Tipp «Der grüne Knopf ist leichter zu treffen 😉» jetzt hier statt im PDF. PDFs: Ja/Nein gleich gross, Nein rot, Knopf heisst «✉️ Antworten».
 - 24.11.: Coop-Versionen der beiden PDFs (Passabene, antwort.html?an=Coop); Antwort-Seite zeigt je nach Händler Subito/Passabene.
+
+### Notiz vom 25.11.2026: Erinnerung an Produkte für andere Läden (nur festgehalten, noch nicht gebaut)
+
+- Problem: In der Migros einkaufen, aber für Coop ist noch etwas eingeschrieben → nicht vergessen.
+- Erinnerung wählbar, **Mehrfachauswahl**: bei jedem Öffnen der App · vor dem Einkaufen (beim Start) · nach dem Einkaufen (beim Ende, gibt es schon als «Noch offen») · «Dauer» (Bedeutung noch zu klären: dauerhaft sichtbar oder wie lange erinnert wird).
+- Einstellbar: allgemein in den Einstellungen **und** beim Zuordnen eines Produkts zu einem Laden als Abfrage (pro Produkt).
+- Abschaltbar, in der Führung erklären.
