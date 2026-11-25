@@ -743,3 +743,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Beim Aufschreiben (und nachträglich beim Bearbeiten) ein Foto vom Produkt machen, damit man sicher das richtige kauft (z. B. genau dieses Mehl, diese Marke).
 - Vorschlag: kleines Vorschaubild statt Symbol in der Produktzeile, Antippen zeigt es gross; Foto wird verkleinert gespeichert (Speicher auf dem Handy ist begrenzt); beim Teilen der Liste optional mitsenden; bleibt beim Produkt (auch in Favoriten/Letzte Produkte). Abschaltbar, in Führung erklären.
+- Entschieden: Vorschaubild ersetzt das Symbol in der Zeile (Antippen = gross), das Produkt **bleibt aber in seiner Kategorie** (Farbstreifen, Sortierung, Kategorie ändern wie bisher).
