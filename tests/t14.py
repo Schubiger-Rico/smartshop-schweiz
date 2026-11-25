@@ -8,7 +8,7 @@ with sync_playwright() as p:
     pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify({ob:{done:true}}))");pg.reload()
     for n in ['Äpfel','Brot']:pg.fill('#dn',n);pg.click('[data-a=add]')
     pg.fill('#dn','Windeln');pg.click('[data-a=urgtog][data-id=draft]');print('draft kept',pg.input_value('#dn'))
-    pg.click('[data-a=shopsel][data-id=draft]');pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');pg.click('[data-a=add]')
+    pg.click('[data-a=shopsel][data-id=draft]');pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');(pg.click('[data-a=remok]') if pg.locator('[data-a=remok]').count() else None);pg.click('[data-a=add]')
     names=pg.locator('.card[data-swk=i] .nm').all_inner_texts();print('first',names[0][:7],'urg cards',pg.locator('.card.urg').count(),'(store item visible)')
     pg.screenshot(path='s14.png')
     pg.click('#shopbtn');pg.wait_for_timeout(100)

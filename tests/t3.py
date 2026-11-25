@@ -11,7 +11,7 @@ with sync_playwright() as p:
     pg.goto('file://'+os.getcwd()+'/index.html');pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify({ob:{done:true},set:{gps:'ask',radius:100}}))");pg.reload()
     pg.fill('#dn','Schrauben');print('chip',pg.locator('[data-a=typesug]').count());pg.click('[data-a=typesug]')
     pg.click('[data-a=add]');print('switcher',pg.locator('[data-a=ltab]').count())
-    pg.fill('#dn','Milch');pg.click('[data-a=shopsel][data-id=draft]');pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');pg.click('[data-a=add]')
+    pg.fill('#dn','Milch');pg.click('[data-a=shopsel][data-id=draft]');pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');(pg.click('[data-a=remok]') if pg.locator('[data-a=remok]').count() else None);pg.click('[data-a=add]')
     print('food cards',pg.locator('.card[data-swk=i]').count(),pg.inner_text('#app').count('🏪 Lidl'))
     pg.click('#hamb');pg.click('[data-a=nav][data-v=settings]');pg.click('[data-a=sub][data-v=gps]');pg.click('[data-a=gpsnow]');pg.wait_for_timeout(1500)
     pg.click('#hamb');pg.click('[data-a=nav][data-v=list]');pg.wait_for_timeout(300)

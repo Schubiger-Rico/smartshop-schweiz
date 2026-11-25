@@ -140,7 +140,7 @@ function num(v,def){v=parseFloat(String(v).replace(',','.'));return isFinite(v)?
 
 /* ===== Zustand ===== */
 var S;
-function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact',btnText:false,lpHelp:true}}
+function setDef(){return{fs:18,theme:'auto',accent:'#39FF14',mode:'normal',favAfter:'5',gps:'off',radius:'auto',quiet:false,vib:false,openList:false,cats:true,recN:'20',recSort:'new',lang:'de',pu:'auto',plan:'gratis',alim:'3',dm:'manual',stm:'3',sortAuto:true,shopAuto:true,apiKey:'',model:'claude-sonnet-5-5',webSearch:true,fbUrl:'',view:'full',show:{},remSc:false,scName:'sEBU Erinnerung',autoBak:true,cloudBak:false,bakCode:'',bakT:0,rows:'compact',btnText:false,lpHelp:true,rem:{open:false,start:true,end:true,always:false},remAsk:true,news:true,newsSeen:''}}
 var STD=[
 ['🥦', 'Obst & Gemüse', [['🍎', 'Früchte'], ['🥕', 'Gemüse'], ['🥬', 'Salat'], ['🌿', 'Kräuter'], ['🍄', 'Pilze'], ['🥔', 'Kartoffeln & Zwiebeln'], ['🍍', 'Exotische Früchte'], ['🌰', 'Trockenfrüchte']]],
 ['🥛', 'Milch & Eier', [['🥛', 'Milch'], ['🍦', 'Joghurt'], ['🧀', 'Käse'], ['🧈', 'Butter'], ['🥚', 'Eier'], ['🍶', 'Rahm'], ['🌱', 'Milchalternativen'], ['🍮', 'Desserts & Pudding']]],
@@ -417,7 +417,7 @@ function shopEnd(quiet){var s=S.shop;if(!s)return;S.shop=null;
    s.seq.forEach(function(c,i){var r=i/(s.seq.length-1),e=o[c]||[0,0];o[c]=[e[0]+r,e[1]+1]});S.learn.order[k]=o});
   if(!quiet)say(t('Reihenfolge für {0} gelernt.',s.store))}
  else if(!quiet)say(t('Einkauf beendet.'));
- if(!quiet){var op=openElse(s);endHint=op.length?{n:op.map(function(i){return i.id})}:null;urgEnd=S.items.some(function(i){return i.urg})}}
+ if(!quiet){var op=openElse(s).filter(function(i){return remOf(i).end});endHint=op.length?{n:op.map(function(i){return i.id})}:null;urgEnd=S.items.some(function(i){return i.urg})}}
 function shopNames(i){var k=(i.stores||[]).slice();if(i.stext)k.push(i.stext);return k}
 function openElse(s){return S.items.filter(function(i){if(!hasShop(i))return false;var k=shopNames(i);return k.length&&k.indexOf(s.store)<0&&k.indexOf(s.chain)<0})}
 function todayItems(){return S.items.filter(function(i){return i.today===ld()&&hasShop(i)})}
@@ -651,6 +651,35 @@ function shVoice(){var h='<h2>🎤 '+t('Sprache')+'</h2>';
  return h+'<p class="small mute">«'+esc(sh.tx)+'»</p>'+(sh.l.length?'<p class="small mute">'+t('Du kannst Produkt und Menge noch antippen und ändern.')+'</p>'+sh.l.map(function(x,i){return'<div class="row" style="flex-wrap:nowrap;gap:.3em"><span>'+esc(iconOf({name:x.n}))+'</span><input class="field" data-vi="'+i+'" data-f="n" value="'+esc(x.n)+'" style="flex:1;min-width:0"><input class="field" data-vi="'+i+'" data-f="q" inputmode="decimal" value="'+(x.q||'')+'" placeholder="0" style="width:3.2em"><input class="field" data-vi="'+i+'" data-f="u" value="'+esc(x.u)+'" style="width:3.6em"><button class="btn sq" data-a="vdel" data-v="'+i+'" aria-label="'+t('Entfernen')+'">✕</button></div>'}).join(''):'<p>'+t('Keine Produkte erkannt.')+'</p>')
   +'<div class="seg" style="margin-top:.6em">'+(sh.l.length?'<button class="btn pri" data-a="voiceadd">＋ '+t('{0} auf die Liste',sh.l.length)+'</button>':'')+'<button class="btn" data-a="voice">'+t('Nochmals')+'</button></div>'}
 function fsCtl(){return'<div class="seg fsctl" style="align-items:center;flex-wrap:nowrap;margin:.3em 0 .7em"><button class="btn sq fsb" data-a="fsdn" aria-label="'+t('Schrift kleiner')+'">−</button><b id="fsv" style="min-width:3.6em;text-align:center;font-size:1.4em">'+S.set.fs+' px</b><button class="btn sq fsb" data-a="fsup" aria-label="'+t('Schrift grösser')+'">+</button></div>'}
+/* ===== Erinnerung an Produkte für andere Läden ===== */
+var REMK=[['open','📲','Bei jedem Öffnen der App'],['start','🛒','Vor dem Einkaufen (beim Start)'],['end','⏹','Nach dem Einkaufen (beim Ende)'],['always','📌','Dauernd, bis gekauft']];
+var remOpen=true,remHid=false;
+function remOf(i){var r=i.rem||S.set.rem||{};return r}
+function otherItems(){var st=S.shop;return S.items.filter(function(i){if(!hasShop(i))return false;if(st){var k=shopNames(i);return k.indexOf(st.store)<0&&k.indexOf(st.chain)<0}return !curMatch(i)})}
+function remBanner(){var l=otherItems().filter(function(i){var r=remOf(i);return r.always||(r.open&&remOpen&&!remHid)||(r.start&&S.shop&&!S.shop.remSeen)});if(!l.length)return'';
+ var fix=l.every(function(i){return remOf(i).always}),n=shopNames(l[0])[0];
+ return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1;min-width:0">🏪 '+t('Für andere Läden noch')+': <b>'+esc(itemsTxt(l))+'</b></span>'+mapBtn(n)+(fix?'':'<button class="btn sq dealxb" data-a="remx" aria-label="'+t('Erinnerung ausblenden')+'">✕</button>')+'</div>'}
+function remRows(r,pre){return REMK.map(function(k){return'<div class="row" style="flex-wrap:nowrap"><span style="flex:1">'+k[1]+' '+t(k[2])+'</span><input type="checkbox" data-'+pre+'="'+k[0]+'"'+(r[k[0]]?' checked':'')+' style="width:1.4em;height:1.4em"></div>'}).join('')}
+function remSetBlock(){return'<h3 id="remoth">🏪 '+t('Erinnerung an andere Läden')+'</h3><p class="small mute">'+t('Wann soll dich sEBU an Produkte erinnern, die du einem anderen Laden zugeordnet hast? Mehrere möglich.')+'</p>'+remRows(S.set.rem||{},'remg')
+  +rowC(t('Beim Zuordnen eines Ladens fragen'),'remAsk',S.set.remAsk!==false)}
+function shRemAsk(){var r=sh.r;return'<h2>🏪 '+t('Wann erinnern?')+'</h2><p class="small mute">'+t('Für «{0}» – mehrere möglich.',esc(sh.name||t('dieses Produkt')))+'</p>'+remRows(r,'remp')
+  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="remok">'+t('Übernehmen')+'</button><button class="btn" data-a="remno">'+t('Nicht mehr fragen')+'</button></div>'}
+
+/* ===== Neu in sEBU: neue Funktionen nach einer Aktualisierung (neueste zuletzt) ===== */
+var NEWS=[
+ ['n01','↩','Rückgängig: Aus Versehen weggewischt? Unten 4 Sekunden lang «Rückgängig» antippen.',null],
+ ['n02','🔎','Strichcode scannen: Produktinfos wie Nutri-Score, mit einem Tipp auf die Liste.',[['list','.camb','📷 antippen und «Strichcode scannen» wählen.']]],
+ ['n03','❗','Dringend: Wichtiges steht immer zuoberst, in jedem Laden.',[['list','[data-a=urgtog][data-id=draft]','❗ vor dem ＋ antippen, dann ist das Produkt dringend.']]],
+ ['n04','🎤','Sprache: «Brot 1 Stück und Mehl 1 Kilo – stopp» – mehrere Produkte auf einmal.',[['list','.micb','🎤 antippen und sprechen. «stopp» beendet das Zuhören.']]],
+ ['n05','🏷️','Aktionen der Händler: direkte Links zu Migros, Coop, Denner, Aldi, Lidl, Volg, Spar, Aligro und Otto\'s.',[['deals','#dlinks','Unter «Aktionen» öffnet ein Tipp die Aktionsseite des Händlers.']]],
+ ['n06','🎡','Grössere Drehräder für Menge und Einheit, mit «Klick» bei jedem Schritt.',[['list','.add .qu','Menge antippen: die grossen Räder erscheinen.']]],
+ ['n07','🏪','Erinnerung an andere Läden: beim Öffnen, vor oder nach dem Einkaufen oder dauernd bis gekauft.',[['settings','#remoth','Hier wählst du, wann sEBU dich erinnert. Mehrere möglich.',{'sub':'liste'}]]]];
+function newsBanner(){var n=S.ob.done&&S.set.news!==false?newsNew().length:0;if(!n)return'';return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1">✨ <b>'+t('Neu in sEBU')+'</b> · '+t(n===1?'1 neue Funktion':'{0} neue Funktionen',n)+'</span><button class="btn pri" data-a="newsopen">'+t('Ansehen')+'</button><button class="btn sq dealxb" data-a="newsok" aria-label="'+t('Ausblenden')+'">✕</button></div>'}
+function newsNew(){var i=-1;for(var k=0;k<NEWS.length;k++)if(NEWS[k][0]===S.set.newsSeen)i=k;return NEWS.slice(i+1)}
+function newsSteps(n){return(n[3]||[]).map(function(x){return st(x[0],x[1],x[2],0,Object.assign({ro:1},x[3]||{}))})}
+function shNews(){var l=sh.all?NEWS.slice().reverse():newsNew().reverse(),h='<h2>✨ '+t('Neu in sEBU')+'</h2>';
+ l.forEach(function(n){h+='<div class="row" style="flex-wrap:nowrap;gap:.5em"><span style="font-size:1.4em">'+n[1]+'</span><span style="flex:1">'+esc(t(n[2]))+'</span>'+(n[3]?'<button class="btn" data-a="newsshow" data-v="'+n[0]+'">'+t('Kurz zeigen')+'</button>':'')+'</div>'});
+ return h+'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="newsok">OK</button>'+(sh.all?'':'<button class="btn" data-a="shclose">'+t('Später')+'</button>')+'</div><p class="small mute">'+t('Abschaltbar unter Einstellungen → Einführung.')+'</p>'}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
@@ -665,7 +694,7 @@ function addRow(real){var has=draft.type||draft.stores.length||draft.stext,id=fu
   +(on('urg')?'<button class="btn sq urgb'+(real&&draft.urg?' on':'')+'" data-a="urgtog" data-id="draft" aria-label="'+t('Dringend')+'">❗</button>':'')
   +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div>'}
 function vList(){
- var h=banner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
+ var h=newsBanner()+banner()+remBanner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
  if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
  h+=addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
  var mineI=sortedItems().filter(function(i){return inTab(i)||(i.urg&&ltab==='food')});
@@ -744,7 +773,7 @@ function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><h3>'+t('Le
  +'</div><div class="seg" style="margin-top:.6em"><input class="field" id="sst" value="'+esc(s.text)+'" placeholder="'+t('Anderer Laden (optional, von Hand)')+'" style="flex:1"></div>'
  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="shok">OK</button><button class="btn" data-a="shclr">'+t('Zurücksetzen')+'</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
 function sheetHtml(){if(!sh)return'';var b='';
- switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break;case'scan':b=shScan();break;case'voice':b=shVoice();break;case'camwhich':b=shCamWhich();break}
+ switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break;case'scan':b=shScan();break;case'voice':b=shVoice();break;case'remask':b=shRemAsk();break;case'news':b=shNews();break;case'camwhich':b=shCamWhich();break}
  return'<div class="sheet" data-a="shclose"><div>'+b+'</div></div>'}
 
 function shQty(){var us=allUnits(),h='<h2>'+t('Menge und Einheit')+'</h2><div class="wheels"><div class="wheel" id="wq"><div class="sp"></div>';
@@ -924,7 +953,7 @@ function vSettings(){
  switch(sub){
  case'profil':h+=rowS(t('Name'),'<input class="field" data-chg="pname" value="'+esc(S.ob.name)+'" placeholder="'+t('freiwillig')+'">')+rowS(t('Nutzung'),'<select class="field" data-chg="ptype">'+['Privat','Familie','Verein','Geschäft'].map(function(o){return'<option'+(S.ob.type===o?' selected':'')+' value="'+o+'">'+t(o)+'</option>'}).join('')+'</select>');
   h+='<p class="small mute">'+t('Der Name dient nur für persönliche Texte in der App.')+'</p>';break;
- case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock()+remBlock();break;
+ case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock()+remSetBlock()+remBlock();break;
  case'look':h+=rowS(t('Textgrösse'),fsCtl())
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
   +rowS(t('Menü'),'<select class="field" data-chg="mode">'+[['minimal','Minimal'],['normal','Normal'],['gross','Gross']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.mode===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
@@ -958,7 +987,7 @@ function vSettings(){
  case'types':h+=vTypes();break;
  case'share':h+=vShare();break;
  case'plan':h+=vTest();break;
- case'tour':h+='<div class="seg"><button class="btn pri" data-a="tour" data-v="app">▶ '+t('Führung durch die App')+'</button><button class="btn pri" data-a="tour" data-v="set">▶ '+t('Führung durch die Einstellungen')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('App: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'':'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><h3>'+t('Einstellungen: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>':''}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break
+ case'tour':h+=rowC(t('«Neu in sEBU» nach Aktualisierungen zeigen'),'news',S.set.news!==false)+'<div class="seg" style="margin-bottom:.6em"><button class="btn" data-a="newsall">✨ '+t('Neuheiten ansehen')+'</button></div><div class="seg"><button class="btn pri" data-a="tour" data-v="app">▶ '+t('Führung durch die App')+'</button><button class="btn pri" data-a="tour" data-v="set">▶ '+t('Führung durch die Einstellungen')+'</button>'+(S.ob.t?'<button class="btn" data-a="tour" data-v="resume">⏯ '+t('Fortsetzen')+'</button>':'')+'</div><h3>'+t('App: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'':'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>'}).join('')+'</div><h3>'+t('Einstellungen: einzelne Bereiche')+'</h3><div class="seg">'+AREAS.map(function(a,i){return a[2]?'<button class="btn" data-a="tour" data-v="'+i+'">'+t(a[0])+'</button>':''}).join('')+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="ob">'+t('Begrüssung wiederholen')+'</button></div>';break
  case'data':h+='<p class="small">'+t('Alle Daten bleiben auf diesem Gerät. Fotos werden nur an die KI gesendet, wenn du es auslöst.')+'</p><h3>'+t('Sicherung')+'</h3><p class="small mute">'+t('Zum Umziehen auf ein anderes Gerät oder in die Home-Bildschirm-App: Sicherung kopieren, dort einfügen und laden.')+'</p><textarea class="field" id="bk" placeholder="'+t('Hier die Sicherung einfügen')+'" style="height:6em"></textarea><div class="seg" style="margin:.4em 0 1em"><button class="btn pri" data-a="bkcopy">'+t('Sicherung kopieren')+'</button><button class="btn" data-a="bkload">'+t('Sicherung laden')+'</button></div>'+bakBlock()+'<h3>'+t('Zurücksetzen')+'</h3><div class="seg"><button class="btn" data-a="resetset">'+t('Einstellungen zurücksetzen')+'</button><button class="btn" data-a="resetall" style="border-color:var(--red)">'+t('Alle Daten löschen')+'</button></div>';break}
  return h}
 function vCatsAdm(){var h='<p class="small mute">'+t('Ziehe am Griff oder nutze ▲▼. Standard-Kategorien lassen sich umbenennen und ausblenden, eigene löschen.')+'</p>';
@@ -1050,6 +1079,8 @@ AREAS.push(['Ratgeber',[
  st('settings','#app .row','Dafür trägst du hier deinen eigenen KI-Schlüssel ein.',0,{sub:'ai'})]]);
 /* Einstellungen-Führung: jede Einstellung, direkt einstellbar */
 function SA(name,steps){AREAS.push([name,steps,1])}
+SA('Neuheiten',[
+ ss('tour','row:«Neu in sEBU»','«Neu in sEBU»: Nach einer Aktualisierung zeigt sEBU einmal die neuen Funktionen, mit «Kurz zeigen» für eine Mini-Führung.','<b>Wenn du keine Hinweise willst:</b> hier ausschalten. Mit «Neuheiten ansehen» liest du sie jederzeit nach.')]);
 SA('Profil',[
  ss('profil','row:Name','Dein Name ist freiwillig und dient nur für persönliche Texte.'),
  ss('profil','row:Nutzung','Privat, Familie, Verein oder Geschäft. Das ist nur eine Notiz.')]);
@@ -1058,6 +1089,7 @@ SA('Einkaufsliste',[
  ss('liste','.pv','Die Vorschau zeigt sofort, wie deine Liste aussieht.'),
  ss('liste','row:❗ Notfall / dringend','❗ Notfall: Dringende Produkte stehen immer zuoberst, rot umrandet und grösser.','<b>Wofür geeignet:</b> Medikamente, Windeln, Milch fürs Baby – alles, was heute sicher mit muss.\n<b>Wenn es nicht klappt:</b> Ist der ❗-Knopf nicht sichtbar, schalte ihn hier ein.'),
  ss('liste','row:🔎 Strichcode scannen','🔎 Strichcode scannen: Produktinfos wie Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts.','<b>Wofür geeignet:</b> Produkte schnell erfassen und vergleichen.\n<b>So geht es:</b> 📷 antippen, «Strichcode scannen», Strichcode vor die Kamera halten.\n<b>Wenn es nicht klappt:</b> Mehr Licht, Strichcode ruhig und gerade halten, etwa 10 bis 15 cm Abstand. Oder «Foto aufnehmen» oder die Nummer unter dem Strichcode von Hand eingeben.\nKamera muss für Safari erlaubt sein. Nicht jedes Schweizer Produkt ist erfasst, dann kommt «Nicht gefunden».'),
+ ss('liste','#remoth','🏪 Erinnerung an andere Läden: Wann soll sEBU dich an Produkte erinnern, die du einem anderen Laden zugeordnet hast? Mehrere möglich.','<b>Bei jedem Öffnen:</b> oben ein Hinweis, mit ✕ bis zum nächsten Öffnen weg.\n<b>Vor dem Einkaufen:</b> beim Tipp auf 🛒.\n<b>Nach dem Einkaufen:</b> «Noch offen» beim Einkaufsende.\n<b>Dauernd:</b> bleibt stehen, bis du das Produkt abhakst.\n<b>Beim Zuordnen fragen:</b> Wählst du für ein Produkt einen Laden, fragt sEBU, wann es erinnern soll.\n<b>Wenn es nervt:</b> Häkchen hier entfernen.'),
  ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
 SA('Darstellung',[
  ss('look','.fsctl','Textgrösse: Tippe auf − oder +. Die Zahl zeigt die Grösse, die Anzeige ändert sich sofort.','<b>Wofür geeignet:</b> 16 bis 18 px für viel auf einen Blick, 22 px und mehr für gute Lesbarkeit.\n<b>Wenn Knöpfe zu eng werden:</b> Schrift etwas kleiner machen oder «Zeilenhöhe: Normal» wählen.'),
@@ -1119,7 +1151,7 @@ var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll 
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
 var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','.micb':'voice','#remh':'remind','[data-ccol]':'catcol','[data-a=urgtog][data-id=draft]':'urg'};
 function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||(n==='cam'?on('cam')||on('scan'):on(n))})}
-function tourSteps0(w){var A=AREAS;
+function tourSteps0(w){var A=AREAS;if(w&&typeof w==='object')return w.steps||[];
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
  if(w==='set')return[].concat.apply([],A.filter(function(a){return a[2]}).map(function(a){return a[1]}));
@@ -1249,7 +1281,7 @@ function act(a,el){var D=el.dataset,i,it;
  case'gocats':sh=null;view='settings';sub='cats';break;
  case'shclose':if(el.classList.contains('sheet')&&event.target!==el)return;sh=null;break;
  case'add':{var ty=draft.type||(ltab==='more'?'sonst':null),r=addItem(fval('dn')||draft.n,fval('dq')||draft.q,fval('du')||draft.u,draft.cat,draft.sub,draft.why,{stores:draft.stores,type:ty,text:draft.stext});if(!r)return;if(draft.type)S.learn.types[norm(r.name)]=draft.type;if(r.type&&ltab!=='more')say(t('Zu «Weitere» hinzugefügt.'));
-  if(draft.urg)r.urg=true;
+  if(draft.urg)r.urg=true;if(draft.rem)r.rem=draft.rem;
   if(draft.manual&&draft.cat)learnCat(r.name,draft.cat,draft.sub);
   if(!r.cat&&S.learn.on!==false&&!r.tour&&!r.type)ask=r.id;
   draft=newDraft();tourEv('add');break}
@@ -1264,6 +1296,13 @@ function act(a,el){var D=el.dataset,i,it;
  case'fsdn':case'fsup':S.set.fs=Math.max(10,Math.min(40,(+S.set.fs||18)+(a==='fsup'?1:-1)));break;
  case'hintsback':S.set.swipeN=0;say(t('Die Hinweise erscheinen wieder.'));break;
  case'dealx':dealHid=true;break;
+ case'remx':remHid=true;if(S.shop)S.shop.remSeen=true;break;
+ case'remok':{var rr={};document.querySelectorAll('[data-remp]').forEach(function(x){rr[x.dataset.remp]=x.checked});if(sh.id==='draft')draft.rem=rr;else{var ri=findItem(sh.id);if(ri)ri.rem=rr}sh=null;break}
+ case'remno':S.set.remAsk=false;sh=null;say(t('Ich frage nicht mehr. Wieder einschalten: Einstellungen → Einkaufsliste.'));break;
+ case'newsok':S.set.newsSeen=NEWS[NEWS.length-1][0];sh=null;break;
+ case'newsall':sh={t:'news',all:true};break;
+ case'newsopen':sh={t:'news'};break;
+ case'newsshow':{var nn=NEWS.filter(function(x){return x[0]===D.v})[0];if(!nn)break;if(!sh.all)S.set.newsSeen=NEWS[NEWS.length-1][0];sh=null;tourStart({steps:newsSteps(nn)});return}
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
@@ -1339,7 +1378,7 @@ case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=
  case'shtog':{sh.sel.text=fval('sst');var ix=sh.sel.stores.indexOf(D.v);if(ix>-1)sh.sel.stores.splice(ix,1);else sh.sel.stores.push(D.v);sh.sel.type=null;break}
  case'shtyp':sh.sel.text=fval('sst');sh.sel.type=sh.sel.type===D.v?null:D.v;sh.sel.stores=[];break;
  case'shclr':sh.sel={stores:[],type:null,text:''};break;
- case'shok':{sh.sel.text=fval('sst').trim();var s2=sh.sel;if(sh.id==='draft'){draft.stores=s2.stores;draft.type=s2.type;draft.stext=s2.text}else{var t2=findItem(sh.id);if(t2){t2.stores=s2.stores;t2.type=s2.type||null;t2.stext=s2.text;if(s2.type)S.learn.types[norm(t2.name)]=s2.type}}sh=null;break}
+ case'shok':{sh.sel.text=fval('sst').trim();var s2=sh.sel,sid0=sh.id,hasSel=(s2.stores&&s2.stores.length)||s2.text;if(sh.id==='draft'){draft.stores=s2.stores;draft.type=s2.type;draft.stext=s2.text}else{var t2=findItem(sh.id);if(t2){t2.stores=s2.stores;t2.type=s2.type||null;t2.stext=s2.text;if(s2.type)S.learn.types[norm(t2.name)]=s2.type}}sh=null;if(hasSel&&S.set.remAsk!==false){var it0=sid0==='draft'?draft:findItem(sid0);sh={t:'remask',id:sid0,name:sid0==='draft'?((document.getElementById('dn')&&document.getElementById('dn').value)||draft.n):(it0&&it0.name),r:Object.assign({},(it0&&it0.rem)||S.set.rem)}}break}
  case'typedel':S.types=S.types.filter(function(x){return x.id!==D.id});S.items.forEach(function(i){if(i.type===D.id)i.type='sonst'});break;
  case'typeadd':{var tn=fval('tn').trim();if(!tn){say(t('Bitte einen Namen eingeben.'));return}S.types.splice(S.types.length-1,0,{id:'c'+uid(),icon:'🏷️',name:tn,on:true,custom:true,kw:fval('tk').trim()||tn});break}
  case'sharenew':shareNew();return;
@@ -1402,6 +1441,8 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.mine!==undefined&&D.mine!==''&&!D.chain){var mm=S.mine[+D.mine];if(mm){mm.off=!t0.checked;save()}return}
  if(D.chain){S.chains[D.chain]=t0.checked;save();return}
  if(D.typ){var tp=typeOf(D.typ);if(tp){tp.on=t0.checked;save()}return}
+ if(D.remg){S.set.rem=S.set.rem||{};S.set.rem[D.remg]=t0.checked;save();R();return}
+ if(D.remp)return;
  if(D.chk&&D.chk.indexOf('v_')===0){setOn(D.chk.slice(2),t0.checked);S.set.view='manual';save();R();return}
  if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='cloudBak'&&t0.checked){if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save();cloudBak(true)}if(kk==='remSc'||kk==='autoBak'||kk==='cloudBak'||kk==='btnText')R();return}
  if(!k||k==='fs'||k==='accent')return;
@@ -1422,7 +1463,7 @@ var sw0=null,dragId=null,upS=null;
 document.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.wheels')&&S.set.tick!==false&&!actx){try{var AC=window.AudioContext||window.webkitAudioContext;if(AC){actx=new AC();var b=actx.createBuffer(1,1,22050),sr=actx.createBufferSource();sr.buffer=b;sr.connect(actx.destination);sr.start(0)}}catch(x){}}},true);
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
-var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',newsopen:'Die neuen Funktionen ansehen.',newsok:'Neuheiten-Hinweis ausblenden. Unter Einstellungen → Einführung jederzeit nachlesbar.',remx:'✕ Erinnerung an andere Läden ausblenden – bis zum nächsten Öffnen.',newsshow:'Kurze Führung zu dieser Neuheit.',newsall:'Alle Neuheiten nochmals ansehen.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung beim Wegfahren anlegen.'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
  hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
@@ -1439,7 +1480,7 @@ function pointerEnd(e){clearTimeout(lpT);
 document.addEventListener('pointerup',pointerEnd);document.addEventListener('pointercancel',function(){clearTimeout(lpT);if(sw0){sw0.el.style.transform='';sw0=null}dragId=null});
 document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('[data-fire]'))e.preventDefault()});
 window.addEventListener('online',runQueue);
-document.addEventListener('visibilitychange',function(){if(document.hidden){dealHid=false;return}if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
+document.addEventListener('visibilitychange',function(){if(document.hidden){dealHid=false;remHid=false;remOpen=true;return}if(S.set.gps!=='off'&&Date.now()-lastGps>120000)gpsDetect();snap();cloudBak()});
 
 document.addEventListener('scroll',function(e){var w=e.target;if(!w.classList||!w.classList.contains('wheel'))return;var o0=w.querySelector('.o');if(o0){var li=Math.round(w.scrollTop/o0.offsetHeight);if(li!==w._last){w._last=li;wheelMark(w,li);if(Date.now()-wheelT>=400)tick()}}if(Date.now()-wheelT<400)return;clearTimeout(w._t);
  w._t=setTimeout(function(){var o=w.querySelector('.o');if(!o)return;var i=Math.round(w.scrollTop/o.offsetHeight);
@@ -1455,7 +1496,8 @@ function addStdCats(){var ms=mains(true),ord=ms.length?Math.max.apply(null,ms.ma
   Object.keys(S.learn.names||{}).forEach(function(k){var l=S.learn.names[k];if(MV[l.sub]){l.sub=MV[l.sub];l.cat='m18'}})}}
 function init(){addStdCats();if(S.set.accent==='#1f8a70')S.set.accent='#39FF14';if(+S.set.radius===25)S.set.radius='auto';purgeDeals();if(!S.share.dev)S.share.dev=uid();startShare();if(S.shop&&Date.now()-S.shop.t>12*36e5)shopEnd(true);R();
  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){});
- if(S.set.gps!=='off')gpsDetect();runQueue();snap();cloudBak()}
+ if(S.set.gps!=='off')gpsDetect();runQueue();snap();cloudBak();
+ if(!S.ob.done)S.set.newsSeen=NEWS[NEWS.length-1][0];}
 init();
 
 

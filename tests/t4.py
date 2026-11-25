@@ -7,7 +7,7 @@ with sync_playwright() as p:
     pg.fill('#dn','Milch');pg.click('[data-a=add]')
     pg.fill('#dn','Brot');pg.click('[data-a=shopsel][data-id=draft]')
     print('own store in picker',pg.locator('[data-a=shtog][data-v="Beck Z"]').count())
-    pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');pg.click('[data-a=add]')
+    pg.click('[data-a=shtog][data-v=Lidl]');pg.click('[data-a=shok]');(pg.click('[data-a=remok]') if pg.locator('[data-a=remok]').count() else None);pg.click('[data-a=add]')
     print('cards main (expect 1)',pg.locator('.card[data-swk=i]').count(),'hint',pg.locator('[data-a=nav][data-v=shops]').count())
     pg.click('[data-a=nav][data-v=shops]');print('shops view cards',pg.locator('.card[data-swk=i]').count(),'h3',pg.locator('#app h3').all_inner_texts())
     pg.click('#hamb');print('menu shops',pg.locator('[data-a=nav][data-v=shops]').count())

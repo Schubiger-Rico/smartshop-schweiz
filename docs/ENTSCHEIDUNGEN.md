@@ -733,3 +733,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Pro Neuheit ein Satz und ein Knopf «Kurz zeigen» (Mini-Führung zu genau dieser Funktion, freiwillig); dazu «OK» / «Später».
 - Abschaltbar in den Einstellungen; ältere Neuheiten unter Einstellungen → Einführung nachlesbar.
 - Arbeitsregel dazu: Bei jeder neuen Funktion einen Eintrag in die Neuheiten-Liste aufnehmen (wie bei der Wegleitung).
+
+### Umgesetzt am 25.11.: Erinnerung an andere Läden, Neu in sEBU
+
+- Erinnerung an Produkte für andere Läden: bei jedem Öffnen, vor dem Einkaufen (🛒), nach dem Einkaufen («Noch offen»), dauernd bis gekauft – Mehrfachauswahl unter Einstellungen → Einkaufsliste; beim Zuordnen eines Ladens fragt sEBU pro Produkt (abschaltbar). Hinweis oben mit 🧭 und ✕ (bei «dauernd» ohne ✕). Standard: vor und nach dem Einkaufen.
+- «Neu in sEBU»: ruhige Zeile oben nach Aktualisierungen («Ansehen» / ✕), Liste der neuen Funktionen mit «Kurz zeigen» (Mini-Führung). Abschaltbar und nachlesbar unter Einstellungen → Einführung. Arbeitsregel: jede neue Funktion in `NEWS` aufnehmen.
