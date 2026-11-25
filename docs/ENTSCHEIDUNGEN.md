@@ -745,3 +745,9 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Vorschlag: kleines Vorschaubild statt Symbol in der Produktzeile, Antippen zeigt es gross; Foto wird verkleinert gespeichert (Speicher auf dem Handy ist begrenzt); beim Teilen der Liste optional mitsenden; bleibt beim Produkt (auch in Favoriten/Letzte Produkte). Abschaltbar, in Führung erklären.
 - Entschieden: Vorschaubild ersetzt das Symbol in der Zeile (Antippen = gross), das Produkt **bleibt aber in seiner Kategorie** (Farbstreifen, Sortierung, Kategorie ändern wie bisher).
 - **Umgesetzt am 25.11.:** Produktfoto: 📸 bei der Eingabe und beim Bearbeiten, Foto ersetzt das Symbol (auch in Favoriten/Letzte Produkte), Antippen zeigt es gross (ersetzen/entfernen/Kategorie ändern), Kategorie bleibt. Gespeichert beim Produktnamen, verkleinert. Schalter «Produktfoto» in Einkaufsliste (bei «Einfach» aus). In Führung und «Neu in sEBU» aufgenommen. Fotos werden beim Teilen der Liste nicht mitgeschickt.
+
+### Notiz vom 25.11.2026: Eigene Läden automatisch erkennen und Produkte zeigen (nur festgehalten, noch nicht gebaut)
+
+- Rico: Wenn ich in einem selbst eingegebenen Laden bin (z. B. Hofladen, Metzger), sollen die dafür gespeicherten Produkte automatisch erscheinen.
+- Heute: klappt nur, wenn der Laden unter Einstellungen → Filialen als «eigener Laden» mit Standort gespeichert ist («Hier speichern») und die Filialerkennung eingeschaltet ist. Von Hand getippte Ladennamen (Freitext bei 🏪) haben keinen Standort.
+- Vorschlag: Bei einem getippten Ladennamen ohne Standort fragt sEBU später einmal «Bist du gerade bei ‹Metzgerei Müller›? Standort speichern» (ein Tipp) – danach erkennt sEBU den Laden automatisch und zeigt die Produkte oben mit Hinweis «📍 Metzgerei Müller – 3 Produkte».
