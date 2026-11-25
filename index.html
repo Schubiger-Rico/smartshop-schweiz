@@ -390,7 +390,7 @@ function newDraft(){return{n:'',q:'0',u:'Stk.',cat:null,sub:null,why:'',manual:f
 var urgEnd=false,endHint=null,draft=newDraft(),ltab='food',showOther=false,nearT=[],dismissedNow={},lastGps=0;
 var CHB=['Migros','Coop','Lidl','Aldi','Denner','Spar','Volg',"Otto's",'Landi','Manor','Jumbo','Coop Pronto','Migrolino','Kiosk','Hornbach','Bauhaus','Obi','Do it + Garden','Coop Bau+Hobby','Ikea','Pfister','Micasa','Conforama','Interio','Interdiscount','MediaMarkt','Fust','Müller','Dm drogerie','Apodro','Amavita','Sun Store','TopPharm','Coop Vitality','Dosenbach','Ochsner','PKZ','Orell Füssli','Thalia','Ex Libris','Fressnapf','Qualipet','Decathlon','Sport XX','Intersport','Franz Carl Weber'];
 function allCh(){var o=CHB.slice(),seen={};o.forEach(function(x){seen[nk(x)]=1});(S.cchains||[]).forEach(function(c){if(!seen[nk(c)]){seen[nk(c)]=1;o.push(c)}});return o}
-function shopOpts(){var o=allCh().filter(chainOn);S.mine.forEach(function(m){if(m.off!==true&&o.indexOf(m.name)<0)o.push(m.name)});return o}
+function shopOpts(){var o=allCh().filter(chainOn);S.mine.forEach(function(m){if(m.off!==true&&o.indexOf(m.name)<0)o.push(m.name)});noLocStores().forEach(function(n){if(o.indexOf(n)<0)o.push(n)});return o}
 function chainOn(c){return S.chains[c]!==false}
 function findItem(id){return S.items.filter(function(x){return x.id===id})[0]}
 function ev(){return S.ev.filter(function(x){return x.id===S.cev&&!x.arch})[0]}
@@ -713,7 +713,8 @@ var NEWS=[
  ['n13','📍','Neuer Laden hier: Über 📍 «Laden wählen» einen neuen Laden samt Standort speichern. Und klare Hilfe, falls Safari den Standort sperrt.',[['list','[data-a=storepick]','📍 antippen, dann «Neuer Laden hier».']]],
  ['n14','🧾','Mehrere Einkaufslisten: zum Beispiel «Aligro» neben «Allgemein». Mit Laden öffnet sie sich dort von selbst.',[['settings','#listnew','Hier legst du eine neue Liste an und wählst auf Wunsch den Laden.',{'sub':'lists'}]]],
  ['n15','⚡','Schnellstart-Knopf: einen Bereich aus dem Menü nach vorne holen, vor den Einkaufswagen.',[['settings','row:Schnellstart-Knopf','Hier wählst du den Bereich für den Knopf.',{'sub':'liste'}]]],
- ['n16','👋','Begrüssung: Beim Öffnen 3 Sekunden ein Spruch zur Tageszeit – einen Monat lang jeden Tag ein anderer. Abschaltbar.',[['settings','row:Begrüssung','Hier wählst du Witzig, Kurz oder Aus.',{'sub':'look'}]]]];
+ ['n16','👋','Begrüssung: Beim Öffnen 3 Sekunden ein Spruch zur Tageszeit – einen Monat lang jeden Tag ein anderer. Abschaltbar.',[['settings','row:Begrüssung','Hier wählst du Witzig, Kurz oder Aus.',{'sub':'look'}]]],
+ ['n17','🔎','Geschäft suchen: Bei «Wo kaufst du das?» (🏪) findest du mit dem Suchfeld schnell das richtige Geschäft.',[['list','[data-a=shopsel][data-id=draft]','🏪 antippen – oben im Fenster ist das Suchfeld.']]]];
 function newsBanner(){var n=S.ob.done&&S.set.news!==false?newsNew().length:0;if(!n)return'';return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1">✨ <b>'+t('Neu in sEBU')+'</b> · '+t(n===1?'1 neue Funktion':'{0} neue Funktionen',n)+'</span><button class="btn pri" data-a="newsopen">'+t('Ansehen')+'</button><button class="btn sq dealxb" data-a="newsok" aria-label="'+t('Ausblenden')+'">✕</button></div>'}
 function newsNew(){var i=-1;for(var k=0;k<NEWS.length;k++)if(NEWS[k][0]===S.set.newsSeen)i=k;return NEWS.slice(i+1)}
 function newsSteps(n){return(n[3]||[]).map(function(x){return st(x[0],x[1],x[2],0,Object.assign({ro:1},x[3]||{}))})}
@@ -847,8 +848,8 @@ var emojiQ='';
 function shEmoji(){var q=norm(emojiQ),h='<h2>'+t(sh.pid?'Symbol für dieses Produkt':'Symbol wählen')+'</h2>'+(sh.pid?'<p class="small mute">'+t('Die App merkt sich dein Symbol für dieses Produkt.')+' <button class="chip" data-a="emopick" data-e="">'+t('Wieder automatisch')+'</button></p>':'')+'<input class="field" id="emq" placeholder="'+t('Suchen (zum Beispiel Käse)')+'" value="'+esc(emojiQ)+'" style="width:100%;margin-bottom:.5em">';
  EMO.forEach(function(g){var l=g[1].filter(function(e){return !q||e[1].indexOf(q)>-1});if(!l.length)return;h+='<h3>'+t(g[0])+'</h3><div class="grid">'+l.map(function(e){return'<button class="ic" data-a="emopick" data-e="'+e[0]+'">'+e[0]+'</button>'}).join('')+'</div>'});
  return h+'<div class="seg" style="margin-top:.6em"><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>'}
-function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><h3>'+t('Lebensmittel-Läden')+'</h3><div class="seg">'
- +shopOpts().map(function(c){var on=s.stores.indexOf(c)>-1;return'<button class="chip'+(on?' sel':'')+'" data-a="shtog" data-v="'+c+'">'+(on?'✓ ':'')+c+'</button>'}).join('')+'</div><h3>'+t('Ladentypen (unter «Weitere»)')+'</h3><div class="seg">'
+function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><input class="field" id="shq" placeholder="🔎 '+t('Geschäft suchen, z. B. Aligro')+'" style="width:100%;margin-bottom:.4em" autocomplete="off"><h3 class="shg">'+t('Geschäfte')+'</h3><div class="seg shg">'
+ +shopOpts().map(function(c){var on=s.stores.indexOf(c)>-1;return'<button class="chip'+(on?' sel':'')+'" data-a="shtog" data-v="'+c+'">'+(on?'✓ ':'')+c+'</button>'}).join('')+'</div><h3 class="shg">'+t('Ladentypen (unter «Weitere»)')+'</h3><div class="seg shg">'
  +S.types.filter(function(x){return x.on!==false}).map(function(x){var on=s.type===x.id;return'<button class="chip'+(on?' sel':'')+'" data-a="shtyp" data-v="'+x.id+'">'+(on?'✓ ':'')+x.icon+' '+esc(tname(x))+'</button>'}).join('')
  +'</div><div class="seg" style="margin-top:.6em"><input class="field" id="sst" value="'+esc(s.text)+'" placeholder="'+t('Anderer Laden (optional, von Hand)')+'" style="flex:1"></div>'
  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="shok">OK</button><button class="btn" data-a="shclr">'+t('Zurücksetzen')+'</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
@@ -874,7 +875,7 @@ var wheelT=0,wheelD=null;
 function dealPanel(i){return'<div class="card blk" data-up="1" style="touch-action:none">'+dealBody(i)+'<div class="seg"><button class="btn sq" data-a="dealclose" aria-label="'+t('Schliessen')+'">✕</button><span class="small mute" style="align-self:center">↑ '+t('Nach oben wischen zum Schliessen')+'</span></div></div>'}
 
 /* ===== Ansicht Läden ===== */
-function vShops(){var g={},h='<h2>🏪 '+t('Läden')+'</h2>';
+function vShops(){var g={},h='<h2>🏪 '+t('Geschäfte')+'</h2>';
  S.items.forEach(function(i){var k=(i.stores||[]).slice();if(i.stext)k.push(i.stext);k.forEach(function(n){(g[n]=g[n]||[]).push(i)})});
  var ks=Object.keys(g);
  function isCur(n){return !!cur&&(n===cur.name||n===cur.chain)}
@@ -1109,7 +1110,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.topbar','Die kleinen Knöpfe zeigen nur Symbole. Bleib 2 Sekunden auf einem Knopf, dann erklärt die App, wofür er ist.','<b>Lieber mit Text?</b> Einstellungen → Darstellung → «Knöpfe mit Text».\n<b>Stört die Erklärung?</b> Dort «Erklärung beim Gedrückthalten» ausschalten.\n<b>Wenn es nicht klappt:</b> Finger ruhig halten und nicht verschieben, sonst zählt es als Wischen.',{ro:1}),
  st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Gedrückt halten auf dem Symbol eines Produkts zeigt, wohin es gehört, zum Beispiel «Vorräte › Öl & Essig».\nKategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei grosse Räder erscheinen, eines für die Menge, eines für die Einheit. Sie laufen waagrecht – nach links oder rechts wischen. Jeder Schritt rastet ein und macht «klick».\nFür welche Hand die Räder liegen, stellst du unter «Favoriten und Letzte Produkte» ein.\nDer Klick lässt sich unter Einstellungen → «Favoriten und Letzte Produkte» ausschalten.',{ro:1}),
- st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
+ st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Geschäfte».\nOben im Fenster ist ein Suchfeld: Tippe ein paar Buchstaben, dann bleiben nur passende Geschäfte stehen.\n<b>Wenn dein Geschäft fehlt:</b> unten von Hand eintippen oder unter Einstellungen → Filialen eine Kette hinzufügen.',{ro:1}),
  st('list','.qkb','⚡ Schnellstart: Dieser Knopf öffnet direkt deinen Lieblingsbereich.','Welcher Bereich, wählst du unter Einstellungen → Einkaufsliste → Schnellstart-Knopf.\n<b>Mit «Einkaufslisten»:</b> Neben 📋 steht klein, welche Liste gerade aktiv ist. Antippen öffnet die Auswahl deiner Listen.\n<b>Wenn ein Produkt fehlt:</b> Es steht wohl in einer anderen Liste – die Zahl in Klammern zeigt, wie viele dort sind.',{ro:1}),
  st('list','.phb','📸 Produktfoto: Fotografiere das Produkt beim Aufschreiben, dann kaufst du sicher das richtige.','Das Foto ersetzt in der Liste das Symbol, das Produkt bleibt in seiner Kategorie. Antippen zeigt das Foto gross, dort kannst du es ersetzen oder entfernen.\nDas Foto bleibt beim Produkt, auch bei den Favoriten und den letzten Produkten.\n<b>Wenn es nicht klappt:</b> Kamera für Safari erlauben. Fotos brauchen Speicher – bei «Speicher voll» alte Fotos entfernen.',{ro:1}),
  st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
@@ -1131,7 +1132,7 @@ AREAS.push(['Menü und Ansicht',[
  mn('list','Einkaufsliste: Hier schreibst du auf, was du brauchst.','Das ist die Startseite. Alles andere ist Zugabe, nichts muss.'),
  mn('lists','📋 Einkaufslisten: mehrere Listen, zum Beispiel «Aligro» neben «Allgemein».','Hier legst du Listen an, gibst ihnen einen Laden und löschst sie wieder. Mit Laden öffnet sich die Liste dort von selbst.\n<b>Wenn du nur eine Liste brauchst:</b> einfach nichts tun – «Allgemein» genügt.'),
  mn('favs','Favoriten: Was du oft kaufst, holst du mit einem Tipp auf die Liste.','Favoriten entstehen auch automatisch, wenn du etwas oft kaufst. Wie oft, stellst du ein. Darunter steht der Verlauf.'),
- mn('shops','Läden: Produkte, die du einem bestimmten Laden zugeordnet hast.','So bleibt die Hauptliste ruhig. Produkte für Coop, Migros oder den Baumarkt erscheinen dort, und in der Liste, sobald du im passenden Laden bist.'),
+ mn('shops','Geschäfte: Produkte, die du einem bestimmten Laden zugeordnet hast.','So bleibt die Hauptliste ruhig. Produkte für Coop, Migros oder den Baumarkt erscheinen dort, und in der Liste, sobald du im passenden Laden bist.'),
  mn('deals','Aktionen: aktuelle Angebote und deine Beobachtungsliste.','Das 🔥 bei einem Produkt beobachtet es. In den Einstellungen schaltest du das auf automatisch, manuell oder aus. Bei «aus» verschwindet der Menüpunkt.'),
  mn('ideas','Ideen: Vorschläge und Rezepte, deren Zutaten du auf die Liste legst.','Du stellst die Personenzahl ein, die Mengen rechnen sich um.'),
  mn('settings','Einstellungen: alles, was du anpassen kannst.','Dazu gibt es eine eigene Führung, in der du gleich alles einstellen kannst.'),
@@ -1320,7 +1321,7 @@ function vShare(){var on=shareOn(),h='<p class="small mute">'+t('Zwei Personen b
  return h}
 
 /* ===== Kopf, Menü, Rendern ===== */
-var NAV=[['list','🛒','Einkaufsliste'],['lists','📋','Einkaufslisten'],['favs','★','Favoriten'],['shops','🏪','Läden'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
+var NAV=[['list','🛒','Einkaufsliste'],['lists','📋','Einkaufslisten'],['favs','★','Favoriten'],['shops','🏪','Geschäfte'],['deals','🔥','Aktionen'],['ideas','💡','Ideen'],['settings','⚙️','Einstellungen']];
 var MORE=[['advice','📷','Ratgeber'],['events','🎉','Anlässe'],['stamm','📌','Stammartikel'],['kipro','✨','Premium-KI'],['test','🧪','Test & Feedback']];
 function navBtn(n){return'<button data-a="nav" data-v="'+n[0]+'" title="'+t(n[2])+'"'+((view===n[0]&&!(view==='settings'&&sub==='lists'))||(n[0]==='lists'&&view==='settings'&&sub==='lists')?' class="cur"':'')+'><span>'+n[1]+'</span><span class="ml">'+t(n[2])+'</span></button>'}
 function menuHtml(){var m=S.set.mode;return'<div class="menu '+(m==='minimal'?'min':m==='gross'?'big':'')+'">'+NAV.filter(function(n){return !(n[0]==='deals'&&S.set.dm==='off')&&!(n[0]==='favs'&&!on('fav'))}).map(navBtn).join('')+'<button data-a="more"><span>⋯</span><span class="ml">'+t('Mehr')+'</span></button>'+(more?MORE.map(navBtn).join(''):'')+'</div>'}
@@ -1542,6 +1543,7 @@ document.addEventListener('input',function(e){var t0=e.target,id=t0.id;
  if(id==='dn'){draft.n=t0.value;updInput()}
  else if(id==='dq'){t0.value=t0.value.replace(/[^0-9.,]/g,'').slice(0,3);draft.q=t0.value}
  else if(id==='du')draft.u=t0.value;
+ else if(id==='shq'){var q3=norm(t0.value);$$('.sheet .shg').forEach(function(g){if(g.tagName==='H3')return;var n=0;g.querySelectorAll('.chip').forEach(function(c){var ok=!q3||(' '+norm(c.textContent).replace(/[^a-z0-9äöüéèàç]+/g,' ')).indexOf(' '+q3)>-1;c.style.display=ok?'':'none';if(ok)n++});g.style.display=n?'':'none';var hd=g.previousElementSibling;if(hd&&hd.tagName==='H3')hd.style.display=n?'':'none'})}
  else if(id==='catq'){catQ=t0.value;var d2=$('.sheet>div');if(d2){d2.innerHTML=shCat();var q2=$('#catq');q2.focus();q2.setSelectionRange(q2.value.length,q2.value.length)}}
  else if(id==='emq'){emojiQ=t0.value;var d=$('.sheet>div');if(d){d.innerHTML=shEmoji();var q=$('#emq');q.focus();q.setSelectionRange(q.value.length,q.value.length)}}
  else if(t0.dataset&&t0.dataset.chg==='fs'){S.set.fs=+t0.value;applyLook();var v=$('#fsv');if(v)v.textContent=t0.value;save()}
