@@ -783,3 +783,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 25.11.: Standort-Hilfe um den Schritt «Einstellungen → Apps → Safari → Standort → Fragen/Erlauben» ergänzt (war bei Rico die entscheidende Sperre).
 
 - 25.11.2026: Drehräder bei «Rechte Hand» ganz an den rechten Rand (Breite 62 %, Beschriftung rechtsbündig), damit der rechte Daumen von rechts nach links wischt; «Linke Hand» gespiegelt.
+
+### Notiz vom 25.11.2026: Einkaufslisten, Schnellstart-Knopf, kurze Begrüssung (nur festgehalten, noch nicht gebaut)
+- **Mehrere Einkaufslisten:** neu unter Einstellungen «Einkaufslisten». Standardliste heisst «Allgemein». Statt Produkte einzeln einem Laden zuzuordnen (z. B. Aligro), legt man eine Liste «Aligro» an und schreibt alles dort hinein. Die Liste holt man von Hand hervor oder sie erscheint automatisch über den Standort.
+- **Schnellstart-Knopf:** frei wählbare Funktion aus dem Menü nach vorne holen.
+- **Begrüssung «Hallo Rico»:** nur kurz, dafür gross anzeigen. Je nach Tageszeit (z. B. «Guten Morgen»), gern auch witzig. Ganz abschaltbar. Der frei gewordene Platz ist für den Schnellstart-Knopf.
