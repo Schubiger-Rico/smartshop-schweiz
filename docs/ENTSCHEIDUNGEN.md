@@ -762,3 +762,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 25.11.2026: «Heute nicht» beim Hinweis «Heute noch» (nur festgehalten, noch nicht gebaut)
 
 - Der Hinweis «Heute noch: … (Aligro)» braucht einen Knopf «Heute nicht», der ihn für den Rest des Tages ausblendet (nervt sonst am gleichen Tag). Am nächsten Tag nicht mehr «heute» (Produkt bleibt normal in der Liste unter seinem Laden).
+- Ergänzung 25.11.: «🔔 Erinnerung beim Wegfahren» umbauen zu «🔔 Nach dem Einkaufen erinnern»: sEBU merkt sich die Produkte und erinnert selbst nochmals, wenn der nächste Einkauf beendet wird (⏹) – ohne iPhone-Erinnerungen-App (Kurzbefehl-Variante bleibt optional).
