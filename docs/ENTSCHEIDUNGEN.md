@@ -804,3 +804,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Suchfeld ganz oben, filtert schon beim Tippen (bestätigt). Menüpunkt «Läden» ebenfalls in «Geschäfte» umbenennen.
 - **Umgesetzt am 25.11.:** «Wo kaufst du das?» mit Suchfeld oben (filtert beim Tippen nach Wortanfang), Überschrift «Geschäfte»; eingetippte Geschäfte wie Aligro erscheinen jetzt auch als Auswahl. Menüpunkt «Läden» heisst «Geschäfte» (nur Menüpunkt und Seitentitel). In Führung und «Neu in sEBU» (n17).
 - 25.11.: Begrüssung neu 4 Sekunden statt 3.
+- 25.11.: Letzte Produkte: Knopf «Zurückholen» ersetzt durch runden ↩-Knopf (Erklärung beim Gedrückthalten).

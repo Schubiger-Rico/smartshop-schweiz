@@ -789,7 +789,7 @@ function vList(){
  h+='<div class="row" style="border:0;margin-top:1em"><h2 style="margin:0">'+t('Letzte Produkte')+'</h2></div>';
  var rl=recList();
  if(!rl.length)h+='<div class="empty">'+t('Abgehakte Produkte erscheinen hier und lassen sich zurückholen.')+'</div>';
- rl.forEach(function(i){h+='<div class="card done"><span class="ic'+(photoOf(i)?' ph':'')+'" style="cursor:default">'+icHtml(i)+'</span><span class="nm">'+esc(i.name)+'</span><span class="q">'+esc(fmt(i))+'</span><button class="btn" data-a="back" data-id="'+i.id+'">'+t('Zurückholen')+'</button></div>'});
+ rl.forEach(function(i){h+='<div class="card done"><span class="ic'+(photoOf(i)?' ph':'')+'" style="cursor:default">'+icHtml(i)+'</span><span class="nm">'+esc(i.name)+'</span><span class="q">'+esc(fmt(i))+'</span><button class="btn sq" data-a="back" data-id="'+i.id+'" aria-label="'+t('Wieder auf die Liste holen')+'">↩</button></div>'});
  return h}
 
 /* ===== Favoriten und Verlauf ===== */
@@ -1125,7 +1125,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.micb','🎤 Sprache: Tippe darauf und sag zum Beispiel «Brot 1 Stück und Mehl 1 Kilo – stopp». Die App zeigt, was sie verstanden hat, du kannst es ändern und bestätigst.','<b>Wofür geeignet:</b> schnell mehrere Produkte auf einmal, auch mit Mengen.\n<b>Wenn es nicht klappt:</b> Mikrofon für Safari erlauben, deutlich sprechen, Produkte mit «und» oder einer Pause trennen. Die Menge darf vor oder nach dem Produkt stehen. «stopp» beendet das Zuhören sofort. In der Homescreen-App klappt es nicht immer, dann im Eingabefeld das 🎤 der iPhone-Tastatur nutzen.',{ro:1}),
  st('list','.camb','📷 öffnet den Ratgeber oder den Strichcode-Scanner.','<b>Ratgeber:</b> Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.\n<b>Strichcode:</b> zeigt Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts. Mit einem Tipp kommt das Produkt auf die Liste.',{ro:1}),
  st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.\nAus Versehen weggewischt? Unten erscheint 4 Sekunden lang «↩ Rückgängig», ein Tipp holt das Produkt zurück.',{act:'check'}),
- st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit «Zurückholen» kommen sie wieder auf die Liste.','Wie viele erscheinen und in welcher Reihenfolge, stellst du unter Einstellungen → «Favoriten und Letzte Produkte» ein.',{ro:1})]]);
+ st('list','row:Letzte Produkte','Abgehakte Produkte stehen hier. Mit ↩ kommen sie wieder auf die Liste.','Wie viele erscheinen und in welcher Reihenfolge, stellst du unter Einstellungen → «Favoriten und Letzte Produkte» ein.',{ro:1})]]);
 AREAS.push(['Menü und Ansicht',[
  st('list','.ttl','Oben steht der Titel. Bei laufendem Einkauf erscheint daneben der Stopp-Knopf.','Der Stopp-Knopf zeigt den Laden, in dem du gerade einkaufst. Ein Tipp beendet den Einkauf.',{ro:1}),
  st('list','#hamb','Mit ⋮ öffnest du das Menü. Alles, was die App kann, findest du dort.','In den Einstellungen unter «Darstellung» wählst du, ob das Menü minimal, normal oder gross ist.',{ro:1}),
