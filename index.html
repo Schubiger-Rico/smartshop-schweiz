@@ -174,7 +174,7 @@ function mkCats(){var o=[],n=0;STD.forEach(function(m,i){var id='m'+i;o.push({id
  m[2].forEach(function(s,j){o.push({id:id+'s'+j,name:s[1],parentId:id,icon:s[0],color:null,sortOrder:id==='m4'?VORD.indexOf(j):j,custom:false,hidden:!!s[2]})})});o.forEach(function(c){if(c.id==='m13')c.sortOrder=999});return o}
 var OSMT={baumarkt:{shop:'doityourself|hardware'},kleider:{shop:'clothes|shoes|boutique|fashion'},elektronik:{shop:'electronics|computer|mobile_phone'},apotheke:{shop:'chemist',amenity:'pharmacy'},papeterie:{shop:'stationery|books'},moebel:{shop:'furniture|houseware|interior_decoration|kitchen|bed'},garten:{shop:'garden_centre|florist|nurseries'}};
 function mkTypes(){return[['baumarkt','🛠️','Baumarkt'],['kleider','👕','Kleider und Schuhe'],['elektronik','🔌','Elektronik'],['apotheke','💊','Apotheke und Drogerie'],['papeterie','✏️','Papeterie und Bücher'],['moebel','🛋️','Möbel und Haushalt'],['garten','🪴','Garten und Pflanzen'],['sonst','🛍️','Sonstiges']].map(function(x){return{id:x[0],icon:x[1],name:x[2],on:true,custom:false,kw:''}})}
-function DEF(){return{v:1,types:mkTypes(),dismiss:[],items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},types:{},on:true},units:[],mine:[],cchains:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},set:setDef()}}
+function DEF(){return{v:1,types:mkTypes(),dismiss:[],items:[],recent:[],favs:[],hist:[],cats:mkCats(),learn:{names:{},alias:{},order:{},types:{},on:true},units:[],mine:[],cchains:[],chains:{},cache:[],ev:[],cev:null,deals:[],dealHist:[],wh:[],queue:[],answers:[],ob:{done:false,type:'Privat',name:'',ph:'name',offer:null,t:null},shop:null,share:{code:'',t:0,dev:''},lists:[{id:'L0',name:'Allgemein'}],curList:'L0',set:setDef()}}
 function fixUnit(u){return u==='Stk'?'Stk.':u==='l'?'lt':u||''}
 function migrate(o){var r={};
  function mi(i){return{id:i.id||uid(),name:i.name,qty:i.qty>=0?i.qty:0,unit:fixUnit(i.unit),fire:!!i.fire,cat:null,sub:null}}
@@ -398,10 +398,10 @@ function addItem(name,qty,unit,c,s,why,x){
  qty=num(qty,0);if(qty<0)qty=0;unit=fixU(unit);rememberUnit(unit);
  var ce=S.learn.on!==false&&ev(),rt=ce&&ce.rate&&ce.rate[name];
  if(qty>0){if(rt==='Zu wenig')qty=Math.round(qty*120)/100;else if(rt==='Zu viel')qty=Math.round(qty*80)/100}
- var d=S.items.filter(function(x){return norm(x.name)===norm(name)&&x.unit===unit})[0];
+ var d=S.items.filter(function(x){return norm(x.name)===norm(name)&&x.unit===unit&&listOf(x)===curL()})[0];
  if(d){d.qty=Math.round((d.qty+qty)*100)/100;say(t('Zusammengeführt: {0} ({1})',d.name,fmt(d)));return d}
  if(!c){var det=detect(name);if(det){c=det.cat;s=det.sub;why=det.why}}
- var it={id:uid(),name:name,qty:qty,unit:unit,fire:S.set.dm==='auto',cat:c||null,sub:s||null,why:why||''};if(x){if(x.stores&&x.stores.length)it.stores=x.stores.slice();if(x.type)it.type=x.type;if(x.text)it.stext=x.text}S.items.push(it);return it}
+ var it={id:uid(),name:name,qty:qty,unit:unit,fire:S.set.dm==='auto',cat:c||null,sub:s||null,why:why||''};if(curL()!=='L0')it.list=curL();if(x){if(x.stores&&x.stores.length)it.stores=x.stores.slice();if(x.type)it.type=x.type;if(x.text)it.stext=x.text}S.items.push(it);return it}
 function autoFav(i){var f=S.favs.filter(function(x){return norm(x.name)===norm(i.name)})[0];
  if(f){f.qty=i.qty;f.unit=i.unit;f.cat=i.cat;f.sub=i.sub;return}
  if(S.set.favAfter==='off')return;
@@ -419,7 +419,7 @@ function checkItem(id){var i=findItem(id);if(!i)return;
 
 /* ===== Smart-Sortierung und Einkauf ===== */
 function shopStart(name,chain){if(S.shop)return;S.shop={store:name,chain:chain||name,t:Date.now(),seq:[]}}
-function shopEnd(quiet){var s=S.shop;if(!s)return;S.shop=null;
+function shopEnd(quiet){var s=S.shop;if(!s)return;S.shop=null;if(listAutoOn){listAutoOn=false;S.curList='L0'}
  if(S.learn.on!==false&&s.seq.length>=2){
   [s.store,s.chain].forEach(function(k,j,a){if(!k||a.indexOf(k)<j)return;var o=S.learn.order[k]||{};
    s.seq.forEach(function(c,i){var r=i/(s.seq.length-1),e=o[c]||[0,0];o[c]=[e[0]+r,e[1]+1]});S.learn.order[k]=o});
@@ -487,6 +487,7 @@ function search(c,done,err){
 function visits(){var v={};S.hist.forEach(function(h){if(h.store)v[h.store]=(v[h.store]||0)+1});return v}
 function pairKey(a,b){return[a.name,b.name].sort().join('|')}
 function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;pick=null;
+ if(n&&S.set.listAuto!==false){var lf=listForStore(f);if(lf&&lf.id!==curL()){S.curList=lf.id;listAutoOn=true;say(t('Liste «{0}» geöffnet.',lname(lf)))}}
  if(n){if(S.set.vib&&navigator.vibrate)navigator.vibrate(120);if(S.set.openList)view='list';
   if(S.set.shopAuto&&!S.shop)shopStart(f.name,f.chain||f.name)}}
 function gpsDetect(manual){
@@ -701,7 +702,8 @@ var NEWS=[
  ['n10','📍','Eigene Läden: Standort jederzeit nachträglich speichern – dann erkennt sEBU den Laden selbst.',[['shops','#app h2','Unter «Läden» steht bei Läden ohne Standort «📍 Hier bin ich».']]],
  ['n11','💰','Preise notieren: beim Abhaken oder beim Bearbeiten, mit Laden und Datum.',[['settings','row:Beim Abhaken nach dem Preis fragen','Hier stellst du ein, wann du den Preis eingibst.',{'sub':'price'}]]],
  ['n12','↔️','Drehräder waagrecht: Menge und Einheit mit dem Daumen nach links oder rechts wischen – für rechte Hand, linke Hand oder beide Daumen.',[['settings','row:Drehräder für','Hier wählst du deine Hand.',{'sub':'favs'}]]],
- ['n13','📍','Neuer Laden hier: Über 📍 «Laden wählen» einen neuen Laden samt Standort speichern. Und klare Hilfe, falls Safari den Standort sperrt.',[['list','[data-a=storepick]','📍 antippen, dann «Neuer Laden hier».']]]];
+ ['n13','📍','Neuer Laden hier: Über 📍 «Laden wählen» einen neuen Laden samt Standort speichern. Und klare Hilfe, falls Safari den Standort sperrt.',[['list','[data-a=storepick]','📍 antippen, dann «Neuer Laden hier».']]],
+ ['n14','🧾','Mehrere Einkaufslisten: zum Beispiel «Aligro» neben «Allgemein». Mit Laden öffnet sie sich dort von selbst.',[['settings','#listnew','Hier legst du eine neue Liste an und wählst auf Wunsch den Laden.',{'sub':'lists'}]]]];
 function newsBanner(){var n=S.ob.done&&S.set.news!==false?newsNew().length:0;if(!n)return'';return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1">✨ <b>'+t('Neu in sEBU')+'</b> · '+t(n===1?'1 neue Funktion':'{0} neue Funktionen',n)+'</span><button class="btn pri" data-a="newsopen">'+t('Ansehen')+'</button><button class="btn sq dealxb" data-a="newsok" aria-label="'+t('Ausblenden')+'">✕</button></div>'}
 function newsNew(){var i=-1;for(var k=0;k<NEWS.length;k++)if(NEWS[k][0]===S.set.newsSeen)i=k;return NEWS.slice(i+1)}
 function newsSteps(n){return(n[3]||[]).map(function(x){return st(x[0],x[1],x[2],0,Object.assign({ro:1},x[3]||{}))})}
@@ -726,6 +728,21 @@ function addPrice(n,p,st){S.prices=S.prices||{};var k=norm(n),a=S.prices[k]||[];
 function lastPrice(x){var a=S.prices&&S.prices[norm(x.name)];return a&&a[0]}
 function fmtCHF(v){return(+v).toFixed(2)}
 function shPrice(){return'<h2>💰 '+t('Preis?')+'</h2><p class="small mute">'+t('Freiwillig: Was hat «{0}» gekostet?',esc(sh.name))+(sh.store?' ('+esc(sh.store)+')':'')+'</p><div class="seg"><input class="field" id="prc" inputmode="decimal" placeholder="CHF" style="flex:1 1 6em" autocomplete="off"><button class="btn pri" data-a="pricesave">'+t('Speichern')+'</button><button class="btn" data-a="shclose">'+t('Überspringen')+'</button></div>'}
+/* ===== Mehrere Einkaufslisten (Standard «Allgemein» = L0) ===== */
+var listAutoOn=false,listDelId=null;
+function listById(id){return(S.lists||[]).filter(function(l){return l.id===id})[0]}
+function listOf(i){return i&&i.list&&listById(i.list)?i.list:'L0'}
+function curL(){return listById(S.curList)?S.curList:'L0'}
+function lname(l){return l.id==='L0'&&l.name==='Allgemein'?t('Allgemein'):l.name}
+function listForStore(f){if(!f)return null;return(S.lists||[]).filter(function(l){return l.store&&(l.store===f.name||l.store===f.chain)})[0]||null}
+function listBar(){if(!S.lists||S.lists.length<2)return'';var c=curL(),h='<div class="seg lbar" id="lbar" style="margin-bottom:.5em;flex-wrap:wrap">';
+ S.lists.forEach(function(l){var n=S.items.filter(function(i){return listOf(i)===l.id}).length;h+='<button class="chip'+(l.id===c?' sel':'')+'" data-a="listset" data-v="'+l.id+'">🧾 '+esc(lname(l))+(n?' ('+n+')':'')+'</button>'});
+ return h+'</div>'}
+function storeOpts(){var o=[],seen={};function a(n){if(n&&!seen[n]){seen[n]=1;o.push(n)}}S.mine.forEach(function(m){a(m.name)});noLocStores().forEach(a);allCh().filter(chainOn).forEach(a);return o}
+function listsBlock(){var h='<p class="small mute">'+t('Statt jedes Produkt einem Laden zuzuordnen, legst du eine eigene Liste an, zum Beispiel «Aligro». Oben über der Liste wechselst du zwischen den Listen. Mit einem Laden öffnet sich die Liste von selbst, wenn du dort bist.')+'</p>',so=storeOpts();
+ S.lists.forEach(function(l,ix){h+='<div class="card" style="flex-wrap:wrap;gap:.4em"><input class="field" data-chg="lname" data-id="'+l.id+'" value="'+esc(lname(l))+'" style="flex:1 1 8em"><select class="field" data-chg="lstore" data-id="'+l.id+'" style="flex:1 1 8em;height:calc(var(--rh)*.8)"><option value="">'+t('Kein Laden')+'</option>'+so.map(function(n){return'<option value="'+esc(n)+'"'+(l.store===n?' selected':'')+'>📍 '+esc(n)+'</option>'}).join('')+'</select>'+(l.id==='L0'?'':'<button class="btn sq" data-a="listdel" data-id="'+l.id+'" aria-label="'+t('Liste löschen')+'">✕</button>')+'</div>'});
+ h+='<h3 id="listnew">＋ '+t('Neue Liste')+'</h3><div class="seg"><input class="field" id="lnn" placeholder="'+t('Name, z. B. Aligro')+'" style="flex:1"><button class="btn pri" data-a="listadd">＋ '+t('Liste')+'</button></div>';
+ return h+rowC(t('Liste automatisch öffnen, wenn ich im Laden bin'),'listAuto',S.set.listAuto!==false)}
 function selH(k,opts){return'<select class="field" data-chg="'+k+'" style="height:calc(var(--rh)*.8)">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(S.set[k])===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>'}
 function inTab(i){return ltab==='more'?!!i.type:!i.type}
 function hasShop(i){return !!((i.stores&&i.stores.length)||i.stext)}
@@ -743,8 +760,8 @@ function addRow(real){var has=draft.type||draft.stores.length||draft.stext,id=fu
 function vList(){
  var h=newsBanner()+banner()+locBanner()+remBanner()+typBanner()+openBanner()+alarm()+shopBar()+askBar(),nMore=S.items.filter(function(i){return i.type}).length,has=draft.type||draft.stores.length||draft.stext;
  if(nMore||ltab==='more')h+='<div class="seg" style="margin-bottom:.5em"><button class="btn'+(ltab==='food'?' sel':'')+'" data-a="ltab" data-v="food">'+t('Lebensmittel')+'</button><button class="btn'+(ltab==='more'?' sel':'')+'" data-a="ltab" data-v="more">'+t('Weitere')+' ('+nMore+')</button></div>';
- h+=addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
- var mineI=sortedItems().filter(function(i){return inTab(i)||(i.urg&&ltab==='food')});
+ h+=listBar()+addRow(1)+'<div id="sug" class="sug">'+sugHtml()+'</div>';
+ var cl=curL(),mineI=sortedItems().filter(function(i){return(listOf(i)===cl&&inTab(i))||(i.urg&&ltab==='food')});
  if(!mineI.length)h+='<div class="empty">'+(ltab==='more'?t('Hier stehen Dinge, die nicht in den Supermarkt gehören, zum Beispiel aus dem Baumarkt. Wähle bei der Eingabe mit 🏪 einen Ladentyp.'):t('Deine Einkaufsliste ist leer. Schreib oben das erste Produkt hinein.'))+'</div>';
  else if((S.set.swipeN||0)<3)h+='<p class="mute small" style="margin:0 0 .4em">'+t('Zum Löschen ein Produkt nach links wischen.')+'</p>';
  function row(i){return card(i)+(dealOpen===i.id?dealPanel(i):'')}
@@ -994,7 +1011,7 @@ function applyLook(){var r=document.documentElement,s=S.set;r.classList.toggle('
  if(s.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',s.theme);var m=$('meta[name=theme-color]');if(m)m.content=s.accent;r.lang=s.lang}
 
 /* ===== Einstellungen ===== */
-var SUBS=[['profil','👤','Profil'],['liste','🧾','Einkaufsliste'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
+var SUBS=[['profil','👤','Profil'],['liste','🧾','Einkaufsliste'],['lists','📋','Einkaufslisten'],['look','🎨','Darstellung'],['lang','🌐','Sprache'],['cats','🗂️','Kategorien und Reihenfolge'],['favs','⭐','Favoriten und Letzte Produkte'],['gps','📍','Filialerkennung'],['stores','🏪','Filialen'],['learn','🧠','Smart-Lernen'],['share','🔗','Liste teilen'],['types','🏪','Ladentypen'],['price','💰','Preise und Alarme'],['ai','🤖','KI'],['plan','🎟️','Abo'],['tour','🧭','Einführung'],['data','🗑️','Daten und Datenschutz']];
 function swatch(c){return'<i data-a="acc" data-v="'+c+'" style="background:'+c+'" role="button" aria-label="'+c+'"></i>'}
 function rowS(l,ctl){return'<div class="row"><span>'+l+'</span>'+ctl+'</div>'}
 function sw(k,v){return'<input type="checkbox" data-chk="'+k+'"'+(v?' checked':'')+' style="width:1.4em;height:1.4em">'}
@@ -1004,6 +1021,7 @@ function vSettings(){
  switch(sub){
  case'profil':h+=rowS(t('Name'),'<input class="field" data-chg="pname" value="'+esc(S.ob.name)+'" placeholder="'+t('freiwillig')+'">')+rowS(t('Nutzung'),'<select class="field" data-chg="ptype">'+['Privat','Familie','Verein','Geschäft'].map(function(o){return'<option'+(S.ob.type===o?' selected':'')+' value="'+o+'">'+t(o)+'</option>'}).join('')+'</select>');
   h+='<p class="small mute">'+t('Der Name dient nur für persönliche Texte in der App.')+'</p>';break;
+ case'lists':h+=listsBlock();break;
  case'liste':h+='<p class="small mute">'+t('Wie viel möchtest du in der Liste sehen? Die Vorschau unten ändert sich sofort.')+'</p>'+viewBlock()+remSetBlock()+remBlock();break;
  case'look':h+=rowS(t('Textgrösse'),fsCtl())
   +rowS(t('Design'),'<select class="field" data-chg="theme">'+[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(function(o){return'<option value="'+o[0]+'"'+(S.set.theme===o[0]?' selected':'')+'>'+t(o[1])+'</option>'}).join('')+'</select>')
@@ -1076,6 +1094,7 @@ AREAS.push(['Eingabeseite',[
  st('list','#catb','Links zeigt das Symbol das Produkt oder die Kategorie. Die App erkennt es beim Schreiben selbst, auch in zusammengesetzten Wörtern: «Paprikapulver» bekommt 🫑. Antippen wählt die Kategorie von Hand.','Gedrückt halten auf dem Symbol eines Produkts zeigt, wohin es gehört, zum Beispiel «Vorräte › Öl & Essig».\nKategorie-Auswahl: oben suchen (zum Beispiel «Asia») oder bei einer Hauptkategorie ▸ antippen, dann erscheinen die Unterkategorien.\nEigenes Symbol: Symbol antippen, dann «Eigenes Symbol für das Produkt». Die App merkt es sich.\nWenn das Symbol nicht passt: dort «Wieder automatisch» oder ein anderes wählen.\nEigene Kategorien legst du in den Einstellungen an.',{ro:1}),
  st('list','.add .qu','Menge und Einheit: Die Menge hat drei Ziffern und beginnt bei 0. Eigene Einheiten kannst du einfach hineinschreiben.','Tippe darauf: Zwei grosse Räder erscheinen, eines für die Menge, eines für die Einheit. Sie laufen waagrecht – nach links oder rechts wischen. Jeder Schritt rastet ein und macht «klick».\nFür welche Hand die Räder liegen, stellst du unter «Favoriten und Letzte Produkte» ein.\nDer Klick lässt sich unter Einstellungen → «Favoriten und Letzte Produkte» ausschalten.',{ro:1}),
  st('list','[data-a=shopsel][data-id=draft]','🏪: Wähle, wo du das Produkt kaufst, oder einen Ladentyp wie Baumarkt.','Produkte mit festem Laden erscheinen in der Liste erst, wenn du dort bist. Du findest sie immer unter «Läden».',{ro:1}),
+ st('list','#lbar','🧾 Einkaufslisten: Hier wechselst du zwischen deinen Listen, zum Beispiel «Allgemein» und «Aligro». Was du eingibst, kommt in die gewählte Liste.','Dringende Produkte ❗ siehst du in jeder Liste.\nListen legst du unter Einstellungen → Einkaufslisten an. Mit einem Laden öffnet sich die Liste von selbst, wenn du dort bist.\n<b>Wenn ein Produkt fehlt:</b> Es steht wohl in einer anderen Liste – die Zahl in Klammern zeigt, wie viele dort sind.',{ro:1}),
  st('list','.phb','📸 Produktfoto: Fotografiere das Produkt beim Aufschreiben, dann kaufst du sicher das richtige.','Das Foto ersetzt in der Liste das Symbol, das Produkt bleibt in seiner Kategorie. Antippen zeigt das Foto gross, dort kannst du es ersetzen oder entfernen.\nDas Foto bleibt beim Produkt, auch bei den Favoriten und den letzten Produkten.\n<b>Wenn es nicht klappt:</b> Kamera für Safari erlauben. Fotos brauchen Speicher – bei «Speicher voll» alte Fotos entfernen.',{ro:1}),
  st('list','[data-a=urgtog][data-id=draft]','❗ Notfall: Tippe vor dem ＋ darauf, wenn etwas dringend ist. Dringendes steht immer zuoberst, rot umrandet und grösser.','Dringend erscheint in jedem Laden, auch wenn du es einem bestimmten Laden zugeordnet hast. Beim Einkaufsende erinnert die App, wenn noch Dringendes offen ist.\nNachträglich: Produktname antippen und ❗ wählen. Ein Tipp auf das rote ❗ in der Liste nimmt die Dringlichkeit wieder weg.',{ro:1}),
  st('list','.add','Jetzt probierst du es: Schreibe «Milch» und tippe auf ＋.','Die App lernt mit: Kategorie, Menge und Laden merkt sie sich für das nächste Mal.',{act:'add'}),
@@ -1145,6 +1164,10 @@ SA('Einkaufsliste',[
  ss('liste','row:🔎 Strichcode scannen','🔎 Strichcode scannen: Produktinfos wie Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts.','<b>Wofür geeignet:</b> Produkte schnell erfassen und vergleichen.\n<b>So geht es:</b> 📷 antippen, «Strichcode scannen», Strichcode vor die Kamera halten.\n<b>Wenn es nicht klappt:</b> Mehr Licht, Strichcode ruhig und gerade halten, etwa 10 bis 15 cm Abstand. Oder «Foto aufnehmen» oder die Nummer unter dem Strichcode von Hand eingeben.\nKamera muss für Safari erlaubt sein. Nicht jedes Schweizer Produkt ist erfasst, dann kommt «Nicht gefunden».'),
  ss('liste','#remoth','🏪 Erinnerung an andere Läden: Wann soll sEBU dich an Produkte erinnern, die du einem anderen Laden zugeordnet hast? Mehrere möglich.','<b>Bei jedem Öffnen:</b> oben ein Hinweis, mit ✕ bis zum nächsten Öffnen weg.\n<b>Vor dem Einkaufen:</b> beim Tipp auf 🛒.\n<b>Nach dem Einkaufen:</b> «Noch offen» beim Einkaufsende.\n<b>Dauernd:</b> bleibt stehen, bis du das Produkt abhakst.\n<b>Beim Zuordnen fragen:</b> Wählst du für ein Produkt einen Laden, fragt sEBU, wann es erinnern soll.\n<b>Wenn es nervt:</b> Häkchen hier entfernen.'),
  ss('liste','#remh','🔔 Erinnerung: über das Teilen-Menü oder direkt über einen iPhone-Kurzbefehl.','<b>Teilen-Menü:</b> geht sofort, du wählst dort «Erinnerungen».\n<b>Kurzbefehl:</b> einmal einrichten (Anleitung darunter), danach ohne Suchen.\n<b>Wenn es nicht klappt:</b> Prüfe, ob der Name des Kurzbefehls genau gleich ist, oder schalte die Option aus.')]);
+SA('Einkaufslisten',[
+ ss('lists','#app .card','📋 Jede Liste hat einen Namen und auf Wunsch einen Laden. «Allgemein» ist die Standardliste.','<b>Wofür geeignet:</b> Läden, in denen du anders einkaufst, zum Beispiel Aligro, Landi oder der Wochenmarkt.\n<b>Mit Laden:</b> Bist du dort, öffnet sich die Liste von selbst; nach dem Einkauf kehrt sEBU zu «Allgemein» zurück.\n<b>Ohne Laden:</b> Du holst die Liste oben über der Einkaufsliste von Hand hervor.\n<b>Löschen:</b> ✕ – die Produkte kommen in «Allgemein».\n<b>Wenn sich die Liste nicht öffnet:</b> Prüfe, ob der Laden erkannt wird (📍) oder ob der Schalter unten eingeschaltet ist.'),
+ ss('lists','#lnn','Hier legst du eine neue Liste an: Name eintippen, «＋ Liste».'),
+ ss('lists','row:Liste automatisch öffnen','Liste automatisch öffnen: Bist du im Laden einer Liste, wechselt sEBU zu dieser Liste.','<b>Wenn du lieber selbst wählst:</b> ausschalten. Die Listen bleiben oben wählbar.')]);
 SA('Darstellung',[
  ss('look','.fsctl','Textgrösse: Tippe auf − oder +. Die Zahl zeigt die Grösse, die Anzeige ändert sich sofort.','<b>Wofür geeignet:</b> 16 bis 18 px für viel auf einen Blick, 22 px und mehr für gute Lesbarkeit.\n<b>Wenn Knöpfe zu eng werden:</b> Schrift etwas kleiner machen oder «Zeilenhöhe: Normal» wählen.'),
  ss('look','row:Design','Hell, Dunkel oder Automatisch nach deinem Gerät.'),
@@ -1206,8 +1229,8 @@ var tour=null;
 var OOPS=['Hoppla, hier noch nicht. Tippe auf das leuchtende Feld.','Netter Versuch! Das leuchtende Feld ist gemeint.','Die App schmunzelt: Ein Feld weiter, bitte.','Fast! Aber nur fast.','Das war ein Fehlklick. Passiert den Besten.','Die Einkaufsliste hält dir die Daumen: Leuchtendes Feld!','Kalt, kalt. Das Leuchten ist woanders.','Der Finger war schneller als das Auge.','Hier gibt es nichts zu sehen. Dort leuchtet es!','Gut gezielt, leider falsch.','Die Milch lacht schon.','Tipp-Tipp, aber ins Leere.'];
 var OOPS2=['Wieder daneben! Das Leuchtende, mein Freund, das Leuchtende.','Soll ich dir eine Taschenlampe leihen?','Dein Finger hat einen eigenen Kopf, oder?','Das Feld leuchtet doch extra für dich. Sei nett zu ihm.','Noch einmal daneben, und die Tomate wird beleidigt.','Du tippst wie ein Profi, nur leider ins Nichts.','Die Brotscheibe schüttelt den Kopf.','Ich glaube, du machst das mit Absicht.','Die App seufzt leise. Leuchtendes Feld, bitte!','Treffer verfehlt. Versenkt wurde: nichts.','Hier ist kein Schatz vergraben. Nur das Leuchten.','Das war jetzt wirklich frech von deinem Finger.'];
 var ENDS=['Einkaufs-Profi','Listen-Legende','Meister der Regale','Rabatt-Jäger*in'],oopsN=0,lastOops=-1;
-var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#noloc':'','.phb':'photo','.micb':'voice','#remh':'remind','[data-ccol]':'catcol','[data-a=urgtog][data-id=draft]':'urg'};
-function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||(n==='cam'?on('cam')||on('scan'):on(n))})}
+var NEED={'#catb':'cat','.card[data-swk=i] .ic':'cat','.card [data-fire]':'fire','.card [data-a=fav]':'fav','#shopbtn':'bar','[data-a=gpsrefresh]':'bar','.camb':'cam','row:Letzte Produkte':'recent','[data-a=shopsel][data-id=draft]':'shop','.menu [data-v=favs]':'fav','.navb':'nav','#noloc':'','#lbar':'lists','.phb':'photo','.micb':'voice','#remh':'remind','[data-ccol]':'catcol','[data-a=urgtog][data-id=draft]':'urg'};
+function tourSteps(w){return tourSteps0(w).filter(function(s){var n=s.v==='favs'?'fav':NEED[s.sel];return !n||(n==='lists'?S.lists&&S.lists.length>1:n==='cam'?on('cam')||on('scan'):on(n))})}
 function tourSteps0(w){var A=AREAS;if(w&&typeof w==='object')return w.steps||[];
  if(w==='all')return[].concat.apply([],A.map(function(a){return a[1]}));
  if(w==='app')return[].concat.apply([],A.filter(function(a){return !a[2]}).map(function(a){return a[1]}));
@@ -1370,6 +1393,10 @@ function act(a,el){var D=el.dataset,i,it;
  case'pricesave':{var pv=parseFloat(String(fval('prc')).replace(',','.'));if(sh&&sh.name&&pv>0)addPrice(sh.name,pv,sh.store);sh=null;break}
  case'geogo':S.set.geoAsked=true;sh=null;R();if(geoPending){var gp=geoPending;geoPending=null;gp()}return;
  case'storenew':{var sn=fval('nsn').trim();if(!sn){say(t('Bitte einen Namen eingeben.'));return}needGeo(function(){locate(function(c){S.mine.push({name:sn,lat:c.latitude,lon:c.longitude,r:25});sh=null;setCur({name:sn,chain:t('Eigener Laden'),d:0});save();R();say(t('«{0}» gespeichert. Ab jetzt erkennt sEBU den Laden.',sn))},geoFail)});return}
+ case'listset':S.curList=D.v;listAutoOn=false;break;
+ case'listadd':{var ln=fval('lnn').trim();if(!ln){say(t('Bitte einen Namen eingeben.'));return}S.lists.push({id:'L'+uid(),name:ln});say(t('Liste «{0}» erstellt.',ln));break}
+ case'listdel':{var ld0=listById(D.id);if(!ld0)break;sh={t:'confirm',title:t('«{0}» löschen',ld0.name),text:t('Die Produkte dieser Liste kommen in «Allgemein».'),ok:'listdelgo',btn:t('Löschen')};listDelId=D.id;break}
+ case'listdelgo':{S.items.forEach(function(i){if(i.list===listDelId)delete i.list});S.lists=S.lists.filter(function(l){return l.id!==listDelId});if(S.curList===listDelId)S.curList='L0';sh=null;break}
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
@@ -1518,6 +1545,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  if(D.chk){var kk=D.chk;if(kk==='learnon')S.learn.on=t0.checked;else S.set[kk]=t0.checked;save();if(kk==='cloudBak'&&t0.checked){if(!S.set.bakCode)S.set.bakCode=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save();cloudBak(true)}if(kk==='remSc'||kk==='autoBak'||kk==='cloudBak'||kk==='btnText')R();return}
  if(!k||k==='fs'||k==='accent')return;
  var v2=t0.value;
+ if(k==='lname'||k==='lstore'){var lx=listById(D.id);if(lx){if(k==='lname'){if(v2.trim())lx.name=v2.trim()}else{if(v2)lx.store=v2;else delete lx.store}save();R()}return}
  if(k==='miner'||k==='minehint'){var m2=S.mine[+D.i];if(m2){if(k==='miner')m2.r=+v2;else m2.hint=v2.trim();save()}return}
  if(k==='pname')S.ob.name=v2.trim();else if(k==='ptype')S.ob.type=v2;
  else if(k==='radius')S.set.radius=v2==='auto'?'auto':+v2;else if(k==='persons')S.set.persons=Math.max(1,+v2||4);
@@ -1534,7 +1562,7 @@ var sw0=null,dragId=null,upS=null;
 document.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.wheels')&&S.set.tick!==false&&!actx){try{var AC=window.AudioContext||window.webkitAudioContext;if(AC){actx=new AC();var b=actx.createBuffer(1,1,22050),sr=actx.createBufferSource();sr.buffer=b;sr.connect(actx.destination);sr.start(0)}}catch(x){}}},true);
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
-var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',storenew:'Neuen Laden mit deinem aktuellen Standort speichern.',geogo:'Weiter zur Standort-Frage von Safari.',todayno:'Für heute ausblenden.',remnextok:'Erinnerung schliessen.',remnextoff:'Nicht mehr an diese Produkte erinnern.',locsave:'Standort dieses Ladens speichern – stehe dafür im Laden.',locno:'Für diesen Laden nicht mehr fragen.',pricesave:'Preis speichern.',photoview:'Foto gross ansehen, ersetzen oder entfernen.',photodel:'Foto entfernen.',newsopen:'Die neuen Funktionen ansehen.',newsok:'Neuheiten-Hinweis ausblenden. Unter Einstellungen → Einführung jederzeit nachlesbar.',remx:'✕ Erinnerung an andere Läden ausblenden – bis zum nächsten Öffnen.',newsshow:'Kurze Führung zu dieser Neuheit.',newsall:'Alle Neuheiten nochmals ansehen.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung: in sEBU nach dem nächsten Einkauf oder als iPhone-Erinnerung (einstellbar).'},hpT=null,hp0=null,helpShown=0;
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',listset:'🧾 Zu dieser Einkaufsliste wechseln. Neues kommt in die gewählte Liste.',listadd:'Neue Einkaufsliste anlegen.',listdel:'Liste löschen – die Produkte kommen in «Allgemein».',storenew:'Neuen Laden mit deinem aktuellen Standort speichern.',geogo:'Weiter zur Standort-Frage von Safari.',todayno:'Für heute ausblenden.',remnextok:'Erinnerung schliessen.',remnextoff:'Nicht mehr an diese Produkte erinnern.',locsave:'Standort dieses Ladens speichern – stehe dafür im Laden.',locno:'Für diesen Laden nicht mehr fragen.',pricesave:'Preis speichern.',photoview:'Foto gross ansehen, ersetzen oder entfernen.',photodel:'Foto entfernen.',newsopen:'Die neuen Funktionen ansehen.',newsok:'Neuheiten-Hinweis ausblenden. Unter Einstellungen → Einführung jederzeit nachlesbar.',remx:'✕ Erinnerung an andere Läden ausblenden – bis zum nächsten Öffnen.',newsshow:'Kurze Führung zu dieser Neuheit.',newsall:'Alle Neuheiten nochmals ansehen.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung: in sEBU nach dem nächsten Einkauf oder als iPhone-Erinnerung (einstellbar).'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
  hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
