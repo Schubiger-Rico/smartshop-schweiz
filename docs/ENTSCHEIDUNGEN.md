@@ -771,3 +771,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Eingetippte Läden ohne Standort: «📍 Hier bin ich – Standort speichern» unter Läden und Einstellungen → Filialen; Frage beim Öffnen (abschaltbar, pro Laden «Nicht fragen»).
 - Preise: Frage beim Abhaken (Standard aus) und Preisfeld beim Bearbeiten (Standard an), wählbar unter Preise und Alarme; Zeile zeigt «💰 Preis (Laden)»; Schalter «Preise notieren» in Einkaufsliste.
 - Alles in Führung und «Neu in sEBU» (n09–n11).
+
+### Notiz vom 25.11.2026: Drehräder waagrecht, Händigkeit wählbar (nur festgehalten, noch nicht gebaut)
+
+- Drehräder für Menge und Einheit **waagrecht** (nach links/rechts wischen) statt senkrecht – mit dem rechten Daumen einfacher.
+- Wählbar machen: **Links**, **Rechts** oder **«zwei an Tipper»** (Bedeutung noch zu klären, vermutlich: mit beiden Daumen bedienen). Vermutete Wirkung: Bedienelemente auf die Daumen-Seite legen.
