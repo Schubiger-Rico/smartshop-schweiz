@@ -781,3 +781,5 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Notiz 25.11.: Beim 📍 «Laden wählen» zusätzlich «＋ Neuer Laden hier»: Name eintippen, Standort wird sofort gespeichert (eigener Laden) und dieser Laden gewählt. Ebenso bei eingetippten Läden ohne Standort direkt dort «📍 Hier bin ich». Noch nicht gebaut.
 - **Umgesetzt am 25.11.:** 📍 «Laden wählen» hat «＋ Neuer Laden hier» (Name eintippen → Standort gespeichert, Laden sofort gewählt). Standort: keine automatische Frage mehr beim Öffnen, solange Safari ihn nicht erlaubt hat; vor der ersten Safari-Frage kurze Erklärung («bitte Erlauben»); ist er gesperrt, zeigt sEBU eine Anleitung mit den iPhone-Einstellungen. In Führung und «Neu in sEBU» (n13).
 - 25.11.: Standort-Hilfe um den Schritt «Einstellungen → Apps → Safari → Standort → Fragen/Erlauben» ergänzt (war bei Rico die entscheidende Sperre).
+
+- 25.11.2026: Drehräder bei «Rechte Hand» ganz an den rechten Rand (Breite 62 %, Beschriftung rechtsbündig), damit der rechte Daumen von rechts nach links wischt; «Linke Hand» gespiegelt.
