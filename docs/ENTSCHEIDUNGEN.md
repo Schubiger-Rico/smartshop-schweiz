@@ -792,3 +792,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Notiz 25.11.: Schnellstart-Knopf steht in der Kopfzeile vor dem Einkaufswagen 🛒. Anzahl (1 oder mehrere) noch offen.
 - **Umgesetzt am 25.11.:** Schnellstart-Knopf (ein Knopf) vor dem Einkaufswagen 🛒; Bereich wählbar unter Einstellungen → Einkaufsliste → «Schnellstart-Knopf» (Standard Aus). In Führung, Hilfe und «Neu in sEBU» (n15). Begrüssung (kurz, gross, Tageszeit) noch offen.
 - Notiz 25.11.: Begrüssung darf witzig sein (sEBU soll Spass machen), passend zur Tageszeit. Dauer noch offen (Vorschlag 3 s).
+- Notiz 25.11.: Begrüssung 3 s beim Öffnen (bestätigt). Witzige Sprüche je Tageszeit, innerhalb eines Monats keine Wiederholung.
