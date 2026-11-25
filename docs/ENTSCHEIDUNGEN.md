@@ -778,3 +778,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Wählbar machen: **Links**, **Rechts** oder **«zwei an Tipper»** (Bedeutung noch zu klären, vermutlich: mit beiden Daumen bedienen). Vermutete Wirkung: Bedienelemente auf die Daumen-Seite legen.
 - **Umgesetzt am 25.11.:** Drehräder waagrecht (nach links/rechts wischen), Einstellung «Drehräder für»: Rechte Hand (Standard) / Linke Hand / Beide Daumen (unter Favoriten und Letzte Produkte). Klick pro Schritt bleibt. In Führung und «Neu in sEBU» (n12).
 - Umgesetzt 25.11.: Begrüssung beginnt fett mit «Wer das volle Potenzial von sEBU ausschöpfen möchte, geht am besten die Führung durch.»
+- Notiz 25.11.: Beim 📍 «Laden wählen» zusätzlich «＋ Neuer Laden hier»: Name eintippen, Standort wird sofort gespeichert (eigener Laden) und dieser Laden gewählt. Ebenso bei eingetippten Läden ohne Standort direkt dort «📍 Hier bin ich». Noch nicht gebaut.
