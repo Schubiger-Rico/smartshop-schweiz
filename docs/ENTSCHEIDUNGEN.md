@@ -794,3 +794,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Notiz 25.11.: Begrüssung darf witzig sein (sEBU soll Spass machen), passend zur Tageszeit. Dauer noch offen (Vorschlag 3 s).
 - Notiz 25.11.: Begrüssung 3 s beim Öffnen (bestätigt). Witzige Sprüche je Tageszeit, innerhalb eines Monats keine Wiederholung.
 - **Umgesetzt am 25.11.:** Begrüssung beim Öffnen 3 s gross, je Tageszeit 31 witzige Sprüche (pro Tag einer, kein Spruch doppelt im Monat), Antippen schliesst. Darstellung → «Begrüssung»: Witzig / Kurz / Aus. Das dauerhafte «Hallo Rico» ist weg, die Kopf-Knöpfe haben dort Platz. In Führung und «Neu in sEBU» (n16).
+- 25.11.: «Einkaufslisten» in den Einstellungen ganz nach oben verschoben (vor Profil), auch in der Einstellungen-Führung.
