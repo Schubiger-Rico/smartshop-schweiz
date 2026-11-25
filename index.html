@@ -464,7 +464,15 @@ function dist(a,b,c,d){var r=Math.PI/180,x=(c-a)*r,y=(d-b)*r*Math.cos((a+c)/2*r)
 function nk(x){return String(x||'').toLowerCase().replace(/[^a-z0-9äöüéèàç]/g,'')}
 function chainOfTags(g){var f=[nk(g.brand),nk(g.name),nk(g.operator)];var CH=allCh(),best=null,bl=0;for(var i=0;i<CH.length;i++){var k=nk(CH[i]);if(k&&k.length>bl&&f.some(function(x){return x.indexOf(k)>-1})){best=CH[i];bl=k.length}}return best}
 function locate(ok,err){if(!navigator.geolocation){err(t('GPS nicht verfügbar'));return}
- navigator.geolocation.getCurrentPosition(function(p){ok(p.coords)},function(){err(t('Kein Zugriff auf den Standort'))},{timeout:10000,enableHighAccuracy:true})}
+ navigator.geolocation.getCurrentPosition(function(p){geoDenied=false;ok(p.coords)},function(e){if(e&&e.code===1)geoDenied=true;err(t('Kein Zugriff auf den Standort'))},{timeout:10000,enableHighAccuracy:true})}
+/* Standort: nur fragen, wenn nötig; vorher kurz erklären; bei Ablehnung klare Hilfe */
+var geoDenied=false,geoPending=null;
+function geoState(cb){try{if(navigator.permissions&&navigator.permissions.query){navigator.permissions.query({name:'geolocation'}).then(function(r){cb(r.state)},function(){cb('unknown')});return}}catch(e){}cb('unknown')}
+function needGeo(fn){geoState(function(st){if(st==='granted'){fn();return}if(st==='denied'||geoDenied){sh={t:'lochelp'};R();return}
+ if(!S.set.geoAsked){geoPending=fn;sh={t:'geointro'};R();return}fn()})}
+function geoFail(m){if(geoDenied){sh={t:'lochelp'};R()}else say(m)}
+function shGeoIntro(){return'<h2>📍 '+t('Standort erlauben?')+'</h2><p>'+t('sEBU braucht deinen Standort, um Läden zu erkennen und zu speichern. Er wird nur auf deinem Handy verwendet und nirgends gespeichert.')+'</p><p class="small mute">'+t('Gleich fragt Safari – bitte «Erlauben» wählen. Lehnst du ab, merkt sich Safari das, und sEBU kann den Laden später nicht finden.')+'</p><div class="seg"><button class="btn pri" data-a="geogo">'+t('Weiter')+'</button><button class="btn" data-a="shclose">'+t('Jetzt nicht')+'</button></div>'}
+function shLocHelp(){return'<h2>📍 '+t('Kein Zugriff auf den Standort')+'</h2><p>'+t('Safari hat den Standort für sEBU gesperrt (vielleicht wurde einmal «Ablehnen» gewählt). So schaltest du ihn wieder ein:')+'</p><ol style="padding-left:1.3em"><li>'+t('iPhone-Einstellungen → Datenschutz & Sicherheit → Ortungsdienste: oben einschalten.')+'</li><li>'+t('In der Liste «Safari-Websites» → «Beim Verwenden der App» oder «Fragen».')+'</li><li>'+t('In Safari bei geöffnetem sEBU: links in der Adresszeile «aA» → Website-Einstellungen → Standort → «Erlauben».')+'</li><li>'+t('sEBU ganz schliessen und neu öffnen.')+'</li></ol><div class="seg"><button class="btn pri" data-a="shclose">'+t('Verstanden')+'</button></div>'}
 function search(c,done,err){
  function fromCache(){var o=S.cache.map(function(s){return{chain:s.chain,name:s.name,lat:s.lat,lon:s.lon,sz:s.sz||0,d:dist(c.latitude,c.longitude,s.lat,s.lon)}}).filter(function(s){return s.d<=1000}).sort(function(a,b){return a.d-b.d});
   if(o.length)done(o,true);else err(t('Filialdaten nicht erreichbar'))}
@@ -483,6 +491,7 @@ function setCur(f){var n=!cur||cur.name!==f.name;cur=f;pend=null;pick=null;
   if(S.set.shopAuto&&!S.shop)shopStart(f.name,f.chain||f.name)}}
 function gpsDetect(manual){
  if(S.set.gps==='off'&&!manual)return;
+ if(!manual&&!gpsDetect.ok){geoState(function(st){if(st==='granted'||(st==='unknown'&&S.set.geoAsked)){gpsDetect.ok=1;gpsDetect(false);gpsDetect.ok=0}});return}
  if(S.shop&&!manual)return;
  stMsg=t('Suche …');if(manual)R();
  locate(function(c){
@@ -691,7 +700,8 @@ var NEWS=[
  ['n09','🔔','Nach dem Einkaufen erinnern: sEBU erinnert dich beim Beenden des nächsten Einkaufs an offene Produkte. Dazu «Heute nicht» beim Hinweis «Heute noch».',[['settings','#remh','Hier wählst du die Art der Erinnerung.',{'sub':'liste'}]]],
  ['n10','📍','Eigene Läden: Standort jederzeit nachträglich speichern – dann erkennt sEBU den Laden selbst.',[['shops','#app h2','Unter «Läden» steht bei Läden ohne Standort «📍 Hier bin ich».']]],
  ['n11','💰','Preise notieren: beim Abhaken oder beim Bearbeiten, mit Laden und Datum.',[['settings','row:Beim Abhaken nach dem Preis fragen','Hier stellst du ein, wann du den Preis eingibst.',{'sub':'price'}]]],
- ['n12','↔️','Drehräder waagrecht: Menge und Einheit mit dem Daumen nach links oder rechts wischen – für rechte Hand, linke Hand oder beide Daumen.',[['settings','row:Drehräder für','Hier wählst du deine Hand.',{'sub':'favs'}]]]];
+ ['n12','↔️','Drehräder waagrecht: Menge und Einheit mit dem Daumen nach links oder rechts wischen – für rechte Hand, linke Hand oder beide Daumen.',[['settings','row:Drehräder für','Hier wählst du deine Hand.',{'sub':'favs'}]]],
+ ['n13','📍','Neuer Laden hier: Über 📍 «Laden wählen» einen neuen Laden samt Standort speichern. Und klare Hilfe, falls Safari den Standort sperrt.',[['list','[data-a=storepick]','📍 antippen, dann «Neuer Laden hier».']]]];
 function newsBanner(){var n=S.ob.done&&S.set.news!==false?newsNew().length:0;if(!n)return'';return'<div class="ban" style="flex-wrap:nowrap;align-items:center"><span style="flex:1">✨ <b>'+t('Neu in sEBU')+'</b> · '+t(n===1?'1 neue Funktion':'{0} neue Funktionen',n)+'</span><button class="btn pri" data-a="newsopen">'+t('Ansehen')+'</button><button class="btn sq dealxb" data-a="newsok" aria-label="'+t('Ausblenden')+'">✕</button></div>'}
 function newsNew(){var i=-1;for(var k=0;k<NEWS.length;k++)if(NEWS[k][0]===S.set.newsSeen)i=k;return NEWS.slice(i+1)}
 function newsSteps(n){return(n[3]||[]).map(function(x){return st(x[0],x[1],x[2],0,Object.assign({ro:1},x[3]||{}))})}
@@ -772,7 +782,7 @@ function shStore(){var h='<h2>'+t('Laden wählen')+'</h2><div class="seg">';
  var seen={};S.mine.filter(function(m){return m.off!==true}).forEach(function(m){seen[m.name]=1;h+='<button class="btn" data-a="storeset" data-n="'+esc(m.name)+'" data-c="'+esc(m.name)+'">'+esc(m.name)+'</button>'});
  near.slice(0,8).forEach(function(s){if(seen[s.name])return;seen[s.name]=1;h+='<button class="btn" data-a="storeset" data-n="'+esc(s.name)+'" data-c="'+esc(s.chain)+'" data-d="'+s.d+'">'+esc(s.name)+' · '+s.d+' m</button>'});
  allCh().filter(chainOn).forEach(function(c){if(!seen[c])h+='<button class="btn" data-a="storeset" data-n="'+c+'" data-c="'+c+'">'+c+'</button>'});
- return h+'</div><div class="seg" style="margin-top:.6em"><input class="field" id="stn" placeholder="'+t('Anderer Laden')+'" style="flex:1"><button class="btn pri" data-a="storeown">OK</button></div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>'}
+ return h+'</div><h3 id="newhere">＋ '+t('Neuer Laden hier')+'</h3><p class="small mute">'+t('Stehst du im Laden? Name eintippen – sEBU speichert den Standort und erkennt den Laden künftig selbst.')+'</p><div class="seg"><input class="field" id="nsn" placeholder="'+t('Name, z. B. Metzgerei Müller')+'" style="flex:1"><button class="btn pri" data-a="storenew">📍 '+t('Speichern')+'</button></div><div class="seg" style="margin-top:.6em"><input class="field" id="stn" placeholder="'+t('Anderer Laden (ohne Standort)')+'" style="flex:1"><button class="btn" data-a="storeown">OK</button></div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>'}
 function shHedit(){var i=S.hist.filter(function(x){return x.id===sh.id})[0];if(!i)return'';var d=new Date(i.date);
  function f(l,id,v,ty){return'<div class="row"><label for="'+id+'">'+l+'</label><input class="field" id="'+id+'" type="'+(ty||'text')+'" value="'+esc(v==null?'':v)+'" style="flex:1 1 9em"></div>'}
  return'<h2>'+t('Eintrag bearbeiten')+'</h2>'+f(t('Produkt'),'h_n',i.name)+f(t('Menge'),'h_q',i.qty)+f(t('Einheit'),'h_u',i.unit)+f(t('Datum'),'h_d',ld(d),'date')+f(t('Laden'),'h_s',i.store)+f(t('Preis (CHF)'),'h_p',i.price)
@@ -810,7 +820,7 @@ function shShop(){var s=sh.sel,h='<h2>'+t('Wo kaufst du das?')+'</h2><h3>'+t('Le
  +'</div><div class="seg" style="margin-top:.6em"><input class="field" id="sst" value="'+esc(s.text)+'" placeholder="'+t('Anderer Laden (optional, von Hand)')+'" style="flex:1"></div>'
  +'<div class="seg" style="margin-top:.6em"><button class="btn pri" data-a="shok">OK</button><button class="btn" data-a="shclr">'+t('Zurücksetzen')+'</button><button class="btn" data-a="shclose">'+t('Abbrechen')+'</button></div>';return h}
 function sheetHtml(){if(!sh)return'';var b='';
- switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break;case'scan':b=shScan();break;case'voice':b=shVoice();break;case'remask':b=shRemAsk();break;case'photo':b=shPhoto();break;case'price':b=shPrice();break;case'news':b=shNews();break;case'camwhich':b=shCamWhich();break}
+ switch(sh.t){case'cat':b=shCat();break;case'store':b=shStore();break;case'hedit':b=shHedit();break;case'confirm':b=shConfirm();break;case'delcat':b=shDelcat();break;case'qty':b=shQty();break;case'shopsel':b=shShop();break;case'emoji':b=shEmoji();break;case'deal':b=shDeal();break;case'dealconf':b=shDealConf();break;case'scan':b=shScan();break;case'voice':b=shVoice();break;case'remask':b=shRemAsk();break;case'photo':b=shPhoto();break;case'geointro':b=shGeoIntro();break;case'lochelp':b=shLocHelp();break;case'price':b=shPrice();break;case'news':b=shNews();break;case'camwhich':b=shCamWhich();break}
  return'<div class="sheet" data-a="shclose"><div>'+b+'</div></div>'}
 
 function shQty(){var us=allUnits(),hd=S.set.hand||'right',h='<h2>'+t('Menge und Einheit')+'</h2><div class="wheels hz '+hd+'"><div class="wl">'+t('Menge')+'</div><div class="wrow wq"><div class="wheel" id="wq"><div class="sp"></div>';
@@ -1075,7 +1085,7 @@ AREAS.push(['Eingabeseite',[
  st('list','.card [data-fire]','🔥 beobachtet das Produkt und meldet Aktionen.','Ob 🔥 automatisch, manuell, immer oder gar nicht erscheint, stellst du in den Einstellungen unter «Preise und Alarme» ein.',{ro:1}),
  st('list','.card [data-a=fav]','☆ macht das Produkt zum Favoriten.','Favoriten holst du später mit einem Tipp zurück.',{ro:1}),
  st('list','#shopbtn','🛒 «Start» startet den Einkauf: Die App lernt deine Reihenfolge im Laden und sortiert die Liste künftig danach.','Beim Abhaken merkt sich die App die Reihenfolge je Laden.\nWenn du den Einkauf beendest und für andere Läden noch etwas offen ist, zeigt die App «Noch offen». Dort merkst du es für heute, startest die Navigation oder stellst eine Erinnerung beim Wegfahren ein.',{ro:1}),
- st('list','[data-a=gpsrefresh]','🔄 sucht den Laden, in dem du gerade bist, neu.','Ohne Erkennung wählst du den Laden mit «📍 Laden wählen» von Hand.\nWenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist.',{ro:1}),
+ st('list','[data-a=gpsrefresh]','🔄 sucht den Laden, in dem du gerade bist, neu.','Ohne Erkennung wählst du den Laden mit «📍 Laden wählen» von Hand. Dort speicherst du mit «Neuer Laden hier» auch einen neuen Laden samt Standort.\nWenn es nicht klappt: Prüfe, ob der Standort für Safari erlaubt ist.',{ro:1}),
  st('list','.micb','🎤 Sprache: Tippe darauf und sag zum Beispiel «Brot 1 Stück und Mehl 1 Kilo – stopp». Die App zeigt, was sie verstanden hat, du kannst es ändern und bestätigst.','<b>Wofür geeignet:</b> schnell mehrere Produkte auf einmal, auch mit Mengen.\n<b>Wenn es nicht klappt:</b> Mikrofon für Safari erlauben, deutlich sprechen, Produkte mit «und» oder einer Pause trennen. Die Menge darf vor oder nach dem Produkt stehen. «stopp» beendet das Zuhören sofort. In der Homescreen-App klappt es nicht immer, dann im Eingabefeld das 🎤 der iPhone-Tastatur nutzen.',{ro:1}),
  st('list','.camb','📷 öffnet den Ratgeber oder den Strichcode-Scanner.','<b>Ratgeber:</b> Fotografiere zum Beispiel ein Regal mit Mehl und frage, welches passt.\n<b>Strichcode:</b> zeigt Nutri-Score und Zutaten aus der freien Datenbank Open Food Facts. Mit einem Tipp kommt das Produkt auf die Liste.',{ro:1}),
  st('list','.card [data-a=check]','Mit ✓ hakst du ab. Zum Löschen wischst du ein Produkt nach links. Tippe jetzt auf ✓.','Abgehakte Produkte stehen im Verlauf und lassen sich zurückholen.\nAus Versehen weggewischt? Unten erscheint 4 Sekunden lang «↩ Rückgängig», ein Tipp holt das Produkt zurück.',{act:'check'}),
@@ -1355,9 +1365,11 @@ function act(a,el){var D=el.dataset,i,it;
  case'todayno':S.set.todayHide=ld();break;
  case'remnextok':remNextShow=false;break;
  case'remnextoff':S.items.forEach(function(i){delete i.remNext});remNextShow=false;break;
- case'locsave':{var ln=D.n;locate(function(c){S.mine.push({name:ln,lat:c.latitude,lon:c.longitude,r:25});save();R();say(t('Standort für {0} gespeichert. Ab jetzt erkennt sEBU den Laden.',ln));if(S.set.gps!=='off')gpsDetect(true)},function(m){say(m)});return}
+ case'locsave':{var ln=D.n;needGeo(function(){locate(function(c){S.mine.push({name:ln,lat:c.latitude,lon:c.longitude,r:25});save();R();say(t('Standort für {0} gespeichert. Ab jetzt erkennt sEBU den Laden.',ln));if(S.set.gps!=='off')gpsDetect(true)},geoFail)});return}
  case'locno':S.set.noLoc=S.set.noLoc||{};S.set.noLoc[D.n]=1;break;
  case'pricesave':{var pv=parseFloat(String(fval('prc')).replace(',','.'));if(sh&&sh.name&&pv>0)addPrice(sh.name,pv,sh.store);sh=null;break}
+ case'geogo':S.set.geoAsked=true;sh=null;R();if(geoPending){var gp=geoPending;geoPending=null;gp()}return;
+ case'storenew':{var sn=fval('nsn').trim();if(!sn){say(t('Bitte einen Namen eingeben.'));return}needGeo(function(){locate(function(c){S.mine.push({name:sn,lat:c.latitude,lon:c.longitude,r:25});sh=null;setCur({name:sn,chain:t('Eigener Laden'),d:0});save();R();say(t('«{0}» gespeichert. Ab jetzt erkennt sEBU den Laden.',sn))},geoFail)});return}
  case'urgtog':if(D.id==='draft'){draft.urg=!draft.urg;var dnv=$('#dn');if(dnv)draft.n=dnv.value}else{var ui=findItem(D.id);if(ui)ui.urg=!ui.urg}break;
  case'urgok':urgEnd=false;break;
  case'undo':if(undo){var ua=undo.k==='h'?S.hist:S.items;ua.splice(Math.min(undo.i,ua.length),0,undo.it);undo=null;clearTimeout(undoT)}break;
@@ -1383,8 +1395,8 @@ function act(a,el){var D=el.dataset,i,it;
  case'sub':sub=D.v;window.scrollTo(0,0);break;
  case'lang':S.set.lang='de';break;
  case'acc':S.set.accent=D.v;break;
- case'gpsnow':gpsDetect(true);return;
- case'mineadd':{var mn=fval('mn').trim();if(!mn){say(t('Bitte einen Namen eingeben.'));return}locate(function(c){S.mine.push({name:mn,lat:c.latitude,lon:c.longitude});save();R()},function(m){say(m)});return}
+ case'gpsnow':needGeo(function(){gpsDetect(true)});return;
+ case'mineadd':{var mn=fval('mn').trim();if(!mn){say(t('Bitte einen Namen eingeben.'));return}needGeo(function(){locate(function(c){S.mine.push({name:mn,lat:c.latitude,lon:c.longitude});save();R()},geoFail)});return}
  case'chainadd':{var cn=fval('cn').trim();if(!cn)return;S.cchains=S.cchains||[];if(allCh().some(function(x){return x.toLowerCase()===cn.toLowerCase()})){say(t('Gibt es schon.'));return}S.cchains.push(cn);break}
  case'chaindel':{S.cchains=(S.cchains||[]).filter(function(x){return x!==D.n});delete S.chains[D.n];S.items.forEach(function(i){if(i.stores)i.stores=i.stores.filter(function(x){return x!==D.n})});break}
  case'minedel':S.mine.splice(+D.i,1);break;
@@ -1424,7 +1436,7 @@ case'bkcopy':{var j=JSON.stringify(S),ta=$('#bk');ta.value=j;ta.select();var ok=
  case'bakget':{var bc=fval('bkc').trim();if(!bc||!fbSet()){say(t('Code eingeben und unter «Liste teilen» die Datenbank-Adresse eintragen.'));return}
   fetch(bakUrl(bc)).then(function(r){return r.json()}).then(function(j){var d=null;try{d=JSON.parse(j.j)}catch(e){}if(!d||!Array.isArray(d.items)){say(t('Keine Sicherung zu diesem Code gefunden.'));return}impData=d;sh={t:'confirm',title:t('Sicherung holen'),text:t('Die Daten auf diesem Gerät werden durch die Sicherung vom {0} ersetzt. Fortfahren?',fdt(j.t)),ok:'doimport'};R()}).catch(function(){say(t('Keine Verbindung. Prüfe das Internet.'))});return}
  case'doimport':{snap(true);var dd=DEF();Object.keys(dd).forEach(function(k){if(k==='set'||k==='learn'||k==='ob')dd[k]=Object.assign(dd[k],impData[k]||{});else if(impData[k]!==undefined)dd[k]=impData[k]});S=dd;impData=null;sh=null;view='list';sub='main';say(t('Sicherung geladen.'));break}
- case'gpsrefresh':declined={};say(t('Suche Filiale …'));gpsDetect(true);return;
+ case'gpsrefresh':needGeo(function(){declined={};say(t('Suche Filiale …'));gpsDetect(true)});return;
  case'ltab':ltab=D.v;break;
  case'other':showOther=!showOther;break;
  case'typego':ltab='more';break;
@@ -1511,7 +1523,7 @@ document.addEventListener('change',function(e){var t0=e.target,D=t0.dataset||{},
  else if(k==='radius')S.set.radius=v2==='auto'?'auto':+v2;else if(k==='persons')S.set.persons=Math.max(1,+v2||4);
  else if(k==='apiKey'||k==='model'||k==='fbUrl')S.set[k]=v2.trim();
  else S.set[k]=v2;
- save();R();if(k==='gps'&&v2!=='off')gpsDetect()});
+ save();R();if(k==='gps'&&v2!=='off')needGeo(function(){gpsDetect(true)})});
 document.addEventListener('pointerdown',function(e){
  var fe=e.target.closest&&e.target.closest('[data-fire]');
  if(fe){lp=false;clearTimeout(lpT);lpT=setTimeout(function(){lp=true;dealOpen=fe.dataset.fire;if(navigator.vibrate)navigator.vibrate(30);R()},2000)}
@@ -1522,7 +1534,7 @@ var sw0=null,dragId=null,upS=null;
 document.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.wheels')&&S.set.tick!==false&&!actx){try{var AC=window.AudioContext||window.webkitAudioContext;if(AC){actx=new AC();var b=actx.createBuffer(1,1,22050),sr=actx.createBufferSource();sr.buffer=b;sr.connect(actx.destination);sr.start(0)}}catch(x){}}},true);
 function catPath(i){var m=i.cat&&cat(i.cat),sb=i.sub&&cat(i.sub);return iconOf(i)+' '+i.name+': '+(m?t('gehört zu')+' '+cname(m)+(sb?' › '+cname(sb):''):t('noch ohne Kategorie'))+'. '+t('Antippen ändert die Kategorie.')}
 /* ===== Erklärung beim Gedrückthalten (2 Sekunden) ===== */
-var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',todayno:'Für heute ausblenden.',remnextok:'Erinnerung schliessen.',remnextoff:'Nicht mehr an diese Produkte erinnern.',locsave:'Standort dieses Ladens speichern – stehe dafür im Laden.',locno:'Für diesen Laden nicht mehr fragen.',pricesave:'Preis speichern.',photoview:'Foto gross ansehen, ersetzen oder entfernen.',photodel:'Foto entfernen.',newsopen:'Die neuen Funktionen ansehen.',newsok:'Neuheiten-Hinweis ausblenden. Unter Einstellungen → Einführung jederzeit nachlesbar.',remx:'✕ Erinnerung an andere Läden ausblenden – bis zum nächsten Öffnen.',newsshow:'Kurze Führung zu dieser Neuheit.',newsall:'Alle Neuheiten nochmals ansehen.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung: in sEBU nach dem nächsten Einkauf oder als iPhone-Erinnerung (einstellbar).'},hpT=null,hp0=null,helpShown=0;
+var HELP={shopstart:'🛒 Einkauf starten: Die App lernt deine Reihenfolge im Laden und sortiert die Liste danach.',storepick:'📍 Laden wählen: von Hand, wenn die Erkennung nicht klappt.',gpsrefresh:'🔄 Laden neu suchen, in dem du gerade bist.',voice:'🎤 Sprache: Produkte sagen statt tippen.',cam:'📷 Strichcode scannen oder den Ratgeber fragen.',catpick:'Kategorie wählen oder ein eigenes Symbol für das Produkt.',qty:'Menge und Einheit ändern.',shopsel:'🏪 Wo kaufst du das? Laden oder Ladentyp wählen.',urgtog:'❗ Dringend: steht immer zuoberst und fällt auf.',add:'＋ Produkt auf die Liste setzen.',fav:'☆ Als Favorit merken.',fsdn:'Schrift kleiner.',storenew:'Neuen Laden mit deinem aktuellen Standort speichern.',geogo:'Weiter zur Standort-Frage von Safari.',todayno:'Für heute ausblenden.',remnextok:'Erinnerung schliessen.',remnextoff:'Nicht mehr an diese Produkte erinnern.',locsave:'Standort dieses Ladens speichern – stehe dafür im Laden.',locno:'Für diesen Laden nicht mehr fragen.',pricesave:'Preis speichern.',photoview:'Foto gross ansehen, ersetzen oder entfernen.',photodel:'Foto entfernen.',newsopen:'Die neuen Funktionen ansehen.',newsok:'Neuheiten-Hinweis ausblenden. Unter Einstellungen → Einführung jederzeit nachlesbar.',remx:'✕ Erinnerung an andere Läden ausblenden – bis zum nächsten Öffnen.',newsshow:'Kurze Führung zu dieser Neuheit.',newsall:'Alle Neuheiten nochmals ansehen.',dealx:'✕ Aktionshinweis ausblenden. Beim nächsten Öffnen der App erscheint er wieder.',hintsback:'Kleine Hinweise wieder anzeigen.',fsup:'Schrift grösser.',check:'✓ Abhaken. Es kommt zu «Letzte Produkte».',menu:'⋮ Menü mit allen Bereichen.',shopend:'⏹ Einkauf beenden.',undo:'↩ Gelöschtes Produkt zurückholen.',back:'Wieder auf die Liste holen.',todayall:'Für heute merken: Die App erinnert dich heute daran.',remind:'🔔 Erinnerung: in sEBU nach dem nächsten Einkauf oder als iPhone-Erinnerung (einstellbar).'},hpT=null,hp0=null,helpShown=0;
 document.addEventListener('pointerdown',function(e){if(S.set.lpHelp===false)return;var hb=e.target.closest&&e.target.closest('button[data-a],a.navb,label.btn');if(!hb||hb.closest('.tc'))return;
  hp0={x:e.clientX,y:e.clientY};clearTimeout(hpT);hpT=setTimeout(function(){var it0=hb.dataset.a==='catpick'&&findItem(hb.dataset.id),m=(it0&&catPath(it0))||HELP[hb.dataset.a]||(hb.classList.contains('navb')?'🧭 Navigation: öffnet Google Maps mit dem Laden als Ziel.':'')||hb.getAttribute('aria-label')||hb.title;if(m){helpShown=Date.now();say(t(m),4500);if(navigator.vibrate)navigator.vibrate(20)}},2000)},true);
 document.addEventListener('pointermove',function(e){if(hp0&&Math.abs(e.clientX-hp0.x)+Math.abs(e.clientY-hp0.y)>12)clearTimeout(hpT)},true);
