@@ -738,3 +738,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Erinnerung an Produkte für andere Läden: bei jedem Öffnen, vor dem Einkaufen (🛒), nach dem Einkaufen («Noch offen»), dauernd bis gekauft – Mehrfachauswahl unter Einstellungen → Einkaufsliste; beim Zuordnen eines Ladens fragt sEBU pro Produkt (abschaltbar). Hinweis oben mit 🧭 und ✕ (bei «dauernd» ohne ✕). Standard: vor und nach dem Einkaufen.
 - «Neu in sEBU»: ruhige Zeile oben nach Aktualisierungen («Ansehen» / ✕), Liste der neuen Funktionen mit «Kurz zeigen» (Mini-Führung). Abschaltbar und nachlesbar unter Einstellungen → Einführung. Arbeitsregel: jede neue Funktion in `NEWS` aufnehmen.
+
+### Notiz vom 25.11.2026: Produktfoto beim Aufschreiben (nur festgehalten, noch nicht gebaut)
+
+- Beim Aufschreiben (und nachträglich beim Bearbeiten) ein Foto vom Produkt machen, damit man sicher das richtige kauft (z. B. genau dieses Mehl, diese Marke).
+- Vorschlag: kleines Vorschaubild statt Symbol in der Produktzeile, Antippen zeigt es gross; Foto wird verkleinert gespeichert (Speicher auf dem Handy ist begrenzt); beim Teilen der Liste optional mitsenden; bleibt beim Produkt (auch in Favoriten/Letzte Produkte). Abschaltbar, in Führung erklären.
