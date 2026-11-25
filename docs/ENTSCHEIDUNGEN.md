@@ -723,6 +723,6 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 25.11.2026: Erinnerung an Produkte für andere Läden (nur festgehalten, noch nicht gebaut)
 
 - Problem: In der Migros einkaufen, aber für Coop ist noch etwas eingeschrieben → nicht vergessen.
-- Erinnerung wählbar, **Mehrfachauswahl**: bei jedem Öffnen der App · vor dem Einkaufen (beim Start) · nach dem Einkaufen (beim Ende, gibt es schon als «Noch offen») · «Dauer» (Bedeutung noch zu klären: dauerhaft sichtbar oder wie lange erinnert wird).
+- Erinnerung wählbar, **Mehrfachauswahl**: bei jedem Öffnen der App · vor dem Einkaufen (beim Start) · nach dem Einkaufen (beim Ende, gibt es schon als «Noch offen») · «Dauer» = dauernd sichtbar oben in der Liste, bis das Produkt gekauft (abgehakt) ist.
 - Einstellbar: allgemein in den Einstellungen **und** beim Zuordnen eines Produkts zu einem Laden als Abfrage (pro Produkt).
 - Abschaltbar, in der Führung erklären.
