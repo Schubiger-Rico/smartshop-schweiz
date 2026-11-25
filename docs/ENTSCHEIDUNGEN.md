@@ -801,3 +801,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 ### Notiz vom 25.11.2026: Suche bei «Wo kaufst du das?» (nur festgehalten, noch nicht gebaut)
 - Im Sheet «Wo kaufst du das?» (🏪 beim Produkt) ein Suchfeld, um vorhandene Geschäfte schneller zu finden.
 - Überschrift «Lebensmittel-Läden» umbenennen in «Geschäfte».
+- Suchfeld ganz oben, filtert schon beim Tippen (bestätigt). Menüpunkt «Läden» ebenfalls in «Geschäfte» umbenennen.
