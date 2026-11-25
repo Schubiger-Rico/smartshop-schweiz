@@ -726,3 +726,10 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Erinnerung wählbar, **Mehrfachauswahl**: bei jedem Öffnen der App · vor dem Einkaufen (beim Start) · nach dem Einkaufen (beim Ende, gibt es schon als «Noch offen») · «Dauer» = dauernd sichtbar oben in der Liste, bis das Produkt gekauft (abgehakt) ist.
 - Einstellbar: allgemein in den Einstellungen **und** beim Zuordnen eines Produkts zu einem Laden als Abfrage (pro Produkt).
 - Abschaltbar, in der Führung erklären.
+
+### Notiz vom 25.11.2026: «Neu in sEBU» beim Öffnen (nur festgehalten, noch nicht gebaut)
+
+- Nach einer Aktualisierung erscheint beim Öffnen einmal eine kurze Info «Neu in sEBU» – nur **neue Funktionen**, keine Design-Änderungen.
+- Pro Neuheit ein Satz und ein Knopf «Kurz zeigen» (Mini-Führung zu genau dieser Funktion, freiwillig); dazu «OK» / «Später».
+- Abschaltbar in den Einstellungen; ältere Neuheiten unter Einstellungen → Einführung nachlesbar.
+- Arbeitsregel dazu: Bei jeder neuen Funktion einen Eintrag in die Neuheiten-Liste aufnehmen (wie bei der Wegleitung).
