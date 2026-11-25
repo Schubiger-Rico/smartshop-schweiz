@@ -752,3 +752,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Heute: klappt nur, wenn der Laden unter Einstellungen → Filialen als «eigener Laden» mit Standort gespeichert ist («Hier speichern») und die Filialerkennung eingeschaltet ist. Von Hand getippte Ladennamen (Freitext bei 🏪) haben keinen Standort.
 - Vorschlag: Bei einem getippten Ladennamen ohne Standort fragt sEBU später einmal «Bist du gerade bei ‹Metzgerei Müller›? Standort speichern» (ein Tipp) – danach erkennt sEBU den Laden automatisch und zeigt die Produkte oben mit Hinweis «📍 Metzgerei Müller – 3 Produkte».
 - Ergänzung: Ortung für einen eingetippten Laden muss **jederzeit nachträglich** aktivierbar sein: bei jedem Laden ohne Standort (unter «Läden» und Einstellungen → Filialen) ein Knopf «📍 Hier bin ich – Standort speichern»; danach automatische Erkennung. Die Frage beim Öffnen ist nur ein zusätzlicher Hinweis (abschaltbar).
+
+### Notiz vom 25.11.2026: Aktuellen Preis notieren (nur festgehalten, noch nicht gebaut)
+
+- Möglichkeit, den aktuellen Preis eines Produkts zu notieren.
+- Vorschlag (offen): Preisfeld «CHF» beim Bearbeiten; Preis wird mit Laden und Datum gespeichert (beim Produktnamen, wie die Fotos); in der Zeile klein «zuletzt 2.40 (Coop)»; Verlauf der Preise, später Vergleich zwischen Läden. Abschaltbar, in Führung und «Neu in sEBU».
