@@ -763,3 +763,11 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Der Hinweis «Heute noch: … (Aligro)» braucht einen Knopf «Heute nicht», der ihn für den Rest des Tages ausblendet (nervt sonst am gleichen Tag). Am nächsten Tag nicht mehr «heute» (Produkt bleibt normal in der Liste unter seinem Laden).
 - Ergänzung 25.11.: «🔔 Erinnerung beim Wegfahren» umbauen zu «🔔 Nach dem Einkaufen erinnern»: sEBU merkt sich die Produkte und erinnert selbst nochmals, wenn der nächste Einkauf beendet wird (⏹) – ohne iPhone-Erinnerungen-App (Kurzbefehl-Variante bleibt optional).
+
+### Umgesetzt am 25.11.: Heute nicht, Nach dem Einkaufen erinnern, Standort eigene Läden, Preise
+
+- «Heute noch»-Hinweis mit «Heute nicht» (für den Rest des Tages weg).
+- 🔔 heisst jetzt «Nach dem Einkaufen erinnern»: sEBU merkt sich die Produkte und erinnert beim Beenden des nächsten Einkaufs (Verstanden / Nicht mehr erinnern). iPhone-Erinnerung beim Wegfahren bleibt wählbar (Einstellungen → Einkaufsliste → Erinnerung).
+- Eingetippte Läden ohne Standort: «📍 Hier bin ich – Standort speichern» unter Läden und Einstellungen → Filialen; Frage beim Öffnen (abschaltbar, pro Laden «Nicht fragen»).
+- Preise: Frage beim Abhaken (Standard aus) und Preisfeld beim Bearbeiten (Standard an), wählbar unter Preise und Alarme; Zeile zeigt «💰 Preis (Laden)»; Schalter «Preise notieren» in Einkaufsliste.
+- Alles in Führung und «Neu in sEBU» (n09–n11).
