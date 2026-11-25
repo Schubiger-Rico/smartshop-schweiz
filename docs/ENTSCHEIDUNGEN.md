@@ -757,3 +757,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 - Möglichkeit, den aktuellen Preis eines Produkts zu notieren.
 - Vorschlag (offen): Preisfeld «CHF» beim Bearbeiten; Preis wird mit Laden und Datum gespeichert (beim Produktnamen, wie die Fotos); in der Zeile klein «zuletzt 2.40 (Coop)»; Verlauf der Preise, später Vergleich zwischen Läden. Abschaltbar, in Führung und «Neu in sEBU».
+- Entschieden: Preis eingeben **beim Abhaken** (kurze freiwillige Frage «Preis?») **und** beim nachträglichen Bearbeiten; in den Einstellungen wählbar (beim Abhaken fragen: ja/nein; Preisfeld beim Bearbeiten: ja/nein).
