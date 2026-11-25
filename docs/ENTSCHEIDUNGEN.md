@@ -758,3 +758,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Möglichkeit, den aktuellen Preis eines Produkts zu notieren.
 - Vorschlag (offen): Preisfeld «CHF» beim Bearbeiten; Preis wird mit Laden und Datum gespeichert (beim Produktnamen, wie die Fotos); in der Zeile klein «zuletzt 2.40 (Coop)»; Verlauf der Preise, später Vergleich zwischen Läden. Abschaltbar, in Führung und «Neu in sEBU».
 - Entschieden: Preis eingeben **beim Abhaken** (kurze freiwillige Frage «Preis?») **und** beim nachträglichen Bearbeiten; in den Einstellungen wählbar (beim Abhaken fragen: ja/nein; Preisfeld beim Bearbeiten: ja/nein).
+
+### Notiz vom 25.11.2026: «Heute nicht» beim Hinweis «Heute noch» (nur festgehalten, noch nicht gebaut)
+
+- Der Hinweis «Heute noch: … (Aligro)» braucht einen Knopf «Heute nicht», der ihn für den Rest des Tages ausblendet (nervt sonst am gleichen Tag). Am nächsten Tag nicht mehr «heute» (Produkt bleibt normal in der Liste unter seinem Laden).
