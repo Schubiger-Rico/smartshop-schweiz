@@ -797,3 +797,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 25.11.: «Einkaufslisten» in den Einstellungen ganz nach oben verschoben (vor Profil), auch in der Einstellungen-Führung.
 - 25.11.: Korrektur: «Zwei Stufen nach oben» hiess: «📋 Einkaufslisten» direkt im Menü ⋮ unter «Einkaufsliste» (öffnet die Listen-Verwaltung). Einstellungen-Sparte wieder am alten Platz. Auch in der Führung und als Schnellstart wählbar.
 - 25.11.: Listen-Leiste «Allgemein/Aligro» über der Eingabe entfernt (wirkte überladen). Ist der Schnellstart auf «Einkaufslisten» gestellt, steht neben 📋 klein die aktive Liste; Antippen öffnet die Auswahl. Unter Menü → Einkaufslisten pro Liste «Wählen»/«✓ Aktiv».
+
+### Notiz vom 25.11.2026: Suche bei «Wo kaufst du das?» (nur festgehalten, noch nicht gebaut)
+- Im Sheet «Wo kaufst du das?» (🏪 beim Produkt) ein Suchfeld, um vorhandene Geschäfte schneller zu finden.
+- Überschrift «Lebensmittel-Läden» umbenennen in «Geschäfte».
