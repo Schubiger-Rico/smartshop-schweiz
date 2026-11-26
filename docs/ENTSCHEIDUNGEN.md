@@ -818,3 +818,8 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Entscheid 26.11.: Zahl auf dem App-Symbol (einfach und Push) bleibt pendent, bis Rico bei Firebase die Cloud Functions (Blaze) aufgeschaltet hat. Dann zusammen bauen.
 - 26.11.: Alle 124 Begrüssungs-Sprüche im frecheren Stil neu geschrieben (von Rico freigegeben).
 - 26.11.: 🏪 (ohne Laden) und 🔥 (aus) haben jetzt den gleichen grünen Rahmen; nur das Symbol selbst ist blass.
+
+### Notiz vom 26.11.2026: «Laden wählen» übersichtlicher (nur festgehalten, noch nicht gebaut)
+- Suchfeld ganz oben (bestehende Geschäfte finden).
+- Liste nach ABC; jeder Anfangsbuchstabe beginnt eine neue Zeile (bei voller Zeile darunter weiter).
+- Wählbar: Suche per Eingabe oder per Scrollen. Bei Eingabe ist auch das Feld für neue Geschäfte gleich sichtbar.
