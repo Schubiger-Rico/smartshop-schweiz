@@ -817,3 +817,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Wunsch 26.11.: Zahl soll sich auch bei geschlossener App ändern, wenn jemand über «Liste teilen» etwas Dringendes hinzufügt. Geht nur mit Web-Push von einem Server (z. B. Firebase Cloud Function bei Änderung in der Datenbank, iPhone ab 16.4 als Homescreen-App). Firebase-Functions brauchen den Blaze-Tarif (Kreditkarte, bei kleiner Nutzung praktisch gratis). Entscheid offen.
 - Entscheid 26.11.: Zahl auf dem App-Symbol (einfach und Push) bleibt pendent, bis Rico bei Firebase die Cloud Functions (Blaze) aufgeschaltet hat. Dann zusammen bauen.
 - 26.11.: Alle 124 Begrüssungs-Sprüche im frecheren Stil neu geschrieben (von Rico freigegeben).
+- 26.11.: 🏪 (ohne Laden) und 🔥 (aus) haben jetzt den gleichen grünen Rahmen; nur das Symbol selbst ist blass.

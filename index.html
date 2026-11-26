@@ -60,7 +60,7 @@ header .stop{}
 .card .q{color:var(--mute);white-space:nowrap}
 .card.done .nm{color:var(--mute)}
 .fire{font-size:.95em}
-.fire.off{opacity:.4;filter:grayscale(.6)}
+.fire.off .fi{opacity:.4;filter:grayscale(.6)}
 .fire.on{opacity:1}
 .menu{position:absolute;right:0;top:100%;z-index:20;background:var(--card);border:1px solid var(--line);border-radius:.7em;padding:.3em;min-width:13em;box-shadow:0 .5em 1.5em #0003}
 .menu button{display:flex;gap:.6em;width:100%;text-align:left;border:0;background:none;padding:.5em .7em;border-radius:.5em;cursor:pointer}
@@ -553,7 +553,7 @@ function askBar(){var i=ask&&findItem(ask);if(!i)return'';
 function card(i){
  if(editId===i.id)return'<div class="card" style="flex-wrap:wrap"><button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie')+'">'+esc(iconOf(i))+'</button><input class="field nm" id="en" value="'+esc(i.name)+'" style="flex:1 1 7em"><button class="btn" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'0')+'</button><button class="btn sq" data-a="shopsel" data-id="'+i.id+'" aria-label="'+t('Laden')+'">🏪</button><button class="btn sq urgb'+(i.urg?' on':'')+'" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Dringend')+'">❗</button>'+(on('photo')?phLabel('photoitem',i.id,photoOf(i)):'')+(on('price')&&S.set.priceEdit!==false?'<input class="field" id="ep" inputmode="decimal" placeholder="💰 CHF" value="'+(lastPrice(i)?fmtCHF(lastPrice(i).p):'')+'" style="width:5.5em">':'')+'<button class="btn pri" data-a="esave" data-id="'+i.id+'">OK</button><button class="btn" data-a="del" data-id="'+i.id+'">'+t('Löschen')+'</button></div>';
  var cc=catColor(i);return'<div class="card'+(i.urg?' urg':'')+'" data-sw="'+i.id+'" data-swk="i"'+(cc?' style="border-left:.45em solid '+cc+'"':'')+'>'+(i.urg?'<button class="btn sq urgb on" data-a="urgtog" data-id="'+i.id+'" aria-label="'+t('Nicht mehr dringend')+'">❗</button>':'')+(photoOf(i)?'<button class="ic ph" data-a="photoview" data-id="'+i.id+'" aria-label="'+t('Foto ansehen')+'">'+icHtml(i)+'</button>':on('cat')?'<button class="ic" data-a="catpick" data-id="'+i.id+'" aria-label="'+t('Kategorie ändern')+'">'+esc(iconOf(i))+'</button>':'')+'<span class="nm" data-a="edit" data-id="'+i.id+'">'+esc(i.name)+(i.stores&&i.stores.length?' <span class="small mute">🏪 '+esc(i.stores.join(', '))+'</span>':'')+(i.stext?' <span class="small mute">🏪 '+esc(i.stext)+'</span>':'')+(on('price')&&lastPrice(i)?' <span class="small mute">💰 '+fmtCHF(lastPrice(i).p)+(lastPrice(i).s?' ('+esc(lastPrice(i).s)+')':'')+'</span>':'')+'</span><span class="q" data-a="qty" data-id="'+i.id+'">'+esc(fmt(i)||'–')+'</span>'
-  +(S.set.dm==='off'||(S.set.dm==='always'&&!realDeals(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'">🔥</button>')
+  +(S.set.dm==='off'||(S.set.dm==='always'&&!realDeals(i).length)?'':'<button class="btn sq fire '+((i.fire||S.set.dm==='always')?'on':'off')+'" style="'+((i.fire||S.set.dm==='always')?fst(i):'')+'" data-fire="'+i.id+'" aria-label="'+t('Aktionssuche')+'"><span class="fi">🔥</span></button>')
   +(on('fav')?'<button class="btn sq" data-a="fav" data-id="'+i.id+'" aria-label="'+t('Favorit')+'">'+(S.favs.some(function(f){return norm(f.name)===norm(i.name)})?'★':'☆')+'</button>':'')
   +'<button class="btn sq" data-a="check" data-id="'+i.id+'" aria-label="'+t('Abhaken')+'">✓</button></div>'}
 function recList(){var n=S.set.recN==='all'?1e9:+S.set.recN,l=S.recent.slice(0,n);if(S.set.recSort==='old')l.reverse();return l}
@@ -774,7 +774,7 @@ function addRow(real){var has=draft.type||draft.stores.length||draft.stext,id=fu
   +(on('voice')?'<button class="btn sq'+(real?' micb':'')+'" data-a="voice" aria-label="'+t('Sprache')+'">🎤</button>':'')
   +'<input class="field nm"'+id('dn')+' placeholder="'+t('Produkt hinzufügen')+'" value="'+(real?esc(draft.n):'')+'" autocomplete="off" enterkeyhint="done"'+(real?'':' tabindex="-1"')+'>'
   +'<button class="btn qu" data-a="qty" data-id="draft" aria-label="'+t('Menge und Einheit')+'">'+esc((draft.q||'0')+' '+draft.u)+'</button>'
-  +(on('shop')?'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'" style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</button>':'')
+  +(on('shop')?'<button class="btn sq" data-a="shopsel" data-id="draft" aria-label="'+t('Wo kaufst du das?')+'"><span style="'+(has?'':'opacity:.45')+'">'+shopLbl()+'</span></button>':'')
   +(on('photo')?phLabel('photodraft','draft',real&&draft.photo,real?' phb':''):'')
   +(on('urg')?'<button class="btn sq urgb'+(real&&draft.urg?' on':'')+'" data-a="urgtog" data-id="draft" aria-label="'+t('Dringend')+'">❗</button>':'')
   +'<button class="btn pri sq" data-a="add" aria-label="'+t('Hinzufügen')+'">＋</button></div>'}
