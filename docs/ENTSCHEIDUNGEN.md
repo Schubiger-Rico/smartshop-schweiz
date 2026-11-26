@@ -810,3 +810,7 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 26.11.: Rahmen noch heller: --line #6fae86, Symbol-Rahmen 92 % Neon.
 - Notiz 26.11.: Beim Begrüssungs-Spruch auch die dringenden Produkte ❗ rot anzeigen, mit ✕ zum Schliessen. Noch offen: bleibt die Anzeige dann bis ✕ stehen?
 - **Umgesetzt am 26.11.:** Dringende ❗ Produkte erscheinen rot unter dem Begrüssungs-Spruch; dann bleibt die Anzeige stehen, bis man ✕ tippt. Ohne Dringendes wie bisher 4 s. In Führung und «Neu in sEBU» (n18).
+
+### Notiz vom 26.11.2026: Zahl auf dem App-Symbol (nur festgehalten, noch nicht gebaut)
+- Auf dem sEBU-Symbol am Homescreen die Anzahl dringender ❗ Produkte anzeigen, wie bei E-Mails (Badging API `navigator.setAppBadge`).
+- iPhone: nur als Homescreen-App, ab iOS 16.4, Mitteilungen müssen einmal erlaubt werden (sEBU schickt trotzdem keine). Zahl wird aktualisiert, wenn sEBU offen ist; geschlossen ändert sie sich nicht von selbst.
