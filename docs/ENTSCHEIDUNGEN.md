@@ -809,3 +809,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 26.11.: Dunkles Design: Rahmen von Knöpfen und Produkten heller grün (--line #55866a statt #3a4c46), Symbol-Rahmen 80 % Neon statt 62 %.
 - 26.11.: Rahmen noch heller: --line #6fae86, Symbol-Rahmen 92 % Neon.
 - Notiz 26.11.: Beim Begrüssungs-Spruch auch die dringenden Produkte ❗ rot anzeigen, mit ✕ zum Schliessen. Noch offen: bleibt die Anzeige dann bis ✕ stehen?
+- **Umgesetzt am 26.11.:** Dringende ❗ Produkte erscheinen rot unter dem Begrüssungs-Spruch; dann bleibt die Anzeige stehen, bis man ✕ tippt. Ohne Dringendes wie bisher 4 s. In Führung und «Neu in sEBU» (n18).

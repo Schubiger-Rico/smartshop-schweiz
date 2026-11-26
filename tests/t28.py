@@ -14,7 +14,10 @@ with sync_playwright() as p:
     pg.click('#greet');print('tap closes',pg.locator('#greet').count()==0)
     pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify(Object.assign(JSON.parse(localStorage.getItem('sebu.v1')),{set:Object.assign(JSON.parse(localStorage.getItem('sebu.v1')).set,{greet:'off'})})))");pg.reload();pg.wait_for_timeout(300)
     print('off',pg.locator('#greet').count()==0)
+    pg.evaluate("localStorage.setItem('sebu.v1',JSON.stringify(Object.assign(JSON.parse(localStorage.getItem('sebu.v1')),{items:[{id:'u',name:'Windeln',qty:1,unit:'Stk.',urg:true}],set:Object.assign(JSON.parse(localStorage.getItem('sebu.v1')).set,{greet:'fun',newsSeen:'n18'})})))");pg.reload();pg.wait_for_timeout(5000)
+    print('urgent stays',pg.locator('#greet .gurg').count(),pg.inner_text('#greet .gurg'))
     pg.screenshot(path='/tmp/claude-0/shots/s28b.png')
+    pg.click('#greet [data-a=greetx]');print('x closes',pg.locator('#greet').count()==0)
     c.close();b.close()
 s=open('index.html').read();import re
 for k in 'mtan':
