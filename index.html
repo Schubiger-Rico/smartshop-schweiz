@@ -106,7 +106,7 @@ html.addwrap .add{display:grid;grid-template-columns:repeat(var(--n),auto) 1fr a
 .wheels.hz .band{top:0;left:calc(50% - var(--ww)/2);width:var(--ww);height:var(--wo);right:auto}
 .greet{position:fixed;left:50%;top:4.2em;transform:translateX(-50%);width:min(92vw,26em);z-index:60;background:var(--card);color:var(--ink);border:3px solid #39FF14;box-shadow:0 6px 24px rgba(0,0,0,.25);border-radius:18px;padding:.8em 1em;font-size:1.35em;font-weight:700;text-align:center;line-height:1.3;animation:grin .35s ease-out;transition:opacity .4s,transform .4s;cursor:pointer}
 .greet.out{opacity:0;transform:translate(-50%,-.6em)}@keyframes grin{from{opacity:0;transform:translate(-50%,-.6em)}to{opacity:1;transform:translate(-50%,0)}}
-.qkb.ql{gap:.25em;padding:0 .55em}.qkb.ql small{font-size:.62em;max-width:6.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qkb.ql{gap:.2em;padding:0 .45em}.qkb.ql small{font-size:.62em;max-width:6.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tc>.card{pointer-events:auto;display:block;max-width:34em;width:100%;user-select:text;box-shadow:0 .3em 1.2em #0005}
 .ordrow{display:flex;align-items:center;gap:.4em;padding:.3em .4em;margin-bottom:.3em;background:var(--card);border:1px solid var(--line);border-radius:.7em}
 .ordrow.drag{opacity:.5}
@@ -538,7 +538,7 @@ function shListPick(){var c=curL(),h='<h2>📋 '+t('Welche Liste?')+'</h2><div c
  return h+'</div><div class="seg" style="margin-top:.6em"><button class="btn" data-a="nav" data-v="lists">⚙️ '+t('Listen verwalten')+'</button><button class="btn" data-a="shclose">'+t('Schliessen')+'</button></div>'}
 function shopBar(pv){
  if(S.shop&&!pv)return'';var b=on('bar'),c=on('cam')||on('scan'),qb=quickBtn();if(!b&&!c&&!qb)return'';var x=pv?'':' id="shopbtn"';
- return'<div class="seg topbar" style="margin-bottom:.5em">'+qb+(b?'<button class="btn"'+x+' data-a="shopstart" aria-label="'+t('Einkauf starten')+'">🛒'+(S.set.btnText?' '+t('Start'):'')+'</button>'+(cur?'':'<button class="btn" data-a="storepick" aria-label="'+t('Laden wählen')+'">📍'+(S.set.btnText?' '+t('Laden'):'')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t(on('scan')&&!on('cam')?'Strichcode scannen':'Ratgeber')+'">📷</button>':'')+'</div>'}
+ return'<div class="seg topbar" style="margin-bottom:.5em">'+qb+(b?'<button class="btn'+(S.set.btnText?'':' sq')+'"'+x+' data-a="shopstart" aria-label="'+t('Einkauf starten')+'">🛒'+(S.set.btnText?' '+t('Start'):'')+'</button>'+(cur?'':'<button class="btn'+(S.set.btnText?'':' sq')+'" data-a="storepick" aria-label="'+t('Laden wählen')+'">📍'+(S.set.btnText?' '+t('Laden'):'')+'</button>')+'<button class="btn sq" data-a="gpsrefresh" aria-label="'+t('Filiale neu suchen')+'">🔄</button>':'')+(c?'<button class="btn sq'+(pv?'':' camb')+'" data-a="cam" aria-label="'+t(on('scan')&&!on('cam')?'Strichcode scannen':'Ratgeber')+'">📷</button>':'')+'</div>'}
 
 /* ===== Einkaufsliste ===== */
 function draftIcon(){return iconOf(draft)}
