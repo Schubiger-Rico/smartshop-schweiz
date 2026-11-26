@@ -815,3 +815,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Auf dem sEBU-Symbol am Homescreen die Anzahl dringender ❗ Produkte anzeigen, wie bei E-Mails (Badging API `navigator.setAppBadge`).
 - iPhone: nur als Homescreen-App, ab iOS 16.4, Mitteilungen müssen einmal erlaubt werden (sEBU schickt trotzdem keine). Zahl wird aktualisiert, wenn sEBU offen ist; geschlossen ändert sie sich nicht von selbst.
 - Wunsch 26.11.: Zahl soll sich auch bei geschlossener App ändern, wenn jemand über «Liste teilen» etwas Dringendes hinzufügt. Geht nur mit Web-Push von einem Server (z. B. Firebase Cloud Function bei Änderung in der Datenbank, iPhone ab 16.4 als Homescreen-App). Firebase-Functions brauchen den Blaze-Tarif (Kreditkarte, bei kleiner Nutzung praktisch gratis). Entscheid offen.
+- Entscheid 26.11.: Zahl auf dem App-Symbol (einfach und Push) bleibt pendent, bis Rico bei Firebase die Cloud Functions (Blaze) aufgeschaltet hat. Dann zusammen bauen.
