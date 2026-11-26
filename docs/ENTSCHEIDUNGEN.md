@@ -823,3 +823,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Suchfeld ganz oben (bestehende Geschäfte finden).
 - Liste nach ABC; jeder Anfangsbuchstabe beginnt eine neue Zeile (bei voller Zeile darunter weiter).
 - Wählbar: Suche per Eingabe oder per Scrollen. Bei Eingabe ist auch das Feld für neue Geschäfte gleich sichtbar.
+- Präzisiert 26.11.: Keine Einstellung. Reihenfolge im Fenster «Laden wählen»: zuerst «＋ Neuer Laden hier», dann Suchfeld (sucht in allen Läden), dann Knopf «Alle anzeigen» → ganze Liste nach ABC, jeder Buchstabe neue Zeile.
