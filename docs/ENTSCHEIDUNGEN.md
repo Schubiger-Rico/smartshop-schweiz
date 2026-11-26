@@ -806,3 +806,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - 25.11.: Begrüssung neu 4 Sekunden statt 3.
 - 25.11.: Letzte Produkte: Knopf «Zurückholen» ersetzt durch runden ↩-Knopf (Erklärung beim Gedrückthalten).
 - 26.11.: 🛒 und 📍 in der Kopfzeile schmal (quadratisch wie 🔄, ausser mit «Knöpfe mit Text»), Listen-Knopf etwas kompakter – so passen die Knöpfe wieder auf die Zeile von ⋮.
+- 26.11.: Dunkles Design: Rahmen von Knöpfen und Produkten heller grün (--line #55866a statt #3a4c46), Symbol-Rahmen 80 % Neon statt 62 %.
