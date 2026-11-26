@@ -826,3 +826,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Präzisiert 26.11.: Keine Einstellung. Reihenfolge im Fenster «Laden wählen»: zuerst «＋ Neuer Laden hier», dann Suchfeld (sucht in allen Läden), dann Knopf «Alle anzeigen» → ganze Liste nach ABC, jeder Buchstabe neue Zeile.
 - **Umgesetzt am 26.11.:** «Laden wählen»: zuoberst «Neuer Laden hier», dann Suchfeld über alle Läden, Knopf «Alle anzeigen» für die Liste nach ABC (jeder Buchstabe eigene Zeile). In Führung und «Neu in sEBU» (n19).
 - 26.11.: «Laden wählen»: Eingabefelder über die ganze Breite, Knöpfe darunter – Platzhalter-Texte sind bei grosser Schrift ganz lesbar.
+- 26.11.: «Anderer Laden (ohne Standort)» aus «Laden wählen» entfernt – «Neuer Laden hier» deckt es ab.
