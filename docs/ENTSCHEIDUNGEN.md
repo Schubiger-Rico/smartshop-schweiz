@@ -832,3 +832,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Neuer Menüpunkt im Menü ⋮: QR-Code des App-Links (speicherbar) und den Link zum Kopieren.
 - **Umgesetzt am 27.11.:** Menüpunkt «💚 Weiterempfehlen» nach Einstellungen: QR-Code (speichern), Link kopieren, Teilen. In Führung und «Neu in sEBU» (n20).
 - Notiz 27.11.: QR-Code mit «sEBU» in der Mitte (Neon auf dunklem Feld, Fehlerkorrektur H, scannt). Vorschau gezeigt, noch nicht eingebaut.
+- **Umgesetzt am 27.11.:** QR-Code unter «Weiterempfehlen» mit «sEBU» in der Mitte (geprüft: scannt). Erzeuger-Skript docs/qrlogo.py.
