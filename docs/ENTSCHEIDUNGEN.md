@@ -836,3 +836,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 ### Notiz vom 27.11.2026: Hilfe, wenn man etwas nicht findet (nur festgehalten, noch nicht gebaut)
 - Eine Hilfe, um Funktionen und Einstellungen zu finden, die man nicht findet. Details (Ort, Art: Suche, Fragen, Führung) noch offen.
+- Präzisiert 27.11.: Die Hilfe kommt ins Menü ⋮ (nicht auf die Startseite, dort ist schon viel). Vorschlag: Suchfeld «🔎 Was suchst du?» zuoberst im Menü, Treffer führen direkt hin.
