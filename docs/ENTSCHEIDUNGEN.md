@@ -830,3 +830,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 
 ### Notiz vom 27.11.2026: «Weiterempfehlen» im Menü (nur festgehalten, noch nicht gebaut)
 - Neuer Menüpunkt im Menü ⋮: QR-Code des App-Links (speicherbar) und den Link zum Kopieren.
+- **Umgesetzt am 27.11.:** Menüpunkt «💚 Weiterempfehlen» nach Einstellungen: QR-Code (speichern), Link kopieren, Teilen. In Führung und «Neu in sEBU» (n20).
