@@ -23,5 +23,6 @@ with sync_playwright() as p:
     r=[i for i in st(pg)['items'] if i['name']=='Reis'][0].get('rem');print('item rem',r)
     pg.evaluate("var s=JSON.parse(localStorage.getItem('sebu.v1'));s.shop=null;s.set.rem={open:false,start:false,end:false,always:false};localStorage.setItem('sebu.v1',JSON.stringify(s))");pg.reload()
     print('always stays (Reis, no x)',pg.inner_text('#app').count('Reis (Lidl)'),pg.locator('[data-a=remx]').count())
+    pg.click('[data-a=remoff]');pg.wait_for_timeout(200);print('remoff gone',pg.inner_text('#app').count('Reis (Lidl)'),'still on list',[i['name'] for i in st(pg)['items']].count('Reis'))
     b.close()
 print(errs)

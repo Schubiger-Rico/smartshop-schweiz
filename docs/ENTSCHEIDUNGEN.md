@@ -840,3 +840,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 27.11.:** Hilfe-Suche «🔎 Was suchst du?» zuoberst im Menü ⋮: durchsucht Menüpunkte, Einstellungen und alle Führungstexte; Antippen springt direkt hin und hebt die Stelle kurz hervor. In Führung und «Neu in sEBU» (n21).
 - 26./27.11.: Hilfe-Suche versteht ganze Sätze («wie kann ich den Witz ausschalten»): Füllwörter und «abstellen/ausschalten» werden übersprungen, Synonyme (Schriftgrösse→Textgrösse, Dunkelmodus). Nur «abstellen» zeigt alle abschaltbaren Einstellungen zur Auswahl.
 - **Umgesetzt am 27.11.:** «Noch offen» hat den Knopf «✓ Erledigt»: hakt die genannten Produkte ab (schon gekauft) und schliesst den Hinweis. In Führung und «Neu in sEBU» (n22).
+- **Umgesetzt am 27.11.:** Hinweis «Für andere Läden noch» hat den Knopf «🔕 Nicht mehr erinnern» (nur für die gezeigten Produkte; sie bleiben unter «Geschäfte»). In Führung und «Neu in sEBU» (n23).
