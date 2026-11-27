@@ -838,3 +838,4 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - Eine Hilfe, um Funktionen und Einstellungen zu finden, die man nicht findet. Details (Ort, Art: Suche, Fragen, Führung) noch offen.
 - Präzisiert 27.11.: Die Hilfe kommt ins Menü ⋮ (nicht auf die Startseite, dort ist schon viel). Vorschlag: Suchfeld «🔎 Was suchst du?» zuoberst im Menü, Treffer führen direkt hin.
 - **Umgesetzt am 27.11.:** Hilfe-Suche «🔎 Was suchst du?» zuoberst im Menü ⋮: durchsucht Menüpunkte, Einstellungen und alle Führungstexte; Antippen springt direkt hin und hebt die Stelle kurz hervor. In Führung und «Neu in sEBU» (n21).
+- 26./27.11.: Hilfe-Suche versteht ganze Sätze («wie kann ich den Witz ausschalten»): Füllwörter und «abstellen/ausschalten» werden übersprungen, Synonyme (Schriftgrösse→Textgrösse, Dunkelmodus). Nur «abstellen» zeigt alle abschaltbaren Einstellungen zur Auswahl.

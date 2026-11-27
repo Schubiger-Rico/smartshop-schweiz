@@ -1359,12 +1359,20 @@ function hIndex(){if(HIDX)return HIDX;var r=[];
   r.push({ic:sv?'⚙️':'🧭',ti:hTitle(st0.x),wh:sv?t('Einstellungen')+(sb?' › '+t(sb[2]):''):t(a[0]),go:{v:st0.v,sub:st0.sub,sel:st0.sel,menu:st0.menu},k:norm(t(a[0])+' '+hStrip(t(st0.x))+' '+hStrip(t(st0.m||'')))})})});
  return HIDX=r}
 function hU(x){return String(x).replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u')}
-function hFind(q){q=hU(norm(q)).trim();if(q.length<2)return[];var ws=q.split(/\s+/),seen={},out=[];
- hIndex().forEach(function(e){var k=' '+hU(e.k).replace(/[^a-z0-9éèàç]+/g,' ');if(!ws.every(function(w){return k.indexOf(' '+w)>-1||k.indexOf(w)>-1}))return;var key=e.ti+'|'+e.wh;if(seen[key])return;seen[key]=1;
-  var sc=(hU(norm(e.ti)).indexOf(ws[0])>-1?0:1)+(e.go.sel?0.5:0);out.push([sc,e])});
- return out.sort(function(a,b){return a[0]-b[0]}).slice(0,8).map(function(x){return x[1]})}
+var HSTOP=' wie wo was kann ich man mich mir du die der das den dem ein eine einen einem und oder mit von fur bei im in am an auf zu ist sind gibt es bitte mal noch ganz soll will mochte wird geht finde finden suche suchen '.split(' '),
+ HACT='abstellen ausstellen ausschalten abschalten deaktivieren weg wegmachen ausblenden verstecken stoppen stopp aus einstellen einschalten anstellen aktivieren anschalten andern ein'.split(' ');
+function hFind(q){q=hU(norm(q)).replace(/[^a-z0-9éèàç ]+/g,' ').trim();if(q.length<2)return[];var all=q.split(/\s+/),ws=all.filter(function(w){return w&&HSTOP.indexOf(w)<0&&HACT.indexOf(w)<0}),act=all.some(function(w){return HACT.indexOf(w)>-1}),seen={},out=[],lim=8;
+ var HSYN={schriftgross:'textgross',schriftgrosse:'textgross',buchstabengross:'textgross',dunkelmodus:'dunkel',nachtmodus:'dunkel',darkmode:'dunkel',design:'dunkel',ton:'klick',vibration:'vibr',laut:'klick',spruch:'spruch',spruche:'spruch',witze:'witz'};
+ ws=ws.map(function(w){w=HSYN[w]||w;return w.length>5?w.replace(/(en|er|e|n|s)$/,''):w});
+ if(!ws.length){if(!act)return[];lim=40}
+ hIndex().forEach(function(e){var k=' '+hU(e.k).replace(/[^a-z0-9éèàç]+/g,' ');
+  if(ws.length){if(!ws.every(function(w){return k.indexOf(' '+w)>-1||k.indexOf(w)>-1}))return}
+  else if(!(e.go.v==='settings'&&e.go.sel&&/ ausschalt| abschalt| aus | aus$| abstell| ausblend| wenn es (stort|nervt)/.test(k)))return;
+  var key=e.ti+'|'+e.wh;if(seen[key])return;seen[key]=1;
+  var sc=(ws.length&&hU(norm(e.ti)).indexOf(ws[0])>-1?0:1)+(e.go.sel?0:0.5)+(act&&e.go.v==='settings'?-0.3:0);out.push([sc,e])});
+ return out.sort(function(a,b){return a[0]-b[0]}).slice(0,lim).map(function(x){return x[1]})}
 var hRes=[];
-function hRender(v){hRes=hFind(v);var b=$('#msres');if(!b)return;b.innerHTML=!norm(v).trim()?'':hRes.length?hRes.map(function(e,i){return'<button class="hres" data-a="hgo" data-i="'+i+'"><span>'+e.ic+'</span><span><b>'+esc(e.ti)+'</b><br><span class="small mute">'+esc(e.wh)+'</span></span></button>'}).join(''):'<p class="small mute" style="margin:.3em">'+t('Nichts gefunden. Versuche ein anderes Wort, zum Beispiel «Laden», «Schrift» oder «Erinnerung».')+'</p>'}
+function hRender(v){hRes=hFind(v);var b=$('#msres');if(!b)return;b.innerHTML=!norm(v).trim()?'':hRes.length?hRes.map(function(e,i){return'<button class="hres" data-a="hgo" data-i="'+i+'"><span>'+e.ic+'</span><span><b>'+esc(e.ti)+'</b><br><span class="small mute">'+esc(e.wh)+'</span></span></button>'}).join(''):'<p class="small mute" style="margin:.3em">'+t('Nichts gefunden. Versuche ein anderes Wort, zum Beispiel «Laden», «Schrift» oder «Erinnerung». Mit «abstellen» siehst du alles, was sich abschalten lässt.')+'</p>'}
 function hGo(e){var g=e.go;menu=false;more=false;if(g.v==='settings'){view='settings';sub=g.sub||'main'}else if(g.v)view=g.v;if(g.v==='lists'){view='settings';sub='lists'}
  R();window.scrollTo(0,0);if(g.menu){menu=true;if(g.more)more=true;R()}
  if(g.sel){setTimeout(function(){var el=tourEl(g.sel);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('hl','hflash');setTimeout(function(){el.classList.remove('hl','hflash')},2600)}},120)}}
