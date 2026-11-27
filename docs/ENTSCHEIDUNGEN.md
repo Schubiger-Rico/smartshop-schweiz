@@ -827,3 +827,6 @@ Stand heute: 1 gebaut; 2 teilweise (Aktionen, aber ohne echte Datenquelle); 3 te
 - **Umgesetzt am 26.11.:** «Laden wählen»: zuoberst «Neuer Laden hier», dann Suchfeld über alle Läden, Knopf «Alle anzeigen» für die Liste nach ABC (jeder Buchstabe eigene Zeile). In Führung und «Neu in sEBU» (n19).
 - 26.11.: «Laden wählen»: Eingabefelder über die ganze Breite, Knöpfe darunter – Platzhalter-Texte sind bei grosser Schrift ganz lesbar.
 - 26.11.: «Anderer Laden (ohne Standort)» aus «Laden wählen» entfernt – «Neuer Laden hier» deckt es ab.
+
+### Notiz vom 27.11.2026: «Weiterempfehlen» im Menü (nur festgehalten, noch nicht gebaut)
+- Neuer Menüpunkt im Menü ⋮: QR-Code des App-Links (speicherbar) und den Link zum Kopieren.
