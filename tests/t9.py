@@ -11,5 +11,8 @@ with sync_playwright() as p:
     print('banner',pg.locator('[data-a=remind]').count(),pg.locator('[data-a=todayall]').count(),pg.locator('[data-a=endno]').count(),'nav',pg.locator('.navb').count())
     print(pg.locator('.navb').first.get_attribute('href') if pg.locator('.navb').count() else None)
     pg.click('[data-a=todayall]');print('today set',pg.evaluate("JSON.parse(localStorage.getItem('sebu.v1')).items.filter(i=>i.today).length"))
+    pg.evaluate("s=>localStorage.setItem('sebu.v1',JSON.stringify(s))",st);pg.reload()
+    pg.click('#shopbtn');pg.click('[data-a=shopend]');pg.click('[data-a=enddone]')
+    s2=pg.evaluate("JSON.parse(localStorage.getItem('sebu.v1'))");print('erledigt: left',[i['name'] for i in s2['items']],'banner gone',pg.locator('[data-a=enddone]').count()==0)
     b.close()
 print(errs)
